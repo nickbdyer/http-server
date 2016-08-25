@@ -6,13 +6,13 @@ plugins {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'uk.nickbdyer.http-server.Main'
+        attributes 'Main-Class': 'uk.nickbdyer.httpserver.Main'
     }
 }
 
 apply plugin: 'application'
 
-mainClassName = "uk.nickbdyer.http-server.Main"
+mainClassName = "uk.nickbdyer.httpserver.Main"
 
 run {
     standardInput = System.in

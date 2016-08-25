@@ -1,3 +1,5 @@
+package uk.nickbdyer.httpserver;
+
 public class HttpServer {
 
     private final int port;

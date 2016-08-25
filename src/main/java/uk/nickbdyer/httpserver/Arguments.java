@@ -1,3 +1,5 @@
+package uk.nickbdyer.httpserver;
+
 public class Arguments {
 
     public static int getPort(String[] args) {
