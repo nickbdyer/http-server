@@ -13,4 +13,13 @@ public class ArgumentsTest {
         assertEquals(5000, port);
     }
 
+    @Test
+    public void argumentsCanParseDifferentPortNumber() {
+        String[] arguments = new String[]{"-p", "7777"};
+
+        int port = Arguments.getPort(arguments);
+
+        assertEquals(7777, port);
+    }
+
 }
