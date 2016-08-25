@@ -1,5 +1,8 @@
 package uk.nickbdyer.httpserver;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+
 public class HttpServer {
 
     private final int port;
@@ -16,5 +19,13 @@ public class HttpServer {
 
     public String getDirectoryPath() {
         return directoryPath;
+    }
+
+    public void listen() {
+        try {
+            new ServerSocket(5000);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
