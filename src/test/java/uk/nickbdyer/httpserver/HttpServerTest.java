@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -62,12 +63,29 @@ public class HttpServerTest {
     @Test
     public void serverWillRespond200OKToSimpleGET() throws IOException {
         HttpServer server = new HttpServer(executor, serverSocket, "");
+        Socket client = new Socket("localhost", 5000);
+
+        OutputStream request = client.getOutputStream();
+        request.write("GET /\n".getBytes());
 
         server.listen();
-        Socket client = new Socket("localhost", 5000);
-        String response = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
 
+        String response = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
         assertEquals("HTTP/1.1 200 OK", response);
+    }
+
+    @Test
+    public void serverWillRespond404ToMissingRoute() throws IOException {
+        HttpServer server = new HttpServer(executor, serverSocket, "");
+        Socket client = new Socket("localhost", 5000);
+
+        OutputStream request = client.getOutputStream();
+        request.write("GET /foobar\n".getBytes());
+
+        server.listen();
+
+        String response = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
+        assertEquals("HTTP/1.1 404 Not Found", response);
     }
 
 }
