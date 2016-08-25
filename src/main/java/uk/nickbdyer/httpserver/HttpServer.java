@@ -32,7 +32,7 @@ public class HttpServer {
                 Socket connection = serverSocket.accept();
                 OutputStream response = connection.getOutputStream();
                 String request = new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine();
-                if ("GET /".equals(request)) {
+                if ("GET / HTTP/1.1".equals(request)) {
                     response.write("HTTP/1.1 200 OK".getBytes());
                 } else {
                     response.write("HTTP/1.1 404 Not Found".getBytes());

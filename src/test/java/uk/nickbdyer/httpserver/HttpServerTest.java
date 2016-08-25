@@ -66,7 +66,7 @@ public class HttpServerTest {
         Socket client = new Socket("localhost", 5000);
 
         OutputStream request = client.getOutputStream();
-        request.write("GET /\n".getBytes());
+        request.write("GET / HTTP/1.1\n".getBytes());
 
         server.listen();
 
@@ -80,7 +80,7 @@ public class HttpServerTest {
         Socket client = new Socket("localhost", 5000);
 
         OutputStream request = client.getOutputStream();
-        request.write("GET /foobar\n".getBytes());
+        request.write("GET /foobar HTTP/1.1\n".getBytes());
 
         server.listen();
 
