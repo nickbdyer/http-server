@@ -75,6 +75,20 @@ public class HttpServerTest {
     }
 
     @Test
+    public void serverWillRespond200OKToSimplePOST() throws IOException {
+        HttpServer server = new HttpServer(executor, serverSocket, "");
+        Socket client = new Socket("localhost", 5000);
+
+        OutputStream request = client.getOutputStream();
+        request.write("POST /form HTTP/1.1\n\nmy=data\n".getBytes());
+
+        server.listen();
+
+        String response = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
+        assertEquals("HTTP/1.1 200 OK", response);
+    }
+
+    @Test
     public void serverWillRespond404ToMissingRoute() throws IOException {
         HttpServer server = new HttpServer(executor, serverSocket, "");
         Socket client = new Socket("localhost", 5000);

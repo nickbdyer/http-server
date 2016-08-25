@@ -27,16 +27,23 @@ public class HttpServer {
     public void listen() {
         executor.execute(() -> {
             try {
-//                Plenty of things to refactor here
-
+//                AwaitConnections
                 Socket connection = serverSocket.accept();
-                OutputStream response = connection.getOutputStream();
+//                AwaitRequest
                 String request = new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine();
+//                HandleRequest
+//                Build response
+                OutputStream response = connection.getOutputStream();
                 if ("GET / HTTP/1.1".equals(request)) {
-                    response.write("HTTP/1.1 200 OK".getBytes());
+                    response.write("HTTP/1.1 200 OK\n".getBytes());
+                } else if ("POST /form HTTP/1.1".equals(request)) {
+                    response.write("HTTP/1.1 200 OK\n".getBytes());
                 } else {
-                    response.write("HTTP/1.1 404 Not Found".getBytes());
+                    response.write("HTTP/1.1 404 Not Found\n".getBytes());
                 }
+//                SendResponse
+                response.flush();
+//                TearDown
                 response.close();
 
             } catch (IOException e) {
