@@ -1,9 +1,13 @@
 package uk.nickbdyer.httpserver;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.util.concurrent.Executors;
+
 public class Main {
 
-    public static void main(String[] args) {
-        new HttpServer(Arguments.getPort(args), Arguments.getDirectoryPath(args));
+    public static void main(String[] args) throws IOException {
+        new HttpServer(Executors.newSingleThreadExecutor(), new ServerSocket(Arguments.getPort(args)), Arguments.getDirectoryPath(args)).listen();
     }
 
 }

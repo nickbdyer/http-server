@@ -2,19 +2,18 @@ package uk.nickbdyer.httpserver;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.concurrent.ExecutorService;
 
 public class HttpServer {
 
-    private final int port;
+    private final ExecutorService executor;
+    private final ServerSocket serverSocket;
     private final String directoryPath;
 
-    public HttpServer(int port, String directoryPath) {
-        this.port = port;
+    public HttpServer(ExecutorService executor, ServerSocket serverSocket, String directoryPath) {
+        this.executor = executor;
+        this.serverSocket = serverSocket;
         this.directoryPath = directoryPath;
-    }
-
-    public int getPort() {
-        return port;
     }
 
     public String getDirectoryPath() {
@@ -22,10 +21,12 @@ public class HttpServer {
     }
 
     public void listen() {
-        try {
-            new ServerSocket(5000);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        executor.execute(() -> {
+            try {
+                serverSocket.accept();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }
