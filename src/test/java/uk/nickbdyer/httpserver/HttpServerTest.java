@@ -19,4 +19,8 @@ public class HttpServerTest {
         assertTrue(socketSpy.acceptWasCalled());
     }
 
+//    Need a way to test multiple incoming connections.
+//    Cannot override accept since this is tied to SocketImpl which is difficult to work with.
+
+
 }
