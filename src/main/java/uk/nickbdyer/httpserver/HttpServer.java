@@ -30,7 +30,7 @@ public class HttpServer {
 //                AwaitConnections
                 Socket connection = serverSocket.accept();
 //                AwaitRequest
-                String request = new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine();
+                String request = new SocketHandler(connection).getRequest();
 //                HandleRequest
 //                Build response
                 OutputStream response = connection.getOutputStream();
