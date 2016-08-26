@@ -7,7 +7,7 @@ import java.util.concurrent.Executors;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        new HttpServer(Executors.newSingleThreadExecutor(), new ServerSocket(Arguments.getPort(args)), Arguments.getDirectoryPath(args)).listen();
+        new HttpServer(new ServerSocket(Arguments.getPort(args)), Arguments.getDirectoryPath(args)).listen();
     }
 
 }
