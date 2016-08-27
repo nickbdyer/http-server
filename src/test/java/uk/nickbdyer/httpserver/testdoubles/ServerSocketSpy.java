@@ -8,8 +8,7 @@ public class ServerSocketSpy extends ServerSocket {
 
     private boolean acceptWasCalled;
 
-    public ServerSocketSpy(int port) throws IOException {
-        super(port);
+    public ServerSocketSpy() throws IOException {
         acceptWasCalled = false;
     }
 

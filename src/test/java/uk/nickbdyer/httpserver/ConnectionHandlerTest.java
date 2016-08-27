@@ -3,6 +3,7 @@ package uk.nickbdyer.httpserver;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import uk.nickbdyer.httpserver.testdoubles.ServerSocketSpy;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -22,6 +23,16 @@ public class ConnectionHandlerTest {
     @After
     public void tearDown() throws IOException {
         serverSocket.close();
+    }
+
+    @Test
+    public void theServerCanAcceptAConnection() throws IOException {
+        ServerSocketSpy socketSpy = new ServerSocketSpy();
+        ConnectionHandler connectionHandler = new ConnectionHandler(socketSpy);
+
+        connectionHandler.getSocket();
+
+        assertTrue(socketSpy.acceptWasCalled());
     }
 
     @Test
