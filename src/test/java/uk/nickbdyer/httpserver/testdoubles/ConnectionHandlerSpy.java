@@ -9,16 +9,19 @@ import java.net.Socket;
 public class ConnectionHandlerSpy extends ConnectionHandler{
 
     private boolean socketConnectionWasMade;
+    public int numberOfConnectionsMade;
 
     public ConnectionHandlerSpy(ServerSocket serverSocket) {
         super(serverSocket);
-        this.socketConnectionWasMade = false;
+        socketConnectionWasMade = false;
+        numberOfConnectionsMade = 0;
     }
 
     @Override
     public Socket getSocket() throws IOException {
         Socket connection = serverSocket.accept();
         socketConnectionWasMade = true;
+        numberOfConnectionsMade += 1;
         return connection;
     }
 

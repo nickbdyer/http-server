@@ -30,11 +30,14 @@ public class HttpServer {
                     response.write("HTTP/1.1 404 Not Found\n".getBytes());
                 }
                 response.flush();
-                response.close();
                 connection = connectionHandler.getSocket();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            if ("Socket closed".equals(e.getMessage())) {
+                System.out.println("Server shutdown...");
+            } else {
+                e.printStackTrace();
+            }
         }
     }
 }
