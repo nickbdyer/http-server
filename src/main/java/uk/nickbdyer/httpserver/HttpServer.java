@@ -2,22 +2,21 @@ package uk.nickbdyer.httpserver;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 public class HttpServer {
 
-    private final ServerSocket serverSocket;
+    private final ConnectionHandler connectionHandler;
     private final String directoryPath;
 
-    public HttpServer(ServerSocket serverSocket, String directoryPath) {
-        this.serverSocket = serverSocket;
+    public HttpServer(ConnectionHandler connectionHandler, String directoryPath) {
+        this.connectionHandler = connectionHandler;
         this.directoryPath = directoryPath;
     }
 
     public void listen() {
         try {
-            Socket connection = serverSocket.accept();
+            Socket connection = connectionHandler.getSocket();
             while (connection != null) {
                 String request = new SocketHandler(connection).getRequest();
 
@@ -32,7 +31,7 @@ public class HttpServer {
                 }
                 response.flush();
                 response.close();
-                connection = serverSocket.accept();
+                connection = connectionHandler.getSocket();
             }
         } catch (IOException e) {
             e.printStackTrace();

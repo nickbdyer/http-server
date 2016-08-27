@@ -6,7 +6,7 @@ import java.net.Socket;
 
 public class ConnectionHandler {
 
-    private final ServerSocket serverSocket;
+    protected final ServerSocket serverSocket;
 
     public ConnectionHandler(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
