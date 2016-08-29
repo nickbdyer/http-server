@@ -36,4 +36,14 @@ public class RequestParserTest {
 
         assertEquals(HEAD, request.getMethod());
     }
+
+    @Test
+    public void requestParserCanExtractTheRoute() {
+        String requestString = "HEAD / HTTP/1.1\n";
+        RequestParser parser = new RequestParser();
+
+        Request request = parser.parse(requestString);
+
+        assertEquals("/", request.getRoute());
+    }
 }

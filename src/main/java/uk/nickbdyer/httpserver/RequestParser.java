@@ -4,7 +4,8 @@ public class RequestParser {
 
     public Request parse(String requestString) {
         String method = requestString.substring(0, (requestString.indexOf(' ')));
-        return new Request(Method.valueOf(method));
+        String route = requestString.substring((requestString.indexOf(' ') + 1), requestString.lastIndexOf(' '));
+        return new Request(Method.valueOf(method), route);
     }
 
 
