@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static uk.nickbdyer.httpserver.Method.*;
 
@@ -73,5 +74,12 @@ public class RequestParserTest {
         RequestParser requestParser = new RequestParser(validRequests);
 
         assertTrue(requestParser.isValid(requestParser.parse("GET / HTTP/1.1")));
+    }
+
+    @Test
+    public void requestParserKnowsIfARequestIsInvalid() {
+        RequestParser requestParser = new RequestParser(new ArrayList<>());
+
+        assertFalse(requestParser.isValid(requestParser.parse("GET / HTTP/1.1")));
     }
 }

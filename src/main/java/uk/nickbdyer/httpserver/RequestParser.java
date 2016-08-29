@@ -18,6 +18,6 @@ public class RequestParser {
 
 
     public boolean isValid(Request request) {
-        return true;
+        return validRequests.contains(request);
     }
 }
