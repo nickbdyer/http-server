@@ -3,6 +3,7 @@ package uk.nickbdyer.httpserver;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class HttpServer {
 
@@ -18,7 +19,8 @@ public class HttpServer {
         try {
             Socket connection = connectionHandler.getSocket();
             while (connection != null) {
-                String request = new SocketHandler(connection).getRequest();
+                String requestString = new SocketHandler(connection).getRequest();
+                Request request = new RequestParser(new ArrayList<Request>()).parse(requestString);
 
 //              Build response
                 OutputStream response = connection.getOutputStream();

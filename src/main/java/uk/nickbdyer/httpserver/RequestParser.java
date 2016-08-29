@@ -1,6 +1,14 @@
 package uk.nickbdyer.httpserver;
 
+import java.util.List;
+
 public class RequestParser {
+
+    private final List<Request> validRequests;
+
+    public RequestParser(List<Request> validRequests) {
+        this.validRequests = validRequests;
+    }
 
     public Request parse(String requestString) {
         String method = requestString.substring(0, (requestString.indexOf(' ')));
@@ -9,4 +17,7 @@ public class RequestParser {
     }
 
 
+    public boolean isValid(Request request) {
+        return true;
+    }
 }
