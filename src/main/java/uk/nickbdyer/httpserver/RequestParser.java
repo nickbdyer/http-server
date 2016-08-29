@@ -11,13 +11,21 @@ public class RequestParser {
     }
 
     public Request parse(String requestString) {
-        String method = requestString.substring(0, (requestString.indexOf(' ')));
+        Method method = validateMethod(requestString.substring(0, (requestString.indexOf(' '))));
         String route = requestString.substring((requestString.indexOf(' ') + 1), requestString.lastIndexOf(' '));
-        return new Request(Method.valueOf(method), route);
+        return new Request(method, route);
     }
 
 
     public boolean isValid(Request request) {
         return validRequests.contains(request);
+    }
+
+    public Method validateMethod(String method) {
+        try {
+            return Method.valueOf(method);
+        } catch (IllegalArgumentException e) {
+            return Method.INVALID_METHOD;
+        }
     }
 }

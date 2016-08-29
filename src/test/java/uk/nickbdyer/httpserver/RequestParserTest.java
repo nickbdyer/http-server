@@ -48,6 +48,15 @@ public class RequestParserTest {
     }
 
     @Test
+    public void requestParserWillReturnINVALIDMETHOD() {
+        String requestString = "HELLO / HTTP/1.1\n";
+
+        Request request = parser.parse(requestString);
+
+        assertEquals(INVALID_METHOD, request.getMethod());
+    }
+
+    @Test
     public void requestParserCanExtractTheRoute() {
         String requestString = "HEAD / HTTP/1.1\n";
 

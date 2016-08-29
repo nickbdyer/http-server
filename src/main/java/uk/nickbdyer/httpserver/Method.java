@@ -1,5 +1,5 @@
 package uk.nickbdyer.httpserver;
 
 public enum Method {
-    POST, HEAD, GET
+    POST, HEAD, INVALID_METHOD, GET
 }
