@@ -1,13 +1,16 @@
 package uk.nickbdyer.httpserver;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static uk.nickbdyer.httpserver.Method.*;
 
 public class RequestParser {
 
     private final List<Request> validRequests;
 
     public RequestParser(List<Request> validRequests) {
-        this.validRequests = validRequests;
+        this.validRequests = addValidHeadRequests(validRequests);
     }
 
     public Request parse(String requestString) {
@@ -28,4 +31,16 @@ public class RequestParser {
             return Method.INVALID_METHOD;
         }
     }
+
+    private List<Request> addValidHeadRequests(List<Request> existingRequests) {
+        ArrayList<Request> newRequests = new ArrayList<>();
+        for (Request request : existingRequests) {
+            if (request.getMethod() == GET) {
+                newRequests.add(new Request(HEAD, request.getRoute()));
+            }
+            newRequests.add(request);
+        }
+        return newRequests;
+    }
+
 }
