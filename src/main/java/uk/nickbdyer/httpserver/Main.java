@@ -5,8 +5,7 @@ import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 
-import static uk.nickbdyer.httpserver.Method.GET;
-import static uk.nickbdyer.httpserver.Method.POST;
+import static uk.nickbdyer.httpserver.Method.*;
 
 public class Main {
 
@@ -15,6 +14,7 @@ public class Main {
 
         validRequests.add(new Request(GET, "/"));
         validRequests.add(new Request(POST, "/form"));
+        validRequests.add(new Request(PUT, "/form"));
 
         RequestParser parser = new RequestParser(validRequests);
         new HttpServer(new ConnectionHandler(new ServerSocket(Arguments.getPort(args))), parser, Arguments.getDirectoryPath(args)).listen();
