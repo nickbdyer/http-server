@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -19,11 +20,15 @@ public class HttpServerTest {
 
     private ServerSocket serverSocket;
     private ExecutorService executor;
+    private HttpServer server;
+    private ConnectionHandlerSpy connectionHandler;
 
     @Before
     public void setUp() throws IOException {
         serverSocket = new ServerSocket(5000);
         executor = Executors.newSingleThreadExecutor();
+        connectionHandler = new ConnectionHandlerSpy(serverSocket);
+        server = new HttpServer(connectionHandler, new RequestParser(new ArrayList<>()), "");
     }
 
     @After
@@ -34,9 +39,6 @@ public class HttpServerTest {
 
     @Test
     public void theServerAllowsASocketConnectionToBeEstablished() throws IOException, InterruptedException {
-        ConnectionHandlerSpy connectionHandler = new ConnectionHandlerSpy(serverSocket);
-        HttpServer server = new HttpServer(connectionHandler, "");
-
         executor.execute(server::listen);
 
         new Socket("localhost", 5000);
@@ -48,9 +50,6 @@ public class HttpServerTest {
 
     @Test
     public void theServerAllowsMultipleSocketConnectionsToBeEstablished() throws IOException, InterruptedException {
-        ConnectionHandlerSpy connectionHandler = new ConnectionHandlerSpy(serverSocket);
-        HttpServer server = new HttpServer(connectionHandler, "");
-
         executor.execute(server::listen);
 
         connectSocketAndSendGetRequest();
