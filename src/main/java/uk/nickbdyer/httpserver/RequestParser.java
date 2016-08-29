@@ -1,11 +1,10 @@
 package uk.nickbdyer.httpserver;
 
-import static uk.nickbdyer.httpserver.Method.GET;
-
 public class RequestParser {
 
     public Request parse(String requestString) {
-        return new Request(GET);
+        String method = requestString.substring(0, (requestString.indexOf(' ')));
+        return new Request(Method.valueOf(method));
     }
 
 
