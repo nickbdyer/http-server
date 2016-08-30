@@ -2,12 +2,22 @@ package uk.nickbdyer.httpserver;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.concurrent.Executors;
+import java.util.ArrayList;
+import java.util.List;
+
+import static uk.nickbdyer.httpserver.Method.*;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        new HttpServer(Executors.newSingleThreadExecutor(), new ServerSocket(Arguments.getPort(args)), Arguments.getDirectoryPath(args)).listen();
+        List<Request> validRequests = new ArrayList<>();
+
+        validRequests.add(new Request(GET, "/"));
+        validRequests.add(new Request(POST, "/form"));
+        validRequests.add(new Request(PUT, "/form"));
+
+        RequestParser parser = new RequestParser(validRequests);
+        new HttpServer(new ConnectionHandler(new ServerSocket(Arguments.getPort(args))), parser, Arguments.getDirectoryPath(args)).listen();
     }
 
 }
