@@ -10,20 +10,20 @@ public class ResponseTest {
     public void anOKResponseHasTheCorrectStatusLine() {
         Response response = Response.OK();
 
-        assertEquals("HTTP/1.1 200 OK", response.getStatusLine());
+        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
     }
 
     @Test
     public void anNotFoundResponseHasTheCorrectStatusLine() {
         Response response = Response.NotFound();
 
-        assertEquals("HTTP/1.1 404 Not Found", response.getStatusLine());
+        assertEquals("HTTP/1.1 404 Not Found\n", response.getStatusLine());
     }
 
     @Test
     public void anRedirectResponseHasTheCorrectStatusLine() {
         Response response = Response.Redirect();
 
-        assertEquals("HTTP/1.1 302 Found", response.getStatusLine());
+        assertEquals("HTTP/1.1 302 Found\n", response.getStatusLine());
     }
 }

@@ -36,11 +36,18 @@ public class RequestParser {
         ArrayList<Request> newRequests = new ArrayList<>();
         for (Request request : existingRequests) {
             if (request.getMethod() == GET) {
-                newRequests.add(new Request(HEAD, request.getRoute()));
+                newRequests.add(new Request(HEAD, request.getRoute()).thatRespondsWith(request.getResponse()));
             }
             newRequests.add(request);
         }
         return newRequests;
     }
 
+    public Response getResponse(Request request) {
+        if (isValid(request)) {
+            int indexOfReponse = validRequests.indexOf(request);
+            return validRequests.get(indexOfReponse).getResponse();
+        }
+        return request.getResponse();
+    }
 }

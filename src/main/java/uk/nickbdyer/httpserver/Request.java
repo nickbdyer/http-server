@@ -1,13 +1,23 @@
 package uk.nickbdyer.httpserver;
 
+import static uk.nickbdyer.httpserver.Response.*;
+
 public class Request {
 
     private Method method;
     private String route;
+    private Response response;
 
     public Request(Method method, String route) {
         this.method = method;
         this.route = route;
+        this.response = NotFound();
+    }
+
+    private Request(Method method, String route, Response response) {
+        this.method = method;
+        this.route = route;
+        this.response = response;
     }
 
     public Method getMethod() {
@@ -16,6 +26,14 @@ public class Request {
 
     public String getRoute() {
         return route;
+    }
+
+    public Request thatRespondsWith(Response response) {
+        return new Request(method, route, response);
+    }
+
+    public Response getResponse() {
+        return response;
     }
 
     @Override

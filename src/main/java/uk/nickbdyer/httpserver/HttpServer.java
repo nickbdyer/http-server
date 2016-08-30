@@ -25,13 +25,11 @@ public class HttpServer {
 
 //              Build response
                 OutputStream response = connection.getOutputStream();
-                if (parser.isValid(request)) {
-                    response.write("HTTP/1.1 200 OK\n".getBytes());
-                } else {
-                    response.write("HTTP/1.1 404 Not Found\n".getBytes());
-                }
+
+                response.write(parser.getResponse(request).getStatusLine().getBytes());
                 response.flush();
                 response.close();
+
                 connection = connectionHandler.getSocket();
             }
         } catch (IOException e) {
