@@ -15,4 +15,12 @@ public class Response {
     public static Response OK() {
         return new Response("HTTP/1.1 200 OK");
     }
+
+    public static Response NotFound() {
+        return new Response("HTTP/1.1 404 Not Found");
+    }
+
+    public static Response Redirect() {
+        return new Response("HTTP/1.1 302 Found");
+    }
 }

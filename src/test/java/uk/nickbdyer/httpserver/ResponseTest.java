@@ -12,4 +12,18 @@ public class ResponseTest {
 
         assertEquals("HTTP/1.1 200 OK", response.getStatusLine());
     }
+
+    @Test
+    public void anNotFoundResponseHasTheCorrectStatusLine() {
+        Response response = Response.NotFound();
+
+        assertEquals("HTTP/1.1 404 Not Found", response.getStatusLine());
+    }
+
+    @Test
+    public void anRedirectResponseHasTheCorrectStatusLine() {
+        Response response = Response.Redirect();
+
+        assertEquals("HTTP/1.1 302 Found", response.getStatusLine());
+    }
 }
