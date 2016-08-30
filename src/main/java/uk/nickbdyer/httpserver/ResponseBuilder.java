@@ -53,7 +53,4 @@ public class ResponseBuilder {
         return definedRequests.containsKey(request.getRoute());
     }
 
-    public String getStatusLine() {
-        return null;
-    }
 }

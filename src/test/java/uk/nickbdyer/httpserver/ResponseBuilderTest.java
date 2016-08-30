@@ -5,9 +5,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
-import static uk.nickbdyer.httpserver.Method.GET;
-import static uk.nickbdyer.httpserver.Method.METHOD_NOT_ALLOWED;
-import static uk.nickbdyer.httpserver.Method.POST;
+import static uk.nickbdyer.httpserver.Method.*;
 import static uk.nickbdyer.httpserver.Response.*;
 
 public class ResponseBuilderTest {
