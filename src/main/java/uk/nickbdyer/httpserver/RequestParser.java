@@ -45,8 +45,8 @@ public class RequestParser {
 
     public Response getResponse(Request request) {
         if (isValid(request)) {
-            int indexOfReponse = validRequests.indexOf(request);
-            return validRequests.get(indexOfReponse).getResponse();
+            int responseIndex = validRequests.indexOf(request);
+            return validRequests.get(responseIndex).getResponse();
         }
         return request.getResponse();
     }

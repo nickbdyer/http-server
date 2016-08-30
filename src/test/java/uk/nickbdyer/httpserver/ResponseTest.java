@@ -14,16 +14,23 @@ public class ResponseTest {
     }
 
     @Test
-    public void anNotFoundResponseHasTheCorrectStatusLine() {
+    public void aNotFoundResponseHasTheCorrectStatusLine() {
         Response response = Response.NotFound();
 
         assertEquals("HTTP/1.1 404 Not Found\n", response.getStatusLine());
     }
 
     @Test
-    public void anRedirectResponseHasTheCorrectStatusLine() {
+    public void aRedirectResponseHasTheCorrectStatusLine() {
         Response response = Response.Redirect();
 
         assertEquals("HTTP/1.1 302 Found\n", response.getStatusLine());
+    }
+
+    @Test
+    public void aRedirectResponseCanAlsoHaveADefinedLocation() {
+        Response response = Response.Redirect("another location");
+
+        assertEquals("Location: another location\n", response.getResponseHeader());
     }
 }

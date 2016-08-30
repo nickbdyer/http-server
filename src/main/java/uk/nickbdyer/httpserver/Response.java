@@ -3,13 +3,23 @@ package uk.nickbdyer.httpserver;
 public class Response {
 
     private String statusLine;
+    private String location;
 
     private Response(String statusLine) {
         this.statusLine = statusLine;
     }
 
+    public Response(String statusLine, String location) {
+        this.statusLine = statusLine;
+        this.location = location;
+    }
+
     public String getStatusLine() {
         return statusLine;
+    }
+
+    public String getResponseHeader() {
+        return "Location: " + location + "\n";
     }
 
     public static Response OK() {
@@ -22,6 +32,10 @@ public class Response {
 
     public static Response Redirect() {
         return new Response("HTTP/1.1 302 Found\n");
+    }
+
+    public static Response Redirect(String location) {
+        return new Response("HTTP/1.1 302 Found", location);
     }
 
     @Override
@@ -39,4 +53,5 @@ public class Response {
     public int hashCode() {
         return getStatusLine().hashCode();
     }
+
 }
