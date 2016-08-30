@@ -1,5 +1,6 @@
 package uk.nickbdyer.httpserver;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
@@ -17,7 +18,13 @@ public class Main {
         parser.add(new Request(POST, "/form").thatRespondsWith(OK()));
         parser.add(new Request(PUT, "/form").thatRespondsWith(OK()));
 
-        new HttpServer(new ConnectionHandler(new ServerSocket(Arguments.getPort(args))), parser, Arguments.getDirectoryPath(args)).listen();
+        File folder = new File(Arguments.getDirectoryPath(args));
+        File[] files = folder.listFiles();
+        for (int i = 0; i < files.length; i++) {
+            parser.add(new Request(GET, ("/".concat(files[i].getName()))).thatRespondsWith(OK()));
+        }
+
+        new HttpServer(new ConnectionHandler(new ServerSocket(Arguments.getPort(args))), parser).listen();
     }
 
 }

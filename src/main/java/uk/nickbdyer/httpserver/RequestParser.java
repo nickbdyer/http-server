@@ -1,6 +1,7 @@
 package uk.nickbdyer.httpserver;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static uk.nickbdyer.httpserver.Method.*;
 
@@ -41,14 +42,17 @@ public class RequestParser {
     }
 
     public Response getResponse(Request request) {
-        if (isDefinedRequest(request)) {
+        if (!isExistingRoute(request)) {
+            return request.getResponse();
+        } else if (isDefinedRequest(request)) {
             int responseIndex = validRequests.get(request.getRoute()).indexOf(request);
             return validRequests.get(request.getRoute()).get(responseIndex).getResponse();
-        } else if (request.getMethod() == METHOD_NOT_ALLOWED) {
-
+        } else {
+            List<Method> allowedMethods = validRequests.get(request.getRoute()).stream()
+                    .map(Request::getMethod)
+                    .collect(Collectors.toList());
+            return request.thatRespondsWith(Response.MethodNotAllowed(allowedMethods)).getResponse();
         }
-
-        return request.getResponse();
     }
 
     private boolean isDefinedRequest(Request request) {

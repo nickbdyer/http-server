@@ -1,6 +1,5 @@
 package uk.nickbdyer.httpserver;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,7 +50,7 @@ public class Response {
         return new Response("HTTP/1.1 302 Found", location);
     }
 
-    public static Response MethodNotAllowed(ArrayList<Method> methods) {
+    public static Response MethodNotAllowed(List<Method> methods) {
         return new Response("HTTP/1.1 405 Method Not Allowed", methods);
     }
 

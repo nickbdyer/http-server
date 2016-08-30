@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -96,5 +97,23 @@ public class RequestParserTest {
         RequestParser requestParser = new RequestParser();
 
         assertEquals(NotFound(), requestParser.getResponse(requestParser.parse("GET / HTTP/1.1")));
+    }
+
+    @Test
+    public void requestParserWillReturnAMethodNotAllowedResponseIfMethodIsNotAllowed() {
+        Request request = new Request(GET, "/").thatRespondsWith(OK());
+        RequestParser requestParser = new RequestParser();
+        requestParser.add(request);
+
+        assertEquals(MethodNotAllowed(new ArrayList<>()), requestParser.getResponse(requestParser.parse("POST / HTTP/1.1")));
+    }
+
+    @Test
+    public void requestParserWillReturnAMethodNotAllowedResponseIfMethodIsNonSensical() {
+        Request request = new Request(GET, "/").thatRespondsWith(OK());
+        RequestParser requestParser = new RequestParser();
+        requestParser.add(request);
+
+        assertEquals(MethodNotAllowed(new ArrayList<>()), requestParser.getResponse(requestParser.parse("ALDSKFGJASDHG / HTTP/1.1")));
     }
 }

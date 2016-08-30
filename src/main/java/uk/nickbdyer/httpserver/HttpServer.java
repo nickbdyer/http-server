@@ -8,12 +8,10 @@ public class HttpServer {
 
     private final ConnectionHandler connectionHandler;
     private final RequestParser parser;
-    private final String directoryPath;
 
-    public HttpServer(ConnectionHandler connectionHandler, RequestParser parser, String directoryPath) {
+    public HttpServer(ConnectionHandler connectionHandler, RequestParser parser) {
         this.connectionHandler = connectionHandler;
         this.parser = parser;
-        this.directoryPath = directoryPath;
     }
 
     public void listen() {
