@@ -2,7 +2,11 @@ package uk.nickbdyer.httpserver;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static org.junit.Assert.assertEquals;
+import static uk.nickbdyer.httpserver.Method.*;
 
 public class ResponseTest {
 
@@ -25,6 +29,13 @@ public class ResponseTest {
         Response response = Response.Redirect("another location");
 
         assertEquals("Location: another location\n", response.getResponseHeader());
+    }
+
+    @Test
+    public void aMethodNotAllowedResponseCanListAllowedMethods() {
+        Response response = Response.MethodNotAllowed(new ArrayList<>(Arrays.asList(GET, POST, HEAD)));
+
+        assertEquals("Allow: GET, POST, HEAD\n", response.getResponseHeader());
     }
 
 }

@@ -32,27 +32,30 @@ public class RequestParser {
         return new Request(method, route);
     }
 
-    public boolean isValid(Request request) {
-        if (isExistingRoute(request)) {
-            return validRequests.get(request.getRoute()).contains(request);
-        }
-        return false;
-    }
-
     public Method validateMethod(String method) {
         try {
             return Method.valueOf(method);
         } catch (IllegalArgumentException e) {
-            return Method.METHOD_NOT_ALLOWED;
+            return METHOD_NOT_ALLOWED;
         }
     }
 
     public Response getResponse(Request request) {
-        if (isValid(request)) {
+        if (isDefinedRequest(request)) {
             int responseIndex = validRequests.get(request.getRoute()).indexOf(request);
             return validRequests.get(request.getRoute()).get(responseIndex).getResponse();
+        } else if (request.getMethod() == METHOD_NOT_ALLOWED) {
+
         }
+
         return request.getResponse();
+    }
+
+    private boolean isDefinedRequest(Request request) {
+        if (isExistingRoute(request)) {
+            return validRequests.get(request.getRoute()).contains(request);
+        }
+        return false;
     }
 
     private boolean isExistingRoute(Request request) {

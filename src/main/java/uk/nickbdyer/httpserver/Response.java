@@ -1,7 +1,12 @@
 package uk.nickbdyer.httpserver;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class Response {
 
+    private List<String> allowedMethods;
     private String statusLine;
     private String location = null;
 
@@ -14,6 +19,11 @@ public class Response {
         this.location = location;
     }
 
+    public Response(String statusLine, List<Method> allowedMethods) {
+        this.statusLine = statusLine;
+        this.allowedMethods = allowedMethods.stream().map(Enum::toString).collect(Collectors.toList());
+    }
+
     public String getStatusLine() {
         return statusLine + "\n";
     }
@@ -21,6 +31,10 @@ public class Response {
     public String getResponseHeader() {
         if (location != null) {
             return "Location: " + location + "\n";
+        }
+        if (allowedMethods != null) {
+            return "Allow: " + String.join(", ", allowedMethods) + "\n";
+
         }
         return "";
     }
@@ -35,6 +49,10 @@ public class Response {
 
     public static Response Redirect(String location) {
         return new Response("HTTP/1.1 302 Found", location);
+    }
+
+    public static Response MethodNotAllowed(ArrayList<Method> methods) {
+        return new Response("HTTP/1.1 405 Method Not Allowed", methods);
     }
 
     @Override

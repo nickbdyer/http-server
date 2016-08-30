@@ -74,23 +74,6 @@ public class RequestParserTest {
     }
 
     @Test
-    public void requestParserKnowsIfARequestIsValid() {
-        Request request = new Request(GET, "/");
-
-        RequestParser requestParser = new RequestParser();
-        requestParser.add(request);
-
-        assertTrue(requestParser.isValid(requestParser.parse("GET / HTTP/1.1")));
-    }
-
-    @Test
-    public void requestParserKnowsIfARequestIsInvalid() {
-        RequestParser requestParser = new RequestParser();
-
-        assertFalse(requestParser.isValid(requestParser.parse("GET / HTTP/1.1")));
-    }
-
-    @Test
     public void requestParserWillReturnADefinedResponseIfItExists() {
         Request request = new Request(GET, "/").thatRespondsWith(OK());
         RequestParser requestParser = new RequestParser();
