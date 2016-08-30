@@ -23,7 +23,7 @@ public class HttpServer {
                 String requestString = new SocketHandler(connection).getRequest();
                 Request request = parser.parse(requestString);
 
-//              Build response
+//              Build response NEEDS REFACTORING, maybe after Interface for Response.
                 OutputStream response = connection.getOutputStream();
 
                 String statusLine = parser.getResponse(request).getStatusLine();

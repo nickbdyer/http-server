@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -28,7 +27,7 @@ public class HttpServerTest {
         serverSocket = new ServerSocket(5000);
         executor = Executors.newSingleThreadExecutor();
         connectionHandler = new ConnectionHandlerSpy(serverSocket);
-        server = new HttpServer(connectionHandler, new RequestParser(new ArrayList<>()), "");
+        server = new HttpServer(connectionHandler, new RequestParser(), "");
     }
 
     @After

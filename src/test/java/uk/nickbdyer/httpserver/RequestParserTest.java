@@ -16,7 +16,7 @@ public class RequestParserTest {
 
     @Before
     public void setUp() {
-        parser = new RequestParser(new ArrayList<>());
+        parser = new RequestParser();
     }
 
     @Test
@@ -52,7 +52,7 @@ public class RequestParserTest {
 
         Request request = parser.parse(requestString);
 
-        assertEquals(INVALID_METHOD, request.getMethod());
+        assertEquals(METHOD_NOT_ALLOWED, request.getMethod());
     }
 
     @Test
@@ -76,17 +76,16 @@ public class RequestParserTest {
     @Test
     public void requestParserKnowsIfARequestIsValid() {
         Request request = new Request(GET, "/");
-        List<Request> validRequests = new ArrayList<>();
-        validRequests.add(request);
 
-        RequestParser requestParser = new RequestParser(validRequests);
+        RequestParser requestParser = new RequestParser();
+        requestParser.add(request);
 
         assertTrue(requestParser.isValid(requestParser.parse("GET / HTTP/1.1")));
     }
 
     @Test
     public void requestParserKnowsIfARequestIsInvalid() {
-        RequestParser requestParser = new RequestParser(new ArrayList<>());
+        RequestParser requestParser = new RequestParser();
 
         assertFalse(requestParser.isValid(requestParser.parse("GET / HTTP/1.1")));
     }
@@ -94,10 +93,8 @@ public class RequestParserTest {
     @Test
     public void requestParserWillReturnADefinedResponseIfItExists() {
         Request request = new Request(GET, "/").thatRespondsWith(OK());
-        List<Request> validRequests = new ArrayList<>();
-        validRequests.add(request);
-
-        RequestParser requestParser = new RequestParser(validRequests);
+        RequestParser requestParser = new RequestParser();
+        requestParser.add(request);
 
         assertEquals(OK(), requestParser.getResponse(requestParser.parse("GET / HTTP/1.1")));
     }
@@ -105,19 +102,15 @@ public class RequestParserTest {
     @Test
     public void requestParserWillReturnANotFoundResponseIfNoDefinedResponseIsFound() {
         Request request = new Request(GET, "/");
-        List<Request> validRequests = new ArrayList<>();
-        validRequests.add(request);
-
-        RequestParser requestParser = new RequestParser(validRequests);
+        RequestParser requestParser = new RequestParser();
+        requestParser.add(request);
 
         assertEquals(NotFound(), requestParser.getResponse(requestParser.parse("GET / HTTP/1.1")));
     }
 
     @Test
     public void requestParserWillReturnANotFoundResponseIfRequestIsNotValid() {
-        List<Request> validRequests = new ArrayList<>();
-
-        RequestParser requestParser = new RequestParser(validRequests);
+        RequestParser requestParser = new RequestParser();
 
         assertEquals(NotFound(), requestParser.getResponse(requestParser.parse("GET / HTTP/1.1")));
     }
