@@ -14,7 +14,7 @@ public class Main {
         List<Request> validRequests = new ArrayList<>();
 
         validRequests.add(new Request(GET, "/").thatRespondsWith(OK()));
-        validRequests.add(new Request(GET, "/redirect").thatRespondsWith(Redirect()));
+        validRequests.add(new Request(GET, "/redirect").thatRespondsWith(Redirect("http://localhost:5000/")));
         validRequests.add(new Request(POST, "/form").thatRespondsWith(OK()));
         validRequests.add(new Request(PUT, "/form").thatRespondsWith(OK()));
 

@@ -21,16 +21,10 @@ public class ResponseTest {
     }
 
     @Test
-    public void aRedirectResponseHasTheCorrectStatusLine() {
-        Response response = Response.Redirect();
-
-        assertEquals("HTTP/1.1 302 Found\n", response.getStatusLine());
-    }
-
-    @Test
     public void aRedirectResponseCanAlsoHaveADefinedLocation() {
         Response response = Response.Redirect("another location");
 
         assertEquals("Location: another location\n", response.getResponseHeader());
     }
+
 }

@@ -3,7 +3,7 @@ package uk.nickbdyer.httpserver;
 public class Response {
 
     private String statusLine;
-    private String location;
+    private String location = null;
 
     private Response(String statusLine) {
         this.statusLine = statusLine;
@@ -19,7 +19,10 @@ public class Response {
     }
 
     public String getResponseHeader() {
-        return "Location: " + location + "\n";
+        if (location != null) {
+            return "Location: " + location + "\n";
+        }
+        return "";
     }
 
     public static Response OK() {
@@ -28,10 +31,6 @@ public class Response {
 
     public static Response NotFound() {
         return new Response("HTTP/1.1 404 Not Found\n");
-    }
-
-    public static Response Redirect() {
-        return new Response("HTTP/1.1 302 Found\n");
     }
 
     public static Response Redirect(String location) {
