@@ -26,7 +26,12 @@ public class HttpServer {
 //              Build response
                 OutputStream response = connection.getOutputStream();
 
-                response.write(parser.getResponse(request).getStatusLine().getBytes());
+                String statusLine = parser.getResponse(request).getStatusLine();
+                String responseHeader = parser.getResponse(request).getResponseHeader();
+
+                response.write(statusLine.getBytes());
+                response.write(responseHeader.getBytes());
+
                 response.flush();
                 response.close();
 

@@ -15,7 +15,7 @@ public class Response {
     }
 
     public String getStatusLine() {
-        return statusLine;
+        return statusLine + "\n";
     }
 
     public String getResponseHeader() {
@@ -26,11 +26,11 @@ public class Response {
     }
 
     public static Response OK() {
-        return new Response("HTTP/1.1 200 OK\n");
+        return new Response("HTTP/1.1 200 OK");
     }
 
     public static Response NotFound() {
-        return new Response("HTTP/1.1 404 Not Found\n");
+        return new Response("HTTP/1.1 404 Not Found");
     }
 
     public static Response Redirect(String location) {
