@@ -7,11 +7,11 @@ import java.net.Socket;
 public class HttpServer {
 
     private final ConnectionHandler connectionHandler;
-    private final RequestParser parser;
+    private final ResponseBuilder builder;
 
-    public HttpServer(ConnectionHandler connectionHandler, RequestParser parser) {
+    public HttpServer(ConnectionHandler connectionHandler, ResponseBuilder builder) {
         this.connectionHandler = connectionHandler;
-        this.parser = parser;
+        this.builder = builder;
     }
 
     public void listen() {
@@ -19,13 +19,14 @@ public class HttpServer {
             Socket connection = connectionHandler.getSocket();
             while (connection != null) {
                 String requestString = new SocketHandler(connection).getRequest();
+                RequestParser parser = new RequestParser();
                 Request request = parser.parse(requestString);
 
 //              Build response NEEDS REFACTORING, maybe after Interface for Response.
                 OutputStream response = connection.getOutputStream();
 
-                String statusLine = parser.getResponse(request).getStatusLine();
-                String responseHeader = parser.getResponse(request).getResponseHeader();
+                String statusLine = builder.getResponse(request).getStatusLine();
+                String responseHeader = builder.getResponse(request).getResponseHeader();
 
                 response.write(statusLine.getBytes());
                 response.write(responseHeader.getBytes());

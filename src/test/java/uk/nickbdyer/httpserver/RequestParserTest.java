@@ -3,13 +3,8 @@ package uk.nickbdyer.httpserver;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import static org.junit.Assert.*;
 import static uk.nickbdyer.httpserver.Method.*;
-import static uk.nickbdyer.httpserver.Response.*;
 
 public class RequestParserTest {
 
@@ -74,46 +69,4 @@ public class RequestParserTest {
         assertEquals("/foobar", request.getRoute());
     }
 
-    @Test
-    public void requestParserWillReturnADefinedResponseIfItExists() {
-        Request request = new Request(GET, "/").thatRespondsWith(OK());
-        RequestParser requestParser = new RequestParser();
-        requestParser.add(request);
-
-        assertEquals(OK(), requestParser.getResponse(requestParser.parse("GET / HTTP/1.1")));
-    }
-
-    @Test
-    public void requestParserWillReturnANotFoundResponseIfNoDefinedResponseIsFound() {
-        Request request = new Request(GET, "/");
-        RequestParser requestParser = new RequestParser();
-        requestParser.add(request);
-
-        assertEquals(NotFound(), requestParser.getResponse(requestParser.parse("GET / HTTP/1.1")));
-    }
-
-    @Test
-    public void requestParserWillReturnANotFoundResponseIfRequestIsNotValid() {
-        RequestParser requestParser = new RequestParser();
-
-        assertEquals(NotFound(), requestParser.getResponse(requestParser.parse("GET / HTTP/1.1")));
-    }
-
-    @Test
-    public void requestParserWillReturnAMethodNotAllowedResponseIfMethodIsNotAllowed() {
-        Request request = new Request(GET, "/").thatRespondsWith(OK());
-        RequestParser requestParser = new RequestParser();
-        requestParser.add(request);
-
-        assertEquals(MethodNotAllowed(new ArrayList<>()), requestParser.getResponse(requestParser.parse("POST / HTTP/1.1")));
-    }
-
-    @Test
-    public void requestParserWillReturnAMethodNotAllowedResponseIfMethodIsNonSensical() {
-        Request request = new Request(GET, "/").thatRespondsWith(OK());
-        RequestParser requestParser = new RequestParser();
-        requestParser.add(request);
-
-        assertEquals(MethodNotAllowed(new ArrayList<>()), requestParser.getResponse(requestParser.parse("ALDSKFGJASDHG / HTTP/1.1")));
-    }
 }

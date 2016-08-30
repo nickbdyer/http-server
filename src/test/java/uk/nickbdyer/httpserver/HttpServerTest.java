@@ -27,7 +27,7 @@ public class HttpServerTest {
         serverSocket = new ServerSocket(5000);
         executor = Executors.newSingleThreadExecutor();
         connectionHandler = new ConnectionHandlerSpy(serverSocket);
-        server = new HttpServer(connectionHandler, new RequestParser());
+        server = new HttpServer(connectionHandler, new ResponseBuilder());
     }
 
     @After
