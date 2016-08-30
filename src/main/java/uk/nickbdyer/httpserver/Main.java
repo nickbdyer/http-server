@@ -13,6 +13,7 @@ public class Main {
         List<Request> validRequests = new ArrayList<>();
 
         validRequests.add(new Request(GET, "/"));
+        validRequests.add(new Request(GET, "/redirect"));
         validRequests.add(new Request(POST, "/form"));
         validRequests.add(new Request(PUT, "/form"));
 
