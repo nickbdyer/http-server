@@ -26,34 +26,38 @@ public class ResponseBuilder {
             allowedMethods = new ArrayList<>(Arrays.asList(request));
             definedRequests.put(request.getRoute(), allowedMethods);
         }
-        if (request.getMethod() == GET) {
-            allowedMethods.add(new Request(HEAD, request.getRoute()).thatRespondsWith(request.getResponse()));
+        if (newRequestIsGET(request)) {
+            addHeadToAllowedMethods(request, allowedMethods);
         }
     }
 
     public Response getResponse(Request request) {
         if (!isExistingRoute(request)) {
-            return request.getResponse();
+            return request.getDefinedResponse();
         } else if (isDefinedRequest(request)) {
-            int responseIndex = definedRequests.get(request.getRoute()).indexOf(request);
-            return definedRequests.get(request.getRoute()).get(responseIndex).getResponse();
+            return definedRequests.get(request.getRoute()).stream()
+                    .filter(request::equals)
+                    .collect(Collectors.toList()).get(0).getDefinedResponse();
         } else {
-            List<Method> allowedMethods = definedRequests.get(request.getRoute()).stream()
+            return new MethodNotAllowed(definedRequests.get(request.getRoute()).stream()
                     .map(Request::getMethod)
-                    .collect(Collectors.toList());
-            return request.thatRespondsWith(new MethodNotAllowed(allowedMethods)).getResponse();
+                    .collect(Collectors.toList()));
         }
     }
 
     private boolean isDefinedRequest(Request request) {
-        if (isExistingRoute(request)) {
-            return definedRequests.get(request.getRoute()).contains(request);
-        }
-        return false;
+        return isExistingRoute(request) && definedRequests.get(request.getRoute()).contains(request);
     }
 
     private boolean isExistingRoute(Request request) {
         return definedRequests.containsKey(request.getRoute());
     }
 
+    private void addHeadToAllowedMethods(Request request, List<Request> allowedMethods) {
+        allowedMethods.add(new Request(HEAD, request.getRoute()).thatRespondsWith(request.getDefinedResponse()));
+    }
+
+    private boolean newRequestIsGET(Request request) {
+        return request.getMethod() == GET;
+    }
 }

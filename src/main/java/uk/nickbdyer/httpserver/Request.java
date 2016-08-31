@@ -33,7 +33,7 @@ public class Request {
         return new Request(method, route, response);
     }
 
-    public Response getResponse() {
+    public Response getDefinedResponse() {
         return response;
     }
 
