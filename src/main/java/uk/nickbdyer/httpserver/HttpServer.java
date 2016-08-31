@@ -25,11 +25,9 @@ public class HttpServer {
 //              Build response NEEDS REFACTORING, maybe after Interface for ConcreteResponse.
                 OutputStream response = connection.getOutputStream();
 
-                String statusLine = builder.getResponse(request).getStatusLine();
-                String responseHeader = builder.getResponse(request).getResponseHeader();
+                String responseString = builder.getResponse(request).getResponse();
 
-                response.write(statusLine.getBytes());
-                response.write(responseHeader.getBytes());
+                response.write(responseString.getBytes());
 
                 response.flush();
                 response.close();

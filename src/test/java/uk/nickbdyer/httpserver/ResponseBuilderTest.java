@@ -1,22 +1,25 @@
 package uk.nickbdyer.httpserver;
 
 import org.junit.Test;
+import uk.nickbdyer.httpserver.Responses.MethodNotAllowed;
+import uk.nickbdyer.httpserver.Responses.NotFound;
+import uk.nickbdyer.httpserver.Responses.OK;
 
 import java.util.ArrayList;
 
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static uk.nickbdyer.httpserver.Method.*;
-import static uk.nickbdyer.httpserver.ConcreteResponse.*;
 
 public class ResponseBuilderTest {
 
     @Test
     public void builderWillReturnADefinedResponseIfItExists() {
-        Request request = new Request(GET, "/").thatRespondsWith(OK());
+        Request request = new Request(GET, "/").thatRespondsWith(new OK());
         ResponseBuilder builder = new ResponseBuilder();
         builder.add(request);
 
-        assertEquals(OK(), builder.getResponse(getRequest()));
+        assertEquals(new OK().getResponse(), builder.getResponse(getRequest()).getResponse());
     }
 
     @Test
@@ -25,32 +28,32 @@ public class ResponseBuilderTest {
         ResponseBuilder builder = new ResponseBuilder();
         builder.add(request);
 
-        assertEquals(NotFound(), builder.getResponse(getRequest()));
+        assertEquals(new NotFound().getResponse(), builder.getResponse(getRequest()).getResponse());
     }
 
     @Test
     public void builderWillReturnANotFoundResponseIfRequestIsNotValid() {
         ResponseBuilder builder = new ResponseBuilder();
 
-        assertEquals(NotFound(), builder.getResponse(getRequest()));
+        assertEquals(new NotFound().getResponse(), builder.getResponse(getRequest()).getResponse());
     }
 
     @Test
     public void builderWillReturnAMethodNotAllowedResponseIfMethodIsNotAllowed() {
-        Request request = new Request(GET, "/").thatRespondsWith(OK());
+        Request request = new Request(GET, "/").thatRespondsWith(new OK());
         ResponseBuilder builder = new ResponseBuilder();
         builder.add(request);
 
-        assertEquals(MethodNotAllowed(new ArrayList<>()), builder.getResponse(postRequest()));
+        assertEquals(new MethodNotAllowed(new ArrayList<>(asList(GET, HEAD))).getResponse(), builder.getResponse(postRequest()).getResponse());
     }
 
     @Test
     public void builderWillReturnAMethodNotAllowedResponseIfMethodIsNonSensical() {
-        Request request = new Request(GET, "/").thatRespondsWith(OK());
+        Request request = new Request(GET, "/").thatRespondsWith(new OK());
         ResponseBuilder builder = new ResponseBuilder();
         builder.add(request);
 
-        assertEquals(MethodNotAllowed(new ArrayList<>()), builder.getResponse(notAllowedRequest()));
+        assertEquals(new MethodNotAllowed(new ArrayList<>(asList(GET, HEAD))).getResponse(), builder.getResponse(notAllowedRequest()).getResponse());
     }
 
     private Request getRequest() {

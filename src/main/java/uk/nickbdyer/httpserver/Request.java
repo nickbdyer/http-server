@@ -1,20 +1,21 @@
 package uk.nickbdyer.httpserver;
 
-import static uk.nickbdyer.httpserver.ConcreteResponse.*;
+import uk.nickbdyer.httpserver.Responses.NotFound;
+import uk.nickbdyer.httpserver.Responses.Response;
 
 public class Request {
 
     private Method method;
     private String route;
-    private ConcreteResponse response;
+    private Response response;
 
     public Request(Method method, String route) {
         this.method = method;
         this.route = route;
-        this.response = NotFound();
+        this.response = new NotFound();
     }
 
-    private Request(Method method, String route, ConcreteResponse response) {
+    private Request(Method method, String route, Response response) {
         this.method = method;
         this.route = route;
         this.response = response;
@@ -28,11 +29,11 @@ public class Request {
         return route;
     }
 
-    public Request thatRespondsWith(ConcreteResponse response) {
+    public Request thatRespondsWith(Response response) {
         return new Request(method, route, response);
     }
 
-    public ConcreteResponse getResponse() {
+    public Response getResponse() {
         return response;
     }
 
