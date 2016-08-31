@@ -70,12 +70,17 @@ public class RequestParserTest {
     }
 
 //    @Test
-//    public void requestParserCanExtractAPostRequestBody() {
-//        String requestString = "POST /foobar HTTP/1.1\n";
+//    public void requestParserCanExtractHeaders() {
+//        String requestString = "GET /foobar HTTP/1.1\n" +
+//                "Content-Length: 11\n" +
+//                "Host: localhost:5000\n" +
+//                "Connection: Keep-Alive\n" +
+//                "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)\n" +
+//                "Accept-Encoding: gzip,deflate\n";
 //
 //        Request request = parser.parse(requestString);
 //
-//        assertEquals("/foobar", request.getRoute());
+//        assertEquals(5, request.getHeaders().keys().length());
 //    }
 
 }
