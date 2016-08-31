@@ -1,7 +1,6 @@
 package uk.nickbdyer.httpserver;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.Socket;
 
 public class HttpServer {
@@ -18,20 +17,13 @@ public class HttpServer {
         try {
             Socket connection = connectionHandler.getSocket();
             while (connection != null) {
-                String requestString = new SocketHandler(connection).getRequest();
-
+                SocketHandler socketHandler = new SocketHandler(connection);
                 RequestParser parser = new RequestParser();
+
+                String requestString = socketHandler.getRequest();
                 Request request = parser.parse(requestString);
-
-//              Build response, move to socket handler
-                OutputStream response = connection.getOutputStream();
-
                 String responseString = builder.getResponse(request).getResponse();
-
-                response.write(responseString.getBytes());
-
-                response.flush();
-                response.close();
+                socketHandler.sendResponse(responseString);
 
                 connection = connectionHandler.getSocket();
             }

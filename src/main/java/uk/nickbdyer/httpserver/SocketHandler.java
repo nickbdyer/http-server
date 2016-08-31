@@ -6,9 +6,11 @@ import java.net.Socket;
 public class SocketHandler {
 
     private final BufferedReader in;
+    private final PrintWriter out;
 
     public SocketHandler(Socket socket) throws IOException {
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        this.out = new PrintWriter(socket.getOutputStream(), true);
     }
 
     public String getRequest() throws IOException {
@@ -19,5 +21,10 @@ public class SocketHandler {
             builder.append(line);
         }
         return builder.toString();
+    }
+
+    public void sendResponse(String response) {
+        out.print(response);
+        out.close();
     }
 }
