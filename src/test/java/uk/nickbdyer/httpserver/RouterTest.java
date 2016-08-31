@@ -14,46 +14,46 @@ import static uk.nickbdyer.httpserver.Method.*;
 public class RouterTest {
 
     @Test
-    public void builderWillReturnADefinedResponseIfItExists() {
+    public void routerWillReturnADefinedResponseIfItExists() {
         Request request = new Request(GET, "/").thatRespondsWith(new OK());
-        Router builder = new Router();
-        builder.add(request);
+        Router router = new Router();
+        router.add(request);
 
-        assertEquals(new OK().getResponse(), builder.getResponse(getRequest()).getResponse());
+        assertEquals(new OK().getStatusLine(), router.getResponse(getRequest()).getStatusLine());
     }
 
     @Test
-    public void builderWillReturnANotFoundResponseIfNoDefinedResponseIsFound() {
+    public void routerWillReturnANotFoundResponseIfNoDefinedResponseIsFound() {
         Request request = new Request(GET, "/");
-        Router builder = new Router();
-        builder.add(request);
+        Router router = new Router();
+        router.add(request);
 
-        assertEquals(new NotFound().getResponse(), builder.getResponse(getRequest()).getResponse());
+        assertEquals(new NotFound().getStatusLine(), router.getResponse(getRequest()).getStatusLine());
     }
 
     @Test
-    public void builderWillReturnANotFoundResponseIfRequestIsNotValid() {
-        Router builder = new Router();
+    public void routerWillReturnANotFoundResponseIfRequestIsNotValid() {
+        Router router = new Router();
 
-        assertEquals(new NotFound().getResponse(), builder.getResponse(getRequest()).getResponse());
+        assertEquals(new NotFound().getResponse(), router.getResponse(getRequest()).getResponse());
     }
 
     @Test
-    public void builderWillReturnAMethodNotAllowedResponseIfMethodIsNotAllowed() {
+    public void routerWillReturnAMethodNotAllowedResponseIfMethodIsNotAllowed() {
         Request request = new Request(GET, "/").thatRespondsWith(new OK());
-        Router builder = new Router();
-        builder.add(request);
+        Router router = new Router();
+        router.add(request);
 
-        assertEquals(new MethodNotAllowed(new ArrayList<>(asList(GET, HEAD))).getResponse(), builder.getResponse(postRequest()).getResponse());
+        assertEquals(new MethodNotAllowed(new ArrayList<>(asList(GET, HEAD))).getResponse(), router.getResponse(postRequest()).getResponse());
     }
 
     @Test
-    public void builderWillReturnAMethodNotAllowedResponseIfMethodIsNonSensical() {
+    public void routerWillReturnAMethodNotAllowedResponseIfMethodIsNonSensical() {
         Request request = new Request(GET, "/").thatRespondsWith(new OK());
-        Router builder = new Router();
-        builder.add(request);
+        Router router = new Router();
+        router.add(request);
 
-        assertEquals(new MethodNotAllowed(new ArrayList<>(asList(GET, HEAD))).getResponse(), builder.getResponse(notAllowedRequest()).getResponse());
+        assertEquals(new MethodNotAllowed(new ArrayList<>(asList(GET, HEAD))).getResponse(), router.getResponse(notAllowedRequest()).getResponse());
     }
 
     private Request getRequest() {

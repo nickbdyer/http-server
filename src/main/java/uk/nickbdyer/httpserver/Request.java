@@ -9,9 +9,9 @@ public class Request {
     private String route;
     private Response response;
 
-    public Request(Method method, String route) {
+    public Request(Method method, String path) {
         this.method = method;
-        this.route = route;
+        this.route = path;
         this.response = new NotFound();
     }
 
@@ -35,22 +35,5 @@ public class Request {
         this.method = method;
         this.route = route;
         this.response = response;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Request request = (Request) o;
-
-        return getMethod() == request.getMethod() && getRoute().equals(request.getRoute());
-    }
-
-    @Override
-    public int hashCode() {
-        int result = getMethod().hashCode();
-        result = 31 * result + getRoute().hashCode();
-        return result;
     }
 }

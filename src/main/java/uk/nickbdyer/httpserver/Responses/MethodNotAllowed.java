@@ -20,7 +20,7 @@ public class MethodNotAllowed implements Response {
         return getStatusLine() + getResponseHeader();
     }
 
-    private String getStatusLine() {
+    public String getStatusLine() {
         return statusLine + "\n";
     }
 

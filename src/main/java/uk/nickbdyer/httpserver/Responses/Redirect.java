@@ -15,7 +15,7 @@ public class Redirect implements Response {
         return getStatusLine() + getResponseHeader();
     }
 
-    private String getStatusLine() {
+    public String getStatusLine() {
         return statusLine + "\n";
     }
 
