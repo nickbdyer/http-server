@@ -3,9 +3,6 @@ package uk.nickbdyer.httpserver;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.Assert.*;
 import static uk.nickbdyer.httpserver.Method.*;
 
@@ -15,7 +12,7 @@ public class RequestParserTest {
 
     @Before
     public void setUp() {
-        parser = new RequestParser(new ArrayList<>());
+        parser = new RequestParser();
     }
 
     @Test
@@ -51,7 +48,7 @@ public class RequestParserTest {
 
         Request request = parser.parse(requestString);
 
-        assertEquals(INVALID_METHOD, request.getMethod());
+        assertEquals(METHOD_NOT_ALLOWED, request.getMethod());
     }
 
     @Test
@@ -72,21 +69,18 @@ public class RequestParserTest {
         assertEquals("/foobar", request.getRoute());
     }
 
-    @Test
-    public void requestParserKnowsIfARequestIsValid() {
-        Request request = new Request(GET, "/");
-        List<Request> validRequests = new ArrayList<>();
-        validRequests.add(request);
+//    @Test
+//    public void requestParserCanExtractHeaders() {
+//        String requestString = "GET /foobar HTTP/1.1\n" +
+//                "Content-Length: 11\n" +
+//                "Host: localhost:5000\n" +
+//                "Connection: Keep-Alive\n" +
+//                "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)\n" +
+//                "Accept-Encoding: gzip,deflate\n";
+//
+//        Request request = parser.parse(requestString);
+//
+//        assertEquals(5, request.getHeaders().keys().length());
+//    }
 
-        RequestParser requestParser = new RequestParser(validRequests);
-
-        assertTrue(requestParser.isValid(requestParser.parse("GET / HTTP/1.1")));
-    }
-
-    @Test
-    public void requestParserKnowsIfARequestIsInvalid() {
-        RequestParser requestParser = new RequestParser(new ArrayList<>());
-
-        assertFalse(requestParser.isValid(requestParser.parse("GET / HTTP/1.1")));
-    }
 }

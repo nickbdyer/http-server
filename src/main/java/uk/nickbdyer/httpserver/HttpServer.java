@@ -7,13 +7,11 @@ import java.net.Socket;
 public class HttpServer {
 
     private final ConnectionHandler connectionHandler;
-    private final RequestParser parser;
-    private final String directoryPath;
+    private final ResponseBuilder builder;
 
-    public HttpServer(ConnectionHandler connectionHandler, RequestParser parser, String directoryPath) {
+    public HttpServer(ConnectionHandler connectionHandler, ResponseBuilder builder) {
         this.connectionHandler = connectionHandler;
-        this.parser = parser;
-        this.directoryPath = directoryPath;
+        this.builder = builder;
     }
 
     public void listen() {
@@ -21,17 +19,20 @@ public class HttpServer {
             Socket connection = connectionHandler.getSocket();
             while (connection != null) {
                 String requestString = new SocketHandler(connection).getRequest();
+
+                RequestParser parser = new RequestParser();
                 Request request = parser.parse(requestString);
 
-//              Build response
+//              Build response, move to socket handler
                 OutputStream response = connection.getOutputStream();
-                if (parser.isValid(request)) {
-                    response.write("HTTP/1.1 200 OK\n".getBytes());
-                } else {
-                    response.write("HTTP/1.1 404 Not Found\n".getBytes());
-                }
+
+                String responseString = builder.getResponse(request).getResponse();
+
+                response.write(responseString.getBytes());
+
                 response.flush();
                 response.close();
+
                 connection = connectionHandler.getSocket();
             }
         } catch (IOException e) {
