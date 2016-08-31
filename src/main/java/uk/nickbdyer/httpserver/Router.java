@@ -9,11 +9,11 @@ import java.util.stream.Collectors;
 import static uk.nickbdyer.httpserver.Method.GET;
 import static uk.nickbdyer.httpserver.Method.HEAD;
 
-public class ResponseBuilder {
+public class Router {
 
     private Map<String, List<Request>> definedRequests;
 
-    public ResponseBuilder() {
+    public Router() {
         this.definedRequests = new HashMap<>();
     }
 

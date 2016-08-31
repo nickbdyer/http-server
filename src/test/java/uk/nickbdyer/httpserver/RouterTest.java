@@ -11,12 +11,12 @@ import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static uk.nickbdyer.httpserver.Method.*;
 
-public class ResponseBuilderTest {
+public class RouterTest {
 
     @Test
     public void builderWillReturnADefinedResponseIfItExists() {
         Request request = new Request(GET, "/").thatRespondsWith(new OK());
-        ResponseBuilder builder = new ResponseBuilder();
+        Router builder = new Router();
         builder.add(request);
 
         assertEquals(new OK().getResponse(), builder.getResponse(getRequest()).getResponse());
@@ -25,7 +25,7 @@ public class ResponseBuilderTest {
     @Test
     public void builderWillReturnANotFoundResponseIfNoDefinedResponseIsFound() {
         Request request = new Request(GET, "/");
-        ResponseBuilder builder = new ResponseBuilder();
+        Router builder = new Router();
         builder.add(request);
 
         assertEquals(new NotFound().getResponse(), builder.getResponse(getRequest()).getResponse());
@@ -33,7 +33,7 @@ public class ResponseBuilderTest {
 
     @Test
     public void builderWillReturnANotFoundResponseIfRequestIsNotValid() {
-        ResponseBuilder builder = new ResponseBuilder();
+        Router builder = new Router();
 
         assertEquals(new NotFound().getResponse(), builder.getResponse(getRequest()).getResponse());
     }
@@ -41,7 +41,7 @@ public class ResponseBuilderTest {
     @Test
     public void builderWillReturnAMethodNotAllowedResponseIfMethodIsNotAllowed() {
         Request request = new Request(GET, "/").thatRespondsWith(new OK());
-        ResponseBuilder builder = new ResponseBuilder();
+        Router builder = new Router();
         builder.add(request);
 
         assertEquals(new MethodNotAllowed(new ArrayList<>(asList(GET, HEAD))).getResponse(), builder.getResponse(postRequest()).getResponse());
@@ -50,7 +50,7 @@ public class ResponseBuilderTest {
     @Test
     public void builderWillReturnAMethodNotAllowedResponseIfMethodIsNonSensical() {
         Request request = new Request(GET, "/").thatRespondsWith(new OK());
-        ResponseBuilder builder = new ResponseBuilder();
+        Router builder = new Router();
         builder.add(request);
 
         assertEquals(new MethodNotAllowed(new ArrayList<>(asList(GET, HEAD))).getResponse(), builder.getResponse(notAllowedRequest()).getResponse());
