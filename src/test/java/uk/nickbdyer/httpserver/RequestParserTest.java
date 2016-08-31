@@ -69,4 +69,13 @@ public class RequestParserTest {
         assertEquals("/foobar", request.getRoute());
     }
 
+//    @Test
+//    public void requestParserCanExtractAPostRequestBody() {
+//        String requestString = "POST /foobar HTTP/1.1\n";
+//
+//        Request request = parser.parse(requestString);
+//
+//        assertEquals("/foobar", request.getRoute());
+//    }
+
 }

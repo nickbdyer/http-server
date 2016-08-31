@@ -65,6 +65,7 @@ public class HttpServerTest {
         OutputStream output = socket.getOutputStream();
         output.write("GET / HTTP/1.1\n".getBytes());
         output.flush();
+        output.close();
     }
 
 

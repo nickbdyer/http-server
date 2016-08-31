@@ -5,8 +5,9 @@ import static uk.nickbdyer.httpserver.Method.METHOD_NOT_ALLOWED;
 public class RequestParser {
 
     public Request parse(String requestString) {
-        Method method = validateMethod(requestString.substring(0, (requestString.indexOf(' '))));
-        String route = requestString.substring((requestString.indexOf(' ') + 1), requestString.lastIndexOf(' '));
+        int firstSpace = requestString.indexOf(' ');
+        Method method = validateMethod(requestString.substring(0, (firstSpace)));
+        String route = requestString.substring((firstSpace + 1), requestString.indexOf(' ', firstSpace + 1));
         return new Request(method, route);
     }
 

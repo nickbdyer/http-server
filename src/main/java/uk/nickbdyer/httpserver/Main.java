@@ -15,6 +15,7 @@ public class Main {
         ResponseBuilder builder = new ResponseBuilder();
         builder.add(new Request(GET, "/").thatRespondsWith(new OK()));
         builder.add(new Request(GET, "/redirect").thatRespondsWith(new Redirect("http://localhost:5000/")));
+        builder.add(new Request(GET, "/form").thatRespondsWith(new OK()));
         builder.add(new Request(POST, "/form").thatRespondsWith(new OK()));
         builder.add(new Request(PUT, "/form").thatRespondsWith(new OK()));
 

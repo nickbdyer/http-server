@@ -19,10 +19,11 @@ public class HttpServer {
             Socket connection = connectionHandler.getSocket();
             while (connection != null) {
                 String requestString = new SocketHandler(connection).getRequest();
+
                 RequestParser parser = new RequestParser();
                 Request request = parser.parse(requestString);
 
-//              Build response NEEDS REFACTORING, maybe after Interface for ConcreteResponse.
+//              Build response, move to socket handler
                 OutputStream response = connection.getOutputStream();
 
                 String responseString = builder.getResponse(request).getResponse();

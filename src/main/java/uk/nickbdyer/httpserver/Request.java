@@ -15,12 +15,6 @@ public class Request {
         this.response = new NotFound();
     }
 
-    private Request(Method method, String route, Response response) {
-        this.method = method;
-        this.route = route;
-        this.response = response;
-    }
-
     public Method getMethod() {
         return method;
     }
@@ -35,6 +29,12 @@ public class Request {
 
     public Response getDefinedResponse() {
         return response;
+    }
+
+    private Request(Method method, String route, Response response) {
+        this.method = method;
+        this.route = route;
+        this.response = response;
     }
 
     @Override
