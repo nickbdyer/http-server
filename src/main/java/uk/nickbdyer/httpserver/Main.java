@@ -3,11 +3,9 @@ package uk.nickbdyer.httpserver;
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.ArrayList;
-import java.util.List;
 
 import static uk.nickbdyer.httpserver.Method.*;
-import static uk.nickbdyer.httpserver.Response.*;
+import static uk.nickbdyer.httpserver.ConcreteResponse.*;
 
 public class Main {
 

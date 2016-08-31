@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static uk.nickbdyer.httpserver.Method.*;
-import static uk.nickbdyer.httpserver.Response.*;
+import static uk.nickbdyer.httpserver.ConcreteResponse.*;
 
 public class ResponseBuilderTest {
 

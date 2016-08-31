@@ -28,7 +28,7 @@ public class ResponseBuilder {
         }
     }
 
-    public Response getResponse(Request request) {
+    public ConcreteResponse getResponse(Request request) {
         if (!isExistingRoute(request)) {
             return request.getResponse();
         } else if (isDefinedRequest(request)) {
@@ -38,7 +38,7 @@ public class ResponseBuilder {
             List<Method> allowedMethods = definedRequests.get(request.getRoute()).stream()
                     .map(Request::getMethod)
                     .collect(Collectors.toList());
-            return request.thatRespondsWith(Response.MethodNotAllowed(allowedMethods)).getResponse();
+            return request.thatRespondsWith(ConcreteResponse.MethodNotAllowed(allowedMethods)).getResponse();
         }
     }
 
