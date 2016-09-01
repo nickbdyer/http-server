@@ -4,6 +4,7 @@ import org.junit.Test;
 import uk.nickbdyer.httpserver.Responses.MethodNotAllowed;
 import uk.nickbdyer.httpserver.Responses.NotFound;
 import uk.nickbdyer.httpserver.Responses.OK;
+import uk.nickbdyer.httpserver.Responses.Redirect;
 
 import java.util.ArrayList;
 
@@ -41,10 +42,12 @@ public class RouterTest {
     @Test
     public void routerWillReturnAMethodNotAllowedResponseIfMethodIsNotAllowed() {
         Request request = new Request(GET, "/").thatRespondsWith(new OK());
+        Request request2 = new Request(PUT, "/").thatRespondsWith(new Redirect(""));
         Router router = new Router();
         router.add(request);
+        router.add(request2);
 
-        assertEquals(new MethodNotAllowed(new ArrayList<>(asList(GET, HEAD))).getResponse(), router.getResponse(postRequest()).getResponse());
+        assertEquals(new MethodNotAllowed(new ArrayList<>(asList(GET, HEAD, PUT))).getResponse(), router.getResponse(postRequest()).getResponse());
     }
 
     @Test
