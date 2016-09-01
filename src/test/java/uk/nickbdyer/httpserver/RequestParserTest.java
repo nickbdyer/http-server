@@ -13,7 +13,7 @@ public class RequestParserTest {
 
     @Test
     public void requestParserRecognisesGETMethod() throws IOException {
-        Socket socket = new SocketStubWithRequest("GET / HTTP/1.1\n");
+        Socket socket = new SocketStubWithRequest("GET / HTTP/1.1\n" + basicRequestHeader);
         RequestParser parser = new RequestParser(socket);
 
         Request request = parser.parse();
@@ -23,7 +23,7 @@ public class RequestParserTest {
 
     @Test
     public void requestParserRecognisesPOSTMethod() throws IOException {
-        Socket socket = new SocketStubWithRequest("POST / HTTP/1.1\n");
+        Socket socket = new SocketStubWithRequest("POST / HTTP/1.1\n" + basicRequestHeader);
         RequestParser parser = new RequestParser(socket);
 
         Request request = parser.parse();
@@ -33,7 +33,7 @@ public class RequestParserTest {
 
     @Test
     public void requestParserRecognisesHEADMethod() throws IOException {
-        Socket socket = new SocketStubWithRequest("HEAD / HTTP/1.1\n");
+        Socket socket = new SocketStubWithRequest("HEAD / HTTP/1.1\n" + basicRequestHeader);
         RequestParser parser = new RequestParser(socket);
 
         Request request = parser.parse();
@@ -43,7 +43,7 @@ public class RequestParserTest {
 
     @Test
     public void requestParserWillReturnINVALIDMETHOD() throws IOException {
-        Socket socket = new SocketStubWithRequest("HELLO / HTTP/1.1\n");
+        Socket socket = new SocketStubWithRequest("HELLO / HTTP/1.1\n" + basicRequestHeader);
         RequestParser parser = new RequestParser(socket);
 
         Request request = parser.parse();
@@ -53,7 +53,7 @@ public class RequestParserTest {
 
     @Test
     public void requestParserCanExtractTheRoute() throws IOException {
-        Socket socket = new SocketStubWithRequest("HEAD / HTTP/1.1\n");
+        Socket socket = new SocketStubWithRequest("HEAD / HTTP/1.1\n" + basicRequestHeader);
         RequestParser parser = new RequestParser(socket);
 
         Request request = parser.parse();
@@ -63,7 +63,7 @@ public class RequestParserTest {
 
     @Test
     public void requestParserCanExtractAnotherRoute() throws IOException {
-        Socket socket = new SocketStubWithRequest("GET /foobar HTTP/1.1\n");
+        Socket socket = new SocketStubWithRequest("GET /foobar HTTP/1.1\n" + basicRequestHeader);
         RequestParser parser = new RequestParser(socket);
 
         Request request = parser.parse();
@@ -72,18 +72,23 @@ public class RequestParserTest {
     }
 
 
-//    @Test
-//    public void requestParserCanExtractHeaders() {
-//        String requestString = "GET /foobar HTTP/1.1\n" +
-//                "Content-Length: 11\n" +
-//                "Host: localhost:5000\n" +
-//                "Connection: Keep-Alive\n" +
-//                "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)\n" +
-//                "Accept-Encoding: gzip,deflate\n";
-//
-//        Request request = parser.parse(requestString);
-//
-//        assertEquals(5, request.getHeaders().keys().length());
-//    }
+    @Test
+    public void requestParserCanExtractHeaders() throws IOException {
+        String requestString = "GET /foobar HTTP/1.1\n" +
+                "Content-Length: 11\n" +
+                "Host: localhost:5000\n" +
+                "Connection: Keep-Alive\n" +
+                "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)\n" +
+                "Accept-Encoding: gzip,deflate\n";
+
+        Socket socket = new SocketStubWithRequest(requestString);
+        RequestParser parser = new RequestParser(socket);
+
+        Request request = parser.parse();
+
+        assertEquals(5, request.getHeaders().size());
+    }
+
+    String basicRequestHeader = "Host: localhost:5000\n";
 
 }
