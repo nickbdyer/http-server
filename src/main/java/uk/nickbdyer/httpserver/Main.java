@@ -12,6 +12,7 @@ import static uk.nickbdyer.httpserver.Method.*;
 public class Main {
 
     public static void main(String[] args) throws IOException {
+        Arguments arguments = new Arguments(args);
         Router router = new Router();
         router.add(new Request(GET, "/").thatRespondsWith(new OK()));
         router.add(new Request(GET, "/redirect").thatRespondsWith(new Redirect("http://localhost:5000/")));
@@ -19,13 +20,13 @@ public class Main {
         router.add(new Request(POST, "/form").thatRespondsWith(new OK()));
         router.add(new Request(PUT, "/form").thatRespondsWith(new OK()));
 
-        File folder = new File(Arguments.getDirectoryPath(args));
+        File folder = new File(arguments.getDirectoryPath());
         File[] files = folder.listFiles();
         for (int i = 0; i < files.length; i++) {
             router.add(new Request(GET, ("/".concat(files[i].getName()))).thatRespondsWith(new OK()));
         }
 
-        new HttpServer(new ServerSocket(Arguments.getPort(args)), router).listen();
+        new HttpServer(new ServerSocket(arguments.getPort()), router).listen();
     }
 
 }
