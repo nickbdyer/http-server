@@ -1,6 +1,8 @@
 package uk.nickbdyer.httpserver;
 
 import uk.nickbdyer.httpserver.Responses.MethodNotAllowed;
+import uk.nickbdyer.httpserver.Responses.NotFound;
+import uk.nickbdyer.httpserver.Responses.OK;
 import uk.nickbdyer.httpserver.Responses.Response;
 
 import java.util.*;
@@ -12,58 +14,58 @@ import static uk.nickbdyer.httpserver.Method.HEAD;
 
 public class Router {
 
-    private Map<String, List<Request>> definedRoutes;
+    private Map<String, List<Route>> definedRoutes;
 
     public Router() {
         this.definedRoutes = new HashMap<>();
     }
 
-    public void add(Request request) {
-        List<Request> allowedMethods;
-        if (isExistingRoute(request)) {
-            allowedMethods = definedRoutes.get(request.getRoute());
-            allowedMethods.add(request);
+    public void add(Route route) {
+        List<Route> allowedMethods;
+        if (isExistingRoute(route.getPath())) {
+            allowedMethods = definedRoutes.get(route.getPath());
+            allowedMethods.add(route);
         } else {
-            allowedMethods = new ArrayList<>(Arrays.asList(request));
-            definedRoutes.put(request.getRoute(), allowedMethods);
+            allowedMethods = new ArrayList<>(Arrays.asList(route));
+            definedRoutes.put(route.getPath(), allowedMethods);
         }
-        if (newRequestIsGET(request)) {
-            addHeadToAllowedMethods(request, allowedMethods);
+        if (newRequestIsGET(route)) {
+            addHeadToAllowedMethods(route, allowedMethods);
         }
     }
 
     public Response getResponse(Request request) {
-        if (!isExistingRoute(request)) {
-            return request.getDefinedResponse();
+        if (!isExistingRoute(request.getPath())) {
+            return new NotFound();
         } else if (hasDefinedRoute(request)) {
-            return definedRoutes.get(request.getRoute()).stream()
+            return definedRoutes.get(request.getPath()).stream()
                     .filter(matchingMethods(request))
-                    .collect(Collectors.toList()).get(0).getDefinedResponse();
+                    .collect(Collectors.toList()).get(0).getResponse();
         } else {
-            return new MethodNotAllowed(definedRoutes.get(request.getRoute()).stream()
-                    .map(Request::getMethod)
+            return new MethodNotAllowed(definedRoutes.get(request.getPath()).stream()
+                    .map(Route::getMethod)
                     .collect(Collectors.toList()));
         }
     }
 
     private boolean hasDefinedRoute(Request request) {
-        return definedRoutes.get(request.getRoute()).stream()
+        return definedRoutes.get(request.getPath()).stream()
                 .anyMatch(matchingMethods(request));
     }
 
-    private boolean isExistingRoute(Request request) {
-        return definedRoutes.containsKey(request.getRoute());
+    private boolean isExistingRoute(String path) {
+        return definedRoutes.containsKey(path);
     }
 
-    private void addHeadToAllowedMethods(Request request, List<Request> allowedMethods) {
-        allowedMethods.add(new Request(HEAD, request.getRoute()).thatRespondsWith(request.getDefinedResponse()));
+    private void addHeadToAllowedMethods(Route route, List<Route> allowedMethods) {
+        allowedMethods.add(new Route(HEAD, route.getPath()).thatRespondsWith(new OK()));
     }
 
-    private boolean newRequestIsGET(Request request) {
-        return request.getMethod() == GET;
+    private boolean newRequestIsGET(Route route) {
+        return route.getMethod() == GET;
     }
 
-    private static Predicate<Request> matchingMethods(Request request) {
+    private static Predicate<Route> matchingMethods(Request request) {
         return route -> route.getMethod().equals(request.getMethod());
     }
 

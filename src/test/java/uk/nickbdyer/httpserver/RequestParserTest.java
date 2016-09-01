@@ -59,7 +59,7 @@ public class RequestParserTest {
 
         Request request = parser.parse();
 
-        assertEquals("/", request.getRoute());
+        assertEquals("/", request.getPath());
     }
 
     @Test
@@ -69,7 +69,7 @@ public class RequestParserTest {
 
         Request request = parser.parse();
 
-        assertEquals("/foobar", request.getRoute());
+        assertEquals("/foobar", request.getPath());
     }
 
 
