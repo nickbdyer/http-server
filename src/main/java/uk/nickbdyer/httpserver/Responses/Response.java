@@ -5,4 +5,5 @@ public interface Response {
     String getResponse();
 
     String getStatusLine();
+
 }

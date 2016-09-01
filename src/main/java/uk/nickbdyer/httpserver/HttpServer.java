@@ -18,13 +18,16 @@ public class HttpServer {
         try {
             Socket connection = serverSocket.accept();
             while (connection != null) {
-                SocketHandler socketHandler = new SocketHandler(connection);
-                RequestParser parser = new RequestParser();
-
-                String requestString = socketHandler.getRequest();
-                Request request = parser.parse(requestString);
+                // Pass socket to requestParser
+                RequestParser parser = new RequestParser(connection);
+                // requestParser.parse return RequestObject
+                String requestString = parser.getRequest();
+                Request request = parser.parse();
+                // Router take RequestObject
                 String responseString = router.getResponse(request).getResponse();
-                socketHandler.sendResponse(responseString);
+                // Route request to appropriate response builder
+                // Response to dispatcher with socket
+                parser.sendResponse(responseString);
 
                 connection = serverSocket.accept();
             }
