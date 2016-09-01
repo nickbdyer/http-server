@@ -68,7 +68,7 @@ public class RouterTest {
     }
 
     private Request notAllowedRequest() {
-        return new Request(METHOD_NOT_ALLOWED, "/");
+        return new Request(INVALID_METHOD, "/");
     }
 
 }

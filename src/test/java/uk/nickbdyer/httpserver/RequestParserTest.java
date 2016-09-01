@@ -1,10 +1,8 @@
 package uk.nickbdyer.httpserver;
 
 import org.junit.Test;
-import uk.nickbdyer.httpserver.testdoubles.SocketStubWithOutputStream;
 import uk.nickbdyer.httpserver.testdoubles.SocketStubWithRequest;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -50,7 +48,7 @@ public class RequestParserTest {
 
         Request request = parser.parse();
 
-        assertEquals(METHOD_NOT_ALLOWED, request.getMethod());
+        assertEquals(INVALID_METHOD, request.getMethod());
     }
 
     @Test
@@ -73,17 +71,6 @@ public class RequestParserTest {
         assertEquals("/foobar", request.getRoute());
     }
 
-    @Test
-    public void aSocketHandlerCanSendAResponse() throws IOException {
-        ByteArrayOutputStream receivedContent = new ByteArrayOutputStream();
-        Socket socket = new SocketStubWithOutputStream(receivedContent);
-
-        RequestParser parser = new RequestParser(socket);
-        String response = "HTTP/1.1 200 OK\n";
-        parser.sendResponse(response);
-
-        assertEquals("HTTP/1.1 200 OK\n", receivedContent.toString());
-    }
 
 //    @Test
 //    public void requestParserCanExtractHeaders() {

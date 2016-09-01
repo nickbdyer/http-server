@@ -1,26 +1,47 @@
 package uk.nickbdyer.httpserver;
 
+import uk.nickbdyer.httpserver.exceptions.StatusLineCouldNotBeReadException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
 
-import static uk.nickbdyer.httpserver.Method.METHOD_NOT_ALLOWED;
+import static uk.nickbdyer.httpserver.Method.INVALID_METHOD;
 
 public class RequestParser {
 
     private final BufferedReader in;
-    private final PrintWriter out;
 
     public RequestParser(Socket socket) throws IOException {
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        this.out = new PrintWriter(socket.getOutputStream(), true);
     }
 
-    public String getRequest() {
-        StringBuilder builder = new StringBuilder();
+    public Request parse() {
+        //Parse StatusLine
+        String statusLine = getStatusLine();
+        int firstSpace = statusLine.indexOf(' ');
+        Method method = validateMethod(statusLine.substring(0, (firstSpace)));
+        String path = statusLine.substring((firstSpace + 1), statusLine.indexOf(' ', firstSpace + 1));
 
+        //Parse Headers
+        String headers = getHeaders();
+
+        //If necessary parse body
+
+        return new Request(method, path);
+    }
+
+    private String getStatusLine() {
+        try {
+            return in.readLine();
+        } catch (IOException e) {
+            throw new StatusLineCouldNotBeReadException();
+        }
+    }
+
+    private String getHeaders() {
+        StringBuilder builder = new StringBuilder();
         try {
             String line;
             while ((line = in.readLine()) != null && line.length() > 0) {
@@ -32,24 +53,11 @@ public class RequestParser {
         return builder.toString();
     }
 
-    public void sendResponse(String response) {
-        out.print(response);
-        out.close();
-    }
-
-    public Request parse() {
-        String requestString = getRequest();
-        int firstSpace = requestString.indexOf(' ');
-        Method method = validateMethod(requestString.substring(0, (firstSpace)));
-        String path = requestString.substring((firstSpace + 1), requestString.indexOf(' ', firstSpace + 1));
-        return new Request(method, path);
-    }
-
     private Method validateMethod(String method) {
         try {
             return Method.valueOf(method);
         } catch (IllegalArgumentException e) {
-            return METHOD_NOT_ALLOWED;
+            return INVALID_METHOD;
         }
     }
 
