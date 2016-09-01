@@ -1,10 +1,8 @@
 package uk.nickbdyer.httpserver;
 
-import uk.nickbdyer.httpserver.exceptions.StatusLineCouldNotBeReadException;
-
-import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,10 +12,10 @@ import static uk.nickbdyer.httpserver.Method.INVALID_METHOD;
 
 public class RequestParser {
 
-    private final BufferedReader in;
+    private final InputStream in;
 
     public RequestParser(Socket socket) throws IOException {
-        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        this.in = socket.getInputStream();
     }
 
     public Request parse() {
@@ -26,6 +24,7 @@ public class RequestParser {
         Map<String, String> headers = getHeaders(readHeaders());
 
         //If necessary parse body
+
         return new Request(statusLine, headers);
     }
 
@@ -45,25 +44,35 @@ public class RequestParser {
     }
 
     private String readStatusLine() {
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
         try {
-            return in.readLine();
-        } catch (IOException e) {
-            throw new StatusLineCouldNotBeReadException();
-        }
-    }
-
-    private String readHeaders() {
-        StringBuilder builder = new StringBuilder();
-        try {
-            String line;
-            //TEST line.length() > 0 character 13
-            while ((line = in.readLine()) != null && line.length() > 0) {
-                builder.append(line).append("\n");
-            }
+            int character = in.read();
+            do {
+                result.write(character);
+                character = in.read();
+            } while(character != 10);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return builder.toString();
+        return result.toString();
+    }
+
+    private String readHeaders() {
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        try {
+            int character = in.read();
+            do {
+                result.write(character);
+                character = in.read();
+            } while (endOfHeaderHasNotBeenReached(character));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result.toString();
+    }
+
+    private boolean endOfHeaderHasNotBeenReached(int character) {
+        return (character != 13) && (character != -1);
     }
 
     private Method validateMethod(String method) {
