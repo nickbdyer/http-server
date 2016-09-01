@@ -11,6 +11,7 @@ public class Request {
     private String route;
     private Response response;
     private Map<String, String> headers;
+    private String body;
 
     public Request(Method method, String path) {
         this.method = method;
@@ -22,6 +23,14 @@ public class Request {
         this.method = status.getMethod();
         this.route = status.getPath();
         this.headers = headers;
+        this.response = new NotFound();
+    }
+
+    public Request(StatusLine status, Map<String, String> headers, String body) {
+        this.method = status.getMethod();
+        this.route = status.getPath();
+        this.headers = headers;
+        this.body = body;
         this.response = new NotFound();
     }
 
@@ -49,5 +58,9 @@ public class Request {
 
     public Map<String, String> getHeaders() {
         return headers;
+    }
+
+    public String getBody() {
+        return body;
     }
 }

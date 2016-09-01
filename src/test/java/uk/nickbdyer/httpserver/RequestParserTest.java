@@ -110,6 +110,25 @@ public class RequestParserTest {
         assertFalse(request.getHeaders().containsKey("Body"));
     }
 
+    @Test
+    public void requestParserWillParseABodyIfItExists() throws IOException {
+        String CRLF = String.valueOf((char) 13) + (char) 10;
+        String requestString = "GET /foobar HTTP/1.1\n" +
+                "Content-Length: 11\n" +
+                "Host: localhost:5000\n" +
+                "Connection: Keep-Alive\n" +
+                "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)\n" +
+                "Accept-Encoding: gzip,deflate" +
+                CRLF + CRLF +
+                "data=fatcat\n";
+
+        Socket socket = new SocketStubWithRequest(requestString);
+        RequestParser parser = new RequestParser(socket);
+
+        Request request = parser.parse();
+
+        assertEquals("data=fatcat", request.getBody());
+    }
 
 
 }

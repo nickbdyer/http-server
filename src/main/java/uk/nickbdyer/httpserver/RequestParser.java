@@ -20,12 +20,21 @@ public class RequestParser {
 
     public Request parse() {
         StatusLine statusLine = getStatusLine(readStatusLine());
-        //Parse Headers
         Map<String, String> headers = getHeaders(readHeaders());
 
-        //If necessary parse body
+        if (headers.containsKey("Content-Length")) {
+            String body = readBody(headers.get("Content-Length"));
+            return new Request(statusLine, headers, body);
+        }
 
         return new Request(statusLine, headers);
+    }
+
+    private StatusLine getStatusLine(String statusLine) {
+        int firstSpace = statusLine.indexOf(' ');
+        Method method = validateMethod(statusLine.substring(0, (firstSpace)));
+        String path = statusLine.substring((firstSpace + 1), statusLine.indexOf(' ', firstSpace + 1));
+        return new StatusLine(method, path);
     }
 
     private Map<String, String> getHeaders(String headers) {
@@ -34,13 +43,6 @@ public class RequestParser {
         Arrays.stream(headers.split("\\r?\\n"))
                 .forEach(line -> dict.put(line.substring(0, line.indexOf(':')), line.substring(line.indexOf(' ') + 1)));
         return dict;
-    }
-
-    private StatusLine getStatusLine(String statusLine) {
-        int firstSpace = statusLine.indexOf(' ');
-        Method method = validateMethod(statusLine.substring(0, (firstSpace)));
-        String path = statusLine.substring((firstSpace + 1), statusLine.indexOf(' ', firstSpace + 1));
-        return new StatusLine(method, path);
     }
 
     private String readStatusLine() {
@@ -65,6 +67,20 @@ public class RequestParser {
                 result.write(character);
                 character = in.read();
             } while (endOfHeaderHasNotBeenReached(character));
+            in.skip(3); //Ignore remaining characters of CRLF (\n\r\n)
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result.toString();
+    }
+
+    private String readBody(String contentLength) {
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        int readLimit = Integer.parseInt(contentLength);
+        byte[] buffer = new byte[readLimit];
+        try {
+            in.read(buffer, 0, readLimit);
+            result.write(buffer);
         } catch (IOException e) {
             e.printStackTrace();
         }
