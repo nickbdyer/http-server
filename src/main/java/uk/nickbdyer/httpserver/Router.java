@@ -1,10 +1,5 @@
 package uk.nickbdyer.httpserver;
 
-import uk.nickbdyer.httpserver.Responses.MethodNotAllowed;
-import uk.nickbdyer.httpserver.Responses.NotFound;
-import uk.nickbdyer.httpserver.Responses.OK;
-import uk.nickbdyer.httpserver.Responses.Response;
-
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -36,15 +31,16 @@ public class Router {
 
     public Response getResponse(Request request) {
         if (!isExistingRoute(request.getPath())) {
-            return new NotFound();
+            return new Response("HTTP/1.1 404 Not Found", "", "");
         } else if (hasDefinedRoute(request)) {
             return definedRoutes.get(request.getPath()).stream()
                     .filter(matchingMethods(request))
                     .collect(Collectors.toList()).get(0).getResponse();
         } else {
-            return new MethodNotAllowed(definedRoutes.get(request.getPath()).stream()
+            String headers = createResponseHeader(definedRoutes.get(request.getPath()).stream()
                     .map(Route::getMethod)
                     .collect(Collectors.toList()));
+            return new Response("HTTP/1.1 405 Method Not Allowed", headers, "");
         }
     }
 
@@ -58,7 +54,7 @@ public class Router {
     }
 
     private void addHeadToAllowedMethods(Route route, List<Route> allowedMethods) {
-        allowedMethods.add(new Route(HEAD, route.getPath()).thatRespondsWith(new OK()));
+        allowedMethods.add(new Route(HEAD, route.getPath()).thatRespondsWith(new Response("HTTP/1.1 200 OK", "", "")));
     }
 
     private boolean newRequestIsGET(Route route) {
@@ -67,6 +63,17 @@ public class Router {
 
     private static Predicate<Route> matchingMethods(Request request) {
         return route -> route.getMethod().equals(request.getMethod());
+    }
+
+    public String createResponseHeader(List<Method> allowedMethods) {
+        List<String> methods = allowedMethods.stream()
+                .map(Enum::toString)
+                .collect(Collectors.toList());
+        return "Allow: " + String.join(", ", methods) + "\n";
+    }
+
+    public String createResponseHeader(String location) {
+        return "Location: " + location;
     }
 
 }

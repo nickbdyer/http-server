@@ -20,26 +20,26 @@ public class RequestParser {
     }
 
     public Request parse() {
-        StatusLine statusLine = null;
+        RequestLine requestLine = null;
         Map<String, String> headers = null;
         try {
-            statusLine = getStatusLine(readStatusLine());
+            requestLine = getStatusLine(readStatusLine());
             headers = getHeaders(readHeaders());
             if (headers.containsKey("Content-Length")) {
                 String body = readBody(headers.get("Content-Length"));
-                return new Request(statusLine, headers, body);
+                return new Request(requestLine, headers, body);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new Request(statusLine, headers);
+        return new Request(requestLine, headers);
     }
 
-    private StatusLine getStatusLine(String statusLine) {
+    private RequestLine getStatusLine(String statusLine) {
         int firstSpace = statusLine.indexOf(' ');
         Method method = validateMethod(statusLine.substring(0, (firstSpace)));
         String path = statusLine.substring((firstSpace + 1), statusLine.indexOf(' ', firstSpace + 1));
-        return new StatusLine(method, path);
+        return new RequestLine(method, path);
     }
 
     private Map<String, String> getHeaders(List<String> headers) {

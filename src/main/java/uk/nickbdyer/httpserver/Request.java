@@ -14,13 +14,13 @@ public class Request {
         this.path = path;
     }
 
-    public Request(StatusLine status, Map<String, String> headers) {
+    public Request(RequestLine status, Map<String, String> headers) {
         this.method = status.getMethod();
         this.path = status.getPath();
         this.headers = headers;
     }
 
-    public Request(StatusLine status, Map<String, String> headers, String body) {
+    public Request(RequestLine status, Map<String, String> headers, String body) {
         this.method = status.getMethod();
         this.path = status.getPath();
         this.headers = headers;

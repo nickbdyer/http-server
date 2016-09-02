@@ -1,8 +1,5 @@
 package uk.nickbdyer.httpserver;
 
-import uk.nickbdyer.httpserver.Responses.NotFound;
-import uk.nickbdyer.httpserver.Responses.Response;
-
 public class Route {
 
     private final Method method;
@@ -12,7 +9,7 @@ public class Route {
     public Route(Method method, String path) {
         this.method = method;
         this.path = path;
-        this.response = new NotFound();
+        this.response = new Response("HTTP/1.1 404 Not Found", "", "");
     }
 
     public Route(Method method, String path, Response response) {

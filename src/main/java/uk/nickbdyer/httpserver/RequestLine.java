@@ -1,11 +1,11 @@
 package uk.nickbdyer.httpserver;
 
-public class StatusLine {
+public class RequestLine {
 
     private final Method method;
     private final String path;
 
-    public StatusLine(Method method, String path) {
+    public RequestLine(Method method, String path) {
         this.method = method;
         this.path = path;
     }
