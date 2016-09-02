@@ -1,32 +1,37 @@
 package uk.nickbdyer.httpserver;
 
-import java.io.ByteArrayOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.Socket;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static uk.nickbdyer.httpserver.Method.INVALID_METHOD;
 
 public class RequestParser {
 
-    private final InputStream in;
+    private final BufferedReader in;
 
     public RequestParser(Socket socket) throws IOException {
-        this.in = socket.getInputStream();
+        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
     public Request parse() {
-        StatusLine statusLine = getStatusLine(readStatusLine());
-        Map<String, String> headers = getHeaders(readHeaders());
-
-        if (headers.containsKey("Content-Length")) {
-            String body = readBody(headers.get("Content-Length"));
-            return new Request(statusLine, headers, body);
+        StatusLine statusLine = null;
+        Map<String, String> headers = null;
+        try {
+            statusLine = getStatusLine(readStatusLine());
+            headers = getHeaders(readHeaders());
+            if (headers.containsKey("Content-Length")) {
+                String body = readBody(headers.get("Content-Length"));
+                return new Request(statusLine, headers, body);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
         return new Request(statusLine, headers);
     }
 
@@ -37,58 +42,39 @@ public class RequestParser {
         return new StatusLine(method, path);
     }
 
-    private Map<String, String> getHeaders(String headers) {
+    private Map<String, String> getHeaders(List<String> headers) {
         //This will blow up with no header sent, Host is required in 1.1. Might require empty check
         Map<String, String> dict = new HashMap<>();
-        Arrays.stream(headers.split("\\r?\\n"))
-                .forEach(line -> dict.put(line.substring(0, line.indexOf(':')), line.substring(line.indexOf(' ') + 1)));
+        headers.forEach(line -> dict.put(line.substring(0, line.indexOf(':')), line.substring(line.indexOf(' ') + 1)));
         return dict;
     }
 
-    private String readStatusLine() {
-        ByteArrayOutputStream result = new ByteArrayOutputStream();
-        try {
-            int character = in.read();
-            do {
-                result.write(character);
-                character = in.read();
-            } while(character != 10);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result.toString();
+    private String readStatusLine() throws IOException {
+        return in.readLine();
     }
 
-    private String readHeaders() {
-        ByteArrayOutputStream result = new ByteArrayOutputStream();
+    private List<String> readHeaders() {
+        String line;
+        List<String> headers = new ArrayList<>();
         try {
-            int character = in.read();
-            do {
-                result.write(character);
-                character = in.read();
-            } while (endOfHeaderHasNotBeenReached(character));
-            in.skip(3); //Ignore remaining characters of CRLF (\n\r\n)
+            while ((line = in.readLine()) != null && line.length() > 0) {
+                headers.add(line);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return result.toString();
+        return headers;
     }
 
     private String readBody(String contentLength) {
-        ByteArrayOutputStream result = new ByteArrayOutputStream();
         int readLimit = Integer.parseInt(contentLength);
-        byte[] buffer = new byte[readLimit];
+        char[] buffer = new char[readLimit];
         try {
             in.read(buffer, 0, readLimit);
-            result.write(buffer);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return result.toString();
-    }
-
-    private boolean endOfHeaderHasNotBeenReached(int character) {
-        return (character != 13) && (character != -1);
+        return new String(buffer);
     }
 
     private Method validateMethod(String method) {
