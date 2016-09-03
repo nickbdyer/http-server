@@ -38,8 +38,18 @@ public class RequestParser {
     private RequestLine getStatusLine(String statusLine) {
         int firstSpace = statusLine.indexOf(' ');
         Method method = validateMethod(statusLine.substring(0, (firstSpace)));
+        if (statusLine.contains("?")) {
+            String path = statusLine.substring((firstSpace + 1), statusLine.indexOf('?'));
+            String parameters = getParameters(statusLine);
+            return new RequestLine(method, path, parameters);
+        }
         String path = statusLine.substring((firstSpace + 1), statusLine.indexOf(' ', firstSpace + 1));
-        return new RequestLine(method, path);
+        return new RequestLine(method, path, null);
+    }
+
+    private String getParameters(String statusLine) {
+        int mark = statusLine.indexOf('?');
+        return statusLine.substring(mark + 1, statusLine.indexOf(' ', mark));
     }
 
     private Map<String, String> getHeaders(List<String> headers) {

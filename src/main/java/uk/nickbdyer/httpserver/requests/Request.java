@@ -8,6 +8,7 @@ public class Request {
     private String path;
     private Map<String, String> headers;
     private String body;
+    private String parameters;
 
     public Request(Method method, String path) {
         this.method = method;
@@ -17,12 +18,14 @@ public class Request {
     public Request(RequestLine status, Map<String, String> headers) {
         this.method = status.getMethod();
         this.path = status.getPath();
+        this.parameters = status.getParameters();
         this.headers = headers;
     }
 
     public Request(RequestLine status, Map<String, String> headers, String body) {
         this.method = status.getMethod();
         this.path = status.getPath();
+        this.parameters = status.getParameters();
         this.headers = headers;
         this.body = body;
     }
@@ -47,5 +50,9 @@ public class Request {
 
     public String getBody() {
         return body;
+    }
+
+    public String getParameters() {
+        return parameters;
     }
 }

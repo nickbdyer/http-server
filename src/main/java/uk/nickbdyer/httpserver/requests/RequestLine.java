@@ -4,10 +4,12 @@ public class RequestLine {
 
     private final Method method;
     private final String path;
+    private String parameters;
 
-    public RequestLine(Method method, String path) {
+    public RequestLine(Method method, String path, String parameters) {
         this.method = method;
         this.path = path;
+        this.parameters = parameters;
     }
 
     public String getPath() {
@@ -16,5 +18,9 @@ public class RequestLine {
 
     public Method getMethod() {
         return method;
+    }
+
+    public String getParameters() {
+        return parameters;
     }
 }

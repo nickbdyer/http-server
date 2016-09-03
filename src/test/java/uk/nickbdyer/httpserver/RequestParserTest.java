@@ -132,5 +132,22 @@ public class RequestParserTest {
         assertEquals("data=fatcat", request.getBody());
     }
 
+    @Test
+    public void requestParserWillParseParametersIfTheyExist() throws IOException {
+        String requestString = "GET /foobar?hello=goodbye HTTP/1.1\n" +
+                "Host: localhost:5000\n" +
+                "Connection: Keep-Alive\n" +
+                "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)\n" +
+                "Accept-Encoding: gzip,deflate";
+
+        Socket socket = new SocketStubWithRequest(requestString);
+        RequestParser parser = new RequestParser(socket);
+
+        Request request = parser.parse();
+
+        assertEquals("/foobar", request.getPath());
+        assertEquals("hello=goodbye", request.getParameters());
+    }
+
 
 }
