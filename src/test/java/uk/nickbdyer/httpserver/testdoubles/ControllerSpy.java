@@ -16,48 +16,48 @@ public class ControllerSpy extends Controller {
     @Override
     public Response get(Request request) {
         methodTriggered = "get";
-        return null;
+        return super.get(request);
     }
 
     @Override
     public Response post(Request request) {
         methodTriggered = "post";
-        return null;
+        return super.post(request);
     }
 
     @Override
     public Response put(Request request) {
         methodTriggered = "put";
-        return null;
+        return super.put(request);
     }
 
     @Override
     public Response delete(Request request) {
         methodTriggered = "delete";
-        return null;
+        return super.delete(request);
     }
 
     @Override
     public Response head(Request request) {
         methodTriggered = "head";
-        return null;
+        return super.head(request);
     }
 
     @Override
     public Response options(Request request) {
         methodTriggered = "options";
-        return null;
+        return super.options(request);
     }
 
     @Override
     public Response trace(Request request) {
         methodTriggered = "trace";
-        return null;
+        return super.trace(request);
     }
 
     @Override
     public Response connect(Request request) {
         methodTriggered = "connect";
-        return null;
+        return super.connect(request);
     }
 }

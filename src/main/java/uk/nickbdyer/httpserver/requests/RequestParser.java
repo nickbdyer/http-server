@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static uk.nickbdyer.httpserver.requests.Method.INVALID_METHOD;
+import static uk.nickbdyer.httpserver.requests.Method.*;
 
 public class RequestParser {
 
@@ -79,9 +79,9 @@ public class RequestParser {
 
     private Method validateMethod(String method) {
         try {
-            return Method.valueOf(method);
+            return valueOf(method);
         } catch (IllegalArgumentException e) {
-            return INVALID_METHOD;
+            return UNKNOWN_METHOD;
         }
     }
 

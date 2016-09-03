@@ -24,40 +24,40 @@ public class Controller {
             case CONNECT:
                 return connect(request);
             default:
-                return new Response("HTTP/1.1 405 Not Found", "", "");
+                return new Response("HTTP/1.1 405 Method Not Allowed", "", "");
         }
 
     }
 
     protected Response get(Request request) {
-        return new Response("HTTP/1.1 405 Not Found", "", "");
+        return new Response("HTTP/1.1 405 Method Not Allowed", "", "");
     }
 
     protected Response post(Request request) {
-        return new Response("HTTP/1.1 405 Not Found", "", "");
+        return new Response("HTTP/1.1 405 Method Not Allowed", "", "");
     }
 
     protected Response put(Request request) {
-        return new Response("HTTP/1.1 405 Not Found", "", "");
+        return new Response("HTTP/1.1 405 Method Not Allowed", "", "");
     }
 
     protected Response delete(Request request) {
-        return new Response("HTTP/1.1 405 Not Found", "", "");
+        return new Response("HTTP/1.1 405 Method Not Allowed", "", "");
     }
 
     protected Response head(Request request) {
-        return new Response("HTTP/1.1 405 Not Found", "", "");
+        return new Response("HTTP/1.1 405 Method Not Allowed", "", "");
     }
 
     protected Response options(Request request) {
-        return new Response("HTTP/1.1 405 Not Found", "", "");
+        return new Response("HTTP/1.1 405 Method Not Allowed", "", "");
     }
 
     protected Response trace(Request request) {
-        return new Response("HTTP/1.1 405 Not Found", "", "");
+        return new Response("HTTP/1.1 405 Method Not Allowed", "", "");
     }
 
     protected Response connect(Request request) {
-        return new Response("HTTP/1.1 405 Not Found", "", "");
+        return new Response("HTTP/1.1 405 Method Not Allowed", "", "");
     }
 }

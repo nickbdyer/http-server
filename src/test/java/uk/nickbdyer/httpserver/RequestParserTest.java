@@ -45,13 +45,13 @@ public class RequestParserTest {
     }
 
     @Test
-    public void requestParserWillReturnINVALIDMETHOD() throws IOException {
+    public void requestParserWillReturnNullForInvalidMethod() throws IOException {
         Socket socket = new SocketStubWithRequest("HELLO / HTTP/1.1\nHost: localhost:5000\r\n");
         RequestParser parser = new RequestParser(socket);
 
         Request request = parser.parse();
 
-        assertEquals(INVALID_METHOD, request.getMethod());
+        assertEquals(UNKNOWN_METHOD, request.getMethod());
     }
 
     @Test

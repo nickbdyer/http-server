@@ -2,7 +2,12 @@ package uk.nickbdyer.httpserver.controllers;
 
 import org.junit.Test;
 import uk.nickbdyer.httpserver.requests.Request;
+import uk.nickbdyer.httpserver.requests.RequestParser;
+import uk.nickbdyer.httpserver.responses.Response;
 import uk.nickbdyer.httpserver.testdoubles.ControllerSpy;
+import uk.nickbdyer.httpserver.testdoubles.SocketStubWithRequest;
+
+import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static uk.nickbdyer.httpserver.requests.Method.*;
@@ -87,6 +92,17 @@ public class ControllerTest {
         controller.execute(getRequest);
 
         assertEquals("connect", controller.methodTriggered);
+    }
+
+    @Test
+    public void aControllerWillRespondToAnUnknownMethodWithAMethodNotAllowedResponse() throws IOException {
+        SocketStubWithRequest socket = new SocketStubWithRequest("HELLO / HTTP/1.1");
+        Request getRequest = new RequestParser(socket).parse();
+        ControllerSpy controller = new ControllerSpy();
+
+        Response response = controller.execute(getRequest);
+
+        assertEquals("HTTP/1.1 405 Method Not Allowed\n", response.getStatusLine());
     }
 }
 
