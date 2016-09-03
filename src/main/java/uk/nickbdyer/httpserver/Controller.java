@@ -27,34 +27,34 @@ public class Controller {
     }
 
     protected Response get(Request request) {
-        return null;
+        return new Response("HTTP/1.1 405 Not Found", "", "");
     }
 
     protected Response post(Request request) {
-        return null;
+        return new Response("HTTP/1.1 405 Not Found", "", "");
     }
 
     protected Response put(Request request) {
-        return null;
+        return new Response("HTTP/1.1 405 Not Found", "", "");
     }
 
     protected Response delete(Request request) {
-        return null;
+        return new Response("HTTP/1.1 405 Not Found", "", "");
     }
 
     protected Response head(Request request) {
-        return null;
+        return new Response("HTTP/1.1 405 Not Found", "", "");
     }
 
     protected Response options(Request request) {
-        return null;
+        return new Response("HTTP/1.1 405 Not Found", "", "");
     }
 
     protected Response trace(Request request) {
-        return null;
+        return new Response("HTTP/1.1 405 Not Found", "", "");
     }
 
     protected Response connect(Request request) {
-        return null;
+        return new Response("HTTP/1.1 405 Not Found", "", "");
     }
 }
