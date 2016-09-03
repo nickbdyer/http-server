@@ -20,6 +20,7 @@ public class Response {
     public String getResponse() {
         if (responseBody != null) {
             responseHeader += "Content-Length: " + responseBody.length() + "\n";
+            responseHeader += "Content-Type: text/html; charset=utf-8";
             return getStatusLine() + getResponseHeader() + getResponseBody();
         }
         return getStatusLine() + getResponseHeader();
