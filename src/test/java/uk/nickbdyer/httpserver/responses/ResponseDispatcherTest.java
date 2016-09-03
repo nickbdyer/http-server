@@ -1,4 +1,4 @@
-package uk.nickbdyer.httpserver;
+package uk.nickbdyer.httpserver.responses;
 
 import org.junit.Test;
 import uk.nickbdyer.httpserver.testdoubles.SocketStubWithOutputStream;

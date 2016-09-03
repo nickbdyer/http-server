@@ -1,4 +1,4 @@
-package uk.nickbdyer.httpserver;
+package uk.nickbdyer.httpserver.responses;
 
 import java.io.IOException;
 import java.io.PrintWriter;

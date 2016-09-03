@@ -1,91 +1,57 @@
 package uk.nickbdyer.httpserver;
 
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import uk.nickbdyer.httpserver.controllers.Controller;
+import uk.nickbdyer.httpserver.controllers.FileController;
+import uk.nickbdyer.httpserver.requests.Request;
+import uk.nickbdyer.httpserver.responses.Response;
 
-import static uk.nickbdyer.httpserver.Method.GET;
-import static uk.nickbdyer.httpserver.Method.HEAD;
+import java.io.File;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Router {
 
-    private Map<String, List<Route>> definedRoutes;
+    private final File publicFolder;
+    private Map<String, Controller> routeTable;
 
-    public Router() {
-        this.definedRoutes = new HashMap<>();
+    public Router(File publicFolder) {
+        this.publicFolder = publicFolder;
+        routeTable = new HashMap<>();
     }
 
-    public void add(Route route) {
-        List<Route> allowedMethods;
-        if (isExistingRoute(route.getPath())) {
-            allowedMethods = definedRoutes.get(route.getPath());
-            allowedMethods.add(route);
-        } else {
-            allowedMethods = new ArrayList<>(Arrays.asList(route));
-            definedRoutes.put(route.getPath(), allowedMethods);
-        }
-        if (newRequestIsGET(route)) {
-            addHeadToAllowedMethods(route, allowedMethods);
-        }
+    public void addController(String path, Controller controller) {
+        routeTable.put(path, controller);
     }
 
-    public Response getResponse(Request request) {
-        if (!isExistingRoute(request.getPath())) {
+    public Response route(Request request) {
+        if (fileExistsIn(publicFolder, request.getPath())) {
+            routeTable.put(request.getPath(), new FileController(getFile(publicFolder, request.getPath())));
+        }
+        if (!routeTable.containsKey(request.getPath())) {
             return NotFound();
-        } else if (hasDefinedRoute(request)) {
-            return getDefinedResponse(request);
         } else {
-            return MethodNotAllowed(request);
+            return routeTable.get(request.getPath()).execute(request);
         }
     }
 
-    private Response getDefinedResponse(Request request) {
-        return definedRoutes.get(request.getPath()).stream()
-                .filter(matchingMethods(request))
-                .collect(Collectors.toList()).get(0).getResponse(request);
+    private boolean fileExistsIn(File publicFolder, String path) {
+        File[] files = publicFolder.listFiles();
+        if (files == null) return false;
+        return Arrays.stream(files).anyMatch(file -> file.getName().equals(path.substring(1)));
+    }
+
+    private File getFile(File publicFolder, String path) {
+        return Arrays.stream(publicFolder.listFiles())
+                .filter(file -> Objects.equals(file.getName(), path.substring(1)))
+                .collect(Collectors.toList()).get(0);
     }
 
     private Response NotFound() {
         return new Response("HTTP/1.1 404 Not Found", "", null);
     }
 
-    private Response MethodNotAllowed(Request request) {
-        String headers = createResponseHeader(definedRoutes.get(request.getPath()).stream()
-                .map(Route::getMethod)
-                .collect(Collectors.toList()));
-        return new Response("HTTP/1.1 405 Method Not Allowed", headers, null);
-    }
-
-    private boolean hasDefinedRoute(Request request) {
-        return definedRoutes.get(request.getPath()).stream()
-                .anyMatch(matchingMethods(request));
-    }
-
-    private boolean isExistingRoute(String path) {
-        return definedRoutes.containsKey(path);
-    }
-
-    private void addHeadToAllowedMethods(Route route, List<Route> allowedMethods) {
-        allowedMethods.add(new Route(HEAD, route.getPath()));
-    }
-
-    private boolean newRequestIsGET(Route route) {
-        return route.getMethod() == GET;
-    }
-
-    private static Predicate<Route> matchingMethods(Request request) {
-        return route -> route.getMethod().equals(request.getMethod());
-    }
-
-    public String createResponseHeader(List<Method> allowedMethods) {
-        List<String> methods = allowedMethods.stream()
-                .map(Enum::toString)
-                .collect(Collectors.toList());
-        return "Allow: " + String.join(", ", methods) + "\n";
-    }
-
-    public String createResponseHeader(String location) {
-        return "Location: " + location + "\n";
-    }
 
 }

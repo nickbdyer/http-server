@@ -1,4 +1,4 @@
-package uk.nickbdyer.httpserver;
+package uk.nickbdyer.httpserver.requests;
 
 import java.util.Map;
 
@@ -24,6 +24,12 @@ public class Request {
         this.method = status.getMethod();
         this.path = status.getPath();
         this.headers = headers;
+        this.body = body;
+    }
+
+    public Request(Method method, String path, String body) {
+        this.method = method;
+        this.path = path;
         this.body = body;
     }
 

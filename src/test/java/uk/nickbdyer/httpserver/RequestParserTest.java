@@ -1,6 +1,8 @@
 package uk.nickbdyer.httpserver;
 
 import org.junit.Test;
+import uk.nickbdyer.httpserver.requests.Request;
+import uk.nickbdyer.httpserver.requests.RequestParser;
 import uk.nickbdyer.httpserver.testdoubles.SocketStubWithRequest;
 
 import java.io.IOException;
@@ -8,7 +10,7 @@ import java.net.Socket;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static uk.nickbdyer.httpserver.Method.*;
+import static uk.nickbdyer.httpserver.requests.Method.*;
 
 public class RequestParserTest {
 
@@ -43,13 +45,13 @@ public class RequestParserTest {
     }
 
     @Test
-    public void requestParserWillReturnINVALIDMETHOD() throws IOException {
+    public void requestParserWillReturnNullForInvalidMethod() throws IOException {
         Socket socket = new SocketStubWithRequest("HELLO / HTTP/1.1\nHost: localhost:5000\r\n");
         RequestParser parser = new RequestParser(socket);
 
         Request request = parser.parse();
 
-        assertEquals(INVALID_METHOD, request.getMethod());
+        assertEquals(UNKNOWN_METHOD, request.getMethod());
     }
 
     @Test

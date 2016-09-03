@@ -1,4 +1,4 @@
-package uk.nickbdyer.httpserver;
+package uk.nickbdyer.httpserver.controllers;
 
 public class FormData {
 
@@ -10,10 +10,6 @@ public class FormData {
 
     public String getData() {
         return data;
-    }
-
-    public FormData() {
-        this.data = "";
     }
 
     public void setData(String data) {
