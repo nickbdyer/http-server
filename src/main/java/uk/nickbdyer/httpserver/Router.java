@@ -10,9 +10,11 @@ import static uk.nickbdyer.httpserver.Method.HEAD;
 public class Router {
 
     private Map<String, List<Route>> definedRoutes;
+    private Map<String, Controller> routeTable;
 
     public Router() {
-        this.definedRoutes = new HashMap<>();
+        definedRoutes = new HashMap<>();
+        routeTable = new HashMap<>();
     }
 
     public void add(Route route) {
@@ -36,6 +38,14 @@ public class Router {
             return getDefinedResponse(request);
         } else {
             return MethodNotAllowed(request);
+        }
+    }
+
+    public Response getControllerResponse(Request request) {
+        if (!routeTable.containsKey(request.getPath())) {
+            return NotFound();
+        } else {
+            return routeTable.get(request.getPath()).execute(request);
         }
     }
 
@@ -86,6 +96,10 @@ public class Router {
 
     public String createResponseHeader(String location) {
         return "Location: " + location + "\n";
+    }
+
+    public void addController(String path, Controller controller) {
+        routeTable.put(path, controller);
     }
 
 }

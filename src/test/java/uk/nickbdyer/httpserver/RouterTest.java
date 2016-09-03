@@ -1,6 +1,7 @@
 package uk.nickbdyer.httpserver;
 
 import org.junit.Test;
+import uk.nickbdyer.httpserver.testdoubles.ControllerSpy;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +14,28 @@ import static org.junit.Assert.assertThat;
 import static uk.nickbdyer.httpserver.Method.*;
 
 public class RouterTest {
+
+    @Test
+    public void aRouterWillPassARequestToTheCorrectController() {
+        Router router = new Router();
+        ControllerSpy controller = new ControllerSpy();
+        router.addController("/test", controller);
+        Request request = new Request(GET, "/test");
+
+        router.getControllerResponse(request);
+
+        assertEquals("get", controller.methodTriggered);
+    }
+
+    @Test
+    public void aRouterWillReturnNotFoundIfNoControllerExistsForAPath() {
+        Router router = new Router();
+        Request request = new Request(GET, "/test");
+
+        Response response = router.getControllerResponse(request);
+
+        assertEquals("HTTP/1.1 404 Not Found\n", response.getStatusLine());
+    }
 
     @Test
     public void routeWillReturnAnOKResponseToAKnownRoute() {
