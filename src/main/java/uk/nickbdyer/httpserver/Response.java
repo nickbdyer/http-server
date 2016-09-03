@@ -3,7 +3,7 @@ package uk.nickbdyer.httpserver;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import static java.time.format.DateTimeFormatter.*;
+import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
 
 public class Response {
 
@@ -18,12 +18,13 @@ public class Response {
     }
 
     public String getResponse() {
+        responseHeader += "Date: " + RFC_1123_DATE_TIME.format(ZonedDateTime.now(ZoneId.of("GMT"))) + "\n";
         if (responseBody != null) {
-            responseHeader += "Date: " + RFC_1123_DATE_TIME.format(ZonedDateTime.now(ZoneId.of("GMT"))) + "\n";
             responseHeader += "Content-Length: " + responseBody.length() + "\n";
             responseHeader += "Content-Type: text/html; charset=utf-8";
+            return getStatusLine() + getResponseHeader() + getResponseBody();
         }
-        return getStatusLine() + getResponseHeader() + getResponseBody();
+        return getStatusLine() + getResponseHeader();
     }
 
     public String getStatusLine() {

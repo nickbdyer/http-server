@@ -46,7 +46,7 @@ public class Router {
     }
 
     private Response NotFound() {
-        return new Response("HTTP/1.1 404 Not Found", "", "");
+        return new Response("HTTP/1.1 404 Not Found", "", null);
     }
 
     private Response MethodNotAllowed(Request request) {

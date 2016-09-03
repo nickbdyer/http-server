@@ -77,21 +77,21 @@ public class RouterTest {
     }
 
     private Response OK() {
-        return new Response("HTTP/1.1 200 OK", "", "");
+        return new Response("HTTP/1.1 200 OK", "", null);
     }
 
     private Response Redirect(String location) {
         String headers = new Router().createResponseHeader(location);
-        return new Response("HTTP/1.1 302 Found", headers, "");
+        return new Response("HTTP/1.1 302 Found", headers, null);
     }
 
     private Response NotFound() {
-        return new Response("HTTP/1.1 404 Not Found", "", "");
+        return new Response("HTTP/1.1 404 Not Found", "", null);
     }
 
     private Response MethodNotAllowed(List<Method> allowedMethods) {
         String headers = new Router().createResponseHeader(allowedMethods);
-        return new Response("HTTP/1.1 405 Method Not Allowed", headers, "");
+        return new Response("HTTP/1.1 405 Method Not Allowed", headers, null);
 
     }
 
