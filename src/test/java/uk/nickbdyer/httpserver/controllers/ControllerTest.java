@@ -1,10 +1,11 @@
-package uk.nickbdyer.httpserver;
+package uk.nickbdyer.httpserver.controllers;
 
 import org.junit.Test;
+import uk.nickbdyer.httpserver.requests.Request;
 import uk.nickbdyer.httpserver.testdoubles.ControllerSpy;
 
 import static org.junit.Assert.assertEquals;
-import static uk.nickbdyer.httpserver.Method.*;
+import static uk.nickbdyer.httpserver.requests.Method.*;
 
 public class ControllerTest {
 

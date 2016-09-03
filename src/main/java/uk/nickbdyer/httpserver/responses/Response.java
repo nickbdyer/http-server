@@ -1,4 +1,4 @@
-package uk.nickbdyer.httpserver;
+package uk.nickbdyer.httpserver.responses;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;

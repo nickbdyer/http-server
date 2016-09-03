@@ -1,4 +1,7 @@
-package uk.nickbdyer.httpserver;
+package uk.nickbdyer.httpserver.controllers;
+
+import uk.nickbdyer.httpserver.requests.Request;
+import uk.nickbdyer.httpserver.responses.Response;
 
 public class Controller {
 

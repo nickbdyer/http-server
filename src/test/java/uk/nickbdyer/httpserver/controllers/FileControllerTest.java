@@ -1,14 +1,13 @@
 package uk.nickbdyer.httpserver.controllers;
 
 import org.junit.Test;
-import uk.nickbdyer.httpserver.FileController;
-import uk.nickbdyer.httpserver.Request;
-import uk.nickbdyer.httpserver.Response;
+import uk.nickbdyer.httpserver.requests.Request;
+import uk.nickbdyer.httpserver.responses.Response;
 
 import java.io.File;
 
 import static org.junit.Assert.assertEquals;
-import static uk.nickbdyer.httpserver.Method.GET;
+import static uk.nickbdyer.httpserver.requests.Method.GET;
 
 public class FileControllerTest {
 

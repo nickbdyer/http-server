@@ -1,8 +1,7 @@
 package uk.nickbdyer.httpserver.controllers;
 
-import uk.nickbdyer.httpserver.Controller;
-import uk.nickbdyer.httpserver.Request;
-import uk.nickbdyer.httpserver.Response;
+import uk.nickbdyer.httpserver.requests.Request;
+import uk.nickbdyer.httpserver.responses.Response;
 
 
 public class RedirectController extends Controller {

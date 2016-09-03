@@ -1,5 +1,9 @@
 package uk.nickbdyer.httpserver;
 
+import uk.nickbdyer.httpserver.requests.Request;
+import uk.nickbdyer.httpserver.requests.RequestParser;
+import uk.nickbdyer.httpserver.responses.ResponseDispatcher;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -18,14 +22,12 @@ public class HttpServer {
         try {
             Socket connection = serverSocket.accept();
             while (connection != null) {
-                // Pass socket to requestParser
                 RequestParser parser = new RequestParser(connection);
-                // requestParser.parse return RequestObject
+
                 Request request = parser.parse();
-                // Router take RequestObject
-                String responseString = router.getControllerResponse(request).getResponse();
-                // Route request to appropriate response builder
-                // Response to dispatcher with socket
+
+                String responseString = router.route(request).getResponse();
+
                 new ResponseDispatcher(connection).sendResponse(responseString);
 
                 connection = serverSocket.accept();

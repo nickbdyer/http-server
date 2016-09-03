@@ -1,4 +1,4 @@
-package uk.nickbdyer.httpserver;
+package uk.nickbdyer.httpserver.requests;
 
 import java.util.Map;
 

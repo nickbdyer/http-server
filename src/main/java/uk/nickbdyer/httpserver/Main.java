@@ -1,6 +1,7 @@
 package uk.nickbdyer.httpserver;
 
 import uk.nickbdyer.httpserver.controllers.FormController;
+import uk.nickbdyer.httpserver.controllers.FormData;
 import uk.nickbdyer.httpserver.controllers.RedirectController;
 import uk.nickbdyer.httpserver.controllers.RootController;
 

@@ -1,6 +1,8 @@
 package uk.nickbdyer.httpserver;
 
 import org.junit.Test;
+import uk.nickbdyer.httpserver.requests.Request;
+import uk.nickbdyer.httpserver.requests.RequestParser;
 import uk.nickbdyer.httpserver.testdoubles.SocketStubWithRequest;
 
 import java.io.IOException;
@@ -8,7 +10,7 @@ import java.net.Socket;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static uk.nickbdyer.httpserver.Method.*;
+import static uk.nickbdyer.httpserver.requests.Method.*;
 
 public class RequestParserTest {
 

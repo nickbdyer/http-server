@@ -1,8 +1,8 @@
 package uk.nickbdyer.httpserver.testdoubles;
 
-import uk.nickbdyer.httpserver.Controller;
-import uk.nickbdyer.httpserver.Request;
-import uk.nickbdyer.httpserver.Response;
+import uk.nickbdyer.httpserver.controllers.Controller;
+import uk.nickbdyer.httpserver.requests.Request;
+import uk.nickbdyer.httpserver.responses.Response;
 
 public class ControllerSpy extends Controller {
 

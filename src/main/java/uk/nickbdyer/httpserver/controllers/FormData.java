@@ -1,4 +1,4 @@
-package uk.nickbdyer.httpserver;
+package uk.nickbdyer.httpserver.controllers;
 
 public class FormData {
 

@@ -1,4 +1,4 @@
-package uk.nickbdyer.httpserver;
+package uk.nickbdyer.httpserver.requests;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static uk.nickbdyer.httpserver.Method.INVALID_METHOD;
+import static uk.nickbdyer.httpserver.requests.Method.INVALID_METHOD;
 
 public class RequestParser {
 
