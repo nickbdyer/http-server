@@ -3,7 +3,11 @@ package uk.nickbdyer.httpserver.controllers;
 import uk.nickbdyer.httpserver.requests.Request;
 import uk.nickbdyer.httpserver.responses.Response;
 
-public class Controller {
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public abstract class Controller {
 
     public Response execute(Request request) {
         switch (request.getMethod()) {
@@ -24,40 +28,52 @@ public class Controller {
             case CONNECT:
                 return connect(request);
             default:
-                return new Response("HTTP/1.1 405 Method Not Allowed", "", "");
+                return MethodNotAllowed();
         }
 
     }
 
     protected Response get(Request request) {
-        return new Response("HTTP/1.1 405 Method Not Allowed", "", "");
+        return MethodNotAllowed();
     }
 
     protected Response post(Request request) {
-        return new Response("HTTP/1.1 405 Method Not Allowed", "", "");
+        return MethodNotAllowed();
     }
 
     protected Response put(Request request) {
-        return new Response("HTTP/1.1 405 Method Not Allowed", "", "");
+        return MethodNotAllowed();
     }
 
     protected Response delete(Request request) {
-        return new Response("HTTP/1.1 405 Method Not Allowed", "", "");
+        return MethodNotAllowed();
     }
 
     protected Response head(Request request) {
-        return new Response("HTTP/1.1 405 Method Not Allowed", "", "");
+        return MethodNotAllowed();
     }
 
     protected Response options(Request request) {
-        return new Response("HTTP/1.1 405 Method Not Allowed", "", "");
+        return MethodNotAllowed();
     }
 
     protected Response trace(Request request) {
-        return new Response("HTTP/1.1 405 Method Not Allowed", "", "");
+        return MethodNotAllowed();
     }
 
     protected Response connect(Request request) {
-        return new Response("HTTP/1.1 405 Method Not Allowed", "", "");
+        return MethodNotAllowed();
     }
+
+    private Response MethodNotAllowed() {
+        return new Response("HTTP/1.1 405 Method Not Allowed", allowedMethods(), "");
+    }
+
+    protected String allowedMethods() {
+        List<String> methods = Arrays.stream(this.getClass().getDeclaredMethods())
+                .map(method -> method.getName().toUpperCase())
+                .collect(Collectors.toList());
+        return "Allow: " + String.join(", ", methods) + "\n";
+    }
+
 }

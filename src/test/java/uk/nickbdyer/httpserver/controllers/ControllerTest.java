@@ -9,7 +9,9 @@ import uk.nickbdyer.httpserver.testdoubles.SocketStubWithRequest;
 
 import java.io.IOException;
 
+import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static uk.nickbdyer.httpserver.requests.Method.*;
 
 public class ControllerTest {
@@ -103,6 +105,17 @@ public class ControllerTest {
         Response response = controller.execute(getRequest);
 
         assertEquals("HTTP/1.1 405 Method Not Allowed\n", response.getStatusLine());
+    }
+
+    @Test
+    public void aControllerWillRespondWithACorrectHeaderForAMethodNotAllowedResponse() throws IOException {
+        SocketStubWithRequest socket = new SocketStubWithRequest("HELLO / HTTP/1.1");
+        Request getRequest = new RequestParser(socket).parse();
+        ControllerSpy controller = new ControllerSpy();
+
+        Response response = controller.execute(getRequest);
+
+        assertThat(response.getResponseHeader(), containsString("Allow: GET, PUT, DELETE, CONNECT, HEAD, POST, OPTIONS, TRACE"));
     }
 }
 
