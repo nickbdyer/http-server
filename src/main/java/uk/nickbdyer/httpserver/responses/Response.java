@@ -36,7 +36,10 @@ public class Response {
     }
 
     public String getResponseBody() {
-        return responseBody;
+        if (responseBody != null) {
+            return responseBody + "\n";
+        }
+        return null;
     }
 
 }
