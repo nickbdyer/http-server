@@ -18,10 +18,8 @@ public class Response {
     }
 
     public String getResponse() {
-        responseHeader += "Date: " + RFC_1123_DATE_TIME.format(ZonedDateTime.now(ZoneId.of("GMT"))) + "\n";
         if (responseBody != null) {
             responseHeader += "Content-Length: " + responseBody.length() + "\n";
-            responseHeader += "Content-Type: text/html; charset=utf-8";
             return getStatusLine() + getResponseHeader() + getResponseBody();
         }
         return getStatusLine() + getResponseHeader();
@@ -31,15 +29,13 @@ public class Response {
         return statusLine + "\n";
     }
 
-    private String getResponseHeader() {
-        return responseHeader + "\r\n\r\n";
+    public String getResponseHeader() {
+        String date = "Date: " + RFC_1123_DATE_TIME.format(ZonedDateTime.now(ZoneId.of("GMT"))) + "\n";
+        return date + responseHeader + "\r\n\r\n";
     }
 
     public String getResponseBody() {
-        if (responseBody != null) {
-            return responseBody;
-        }
-        return null;
+        return responseBody;
     }
 
 }

@@ -1,7 +1,6 @@
-package uk.nickbdyer.httpserver;
+package uk.nickbdyer.httpserver.responses;
 
 import org.junit.Test;
-import uk.nickbdyer.httpserver.responses.ResponseDispatcher;
 import uk.nickbdyer.httpserver.testdoubles.SocketStubWithOutputStream;
 
 import java.io.ByteArrayOutputStream;
