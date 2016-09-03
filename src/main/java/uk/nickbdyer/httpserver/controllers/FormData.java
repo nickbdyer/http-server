@@ -12,10 +12,6 @@ public class FormData {
         return data;
     }
 
-    public FormData() {
-        this.data = "";
-    }
-
     public void setData(String data) {
         this.data = data;
     }

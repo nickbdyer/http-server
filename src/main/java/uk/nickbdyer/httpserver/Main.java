@@ -15,7 +15,7 @@ public class Main {
         Arguments arguments = new Arguments(args);
         File publicFolder = new File(arguments.getDirectoryPath());
 
-        FormData form = new FormData();
+        FormData form = new FormData(null);
         Router router = new Router(publicFolder);
         router.addController("/", new RootController());
         router.addController("/redirect", new RedirectController());
