@@ -1,5 +1,6 @@
 package uk.nickbdyer.httpserver;
 
+import java.io.File;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -9,10 +10,12 @@ import static uk.nickbdyer.httpserver.Method.HEAD;
 
 public class Router {
 
+    private final File publicFolder;
     private Map<String, List<Route>> definedRoutes;
     private Map<String, Controller> routeTable;
 
-    public Router() {
+    public Router(File publicFolder) {
+        this.publicFolder = publicFolder;
         definedRoutes = new HashMap<>();
         routeTable = new HashMap<>();
     }
@@ -42,11 +45,26 @@ public class Router {
     }
 
     public Response getControllerResponse(Request request) {
+        if (fileExistsIn(publicFolder, request.getPath())) {
+            routeTable.put(request.getPath(), new FileController(getFile(publicFolder, request.getPath())));
+        }
         if (!routeTable.containsKey(request.getPath())) {
             return NotFound();
         } else {
             return routeTable.get(request.getPath()).execute(request);
         }
+    }
+
+    private File getFile(File publicFolder, String path) {
+        return Arrays.stream(publicFolder.listFiles())
+                .filter(file -> Objects.equals(file.getName(), path.substring(1)))
+                .collect(Collectors.toList()).get(0);
+    }
+
+    private boolean fileExistsIn(File publicFolder, String path) {
+        File[] files = publicFolder.listFiles();
+        if (files == null) return false;
+        return Arrays.stream(files).anyMatch(file -> file.getName().equals(path.substring(1)));
     }
 
     private Response getDefinedResponse(Request request) {

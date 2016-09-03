@@ -1,8 +1,10 @@
 package uk.nickbdyer.httpserver;
 
+import org.junit.Before;
 import org.junit.Test;
 import uk.nickbdyer.httpserver.testdoubles.ControllerSpy;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,9 +17,15 @@ import static uk.nickbdyer.httpserver.Method.*;
 
 public class RouterTest {
 
+    private Router router;
+
+    @Before
+    public void setUp() {
+        router = new Router(new File(""));
+    }
+
     @Test
     public void aRouterWillPassARequestToTheCorrectController() {
-        Router router = new Router();
         ControllerSpy controller = new ControllerSpy();
         router.addController("/test", controller);
         Request request = new Request(GET, "/test");
@@ -29,7 +37,6 @@ public class RouterTest {
 
     @Test
     public void aRouterWillReturnNotFoundIfNoControllerExistsForAPath() {
-        Router router = new Router();
         Request request = new Request(GET, "/test");
 
         Response response = router.getControllerResponse(request);
@@ -40,7 +47,6 @@ public class RouterTest {
     @Test
     public void routeWillReturnAnOKResponseToAKnownRoute() {
         Route route = new Route(GET, "/");
-        Router router = new Router();
         router.add(route);
 
         assertEquals(OK().getStatusLine(), router.getResponse(getRequest()).getStatusLine());
@@ -48,8 +54,6 @@ public class RouterTest {
 
     @Test
     public void routerWillReturnANotFoundResponseIfRequestIsNotValid() {
-        Router router = new Router();
-
         assertEquals(NotFound().getResponse(), router.getResponse(getRequest()).getResponse());
     }
 
@@ -57,7 +61,6 @@ public class RouterTest {
     public void routerWillReturnAMethodNotAllowedResponseIfMethodIsNotAllowed() {
         Route route = new Route(GET, "/");
         Route route2 = new Route(PUT, "/");
-        Router router = new Router();
         router.add(route);
         router.add(route2);
 
@@ -67,7 +70,6 @@ public class RouterTest {
     @Test
     public void routerWillReturnAMethodNotAllowedResponseIfMethodIsNonsensical() {
         Route route = new Route(GET, "/");
-        Router router = new Router();
         router.add(route);
 
         assertEquals(MethodNotAllowed(new ArrayList<>(asList(GET, HEAD))).getResponse(), router.getResponse(notAllowedRequest()).getResponse());
@@ -104,7 +106,7 @@ public class RouterTest {
     }
 
     private Response Redirect(String location) {
-        String headers = new Router().createResponseHeader(location);
+        String headers = new Router(new File("")).createResponseHeader(location);
         return new Response("HTTP/1.1 302 Found", headers, null);
     }
 
@@ -113,7 +115,7 @@ public class RouterTest {
     }
 
     private Response MethodNotAllowed(List<Method> allowedMethods) {
-        String headers = new Router().createResponseHeader(allowedMethods);
+        String headers = new Router(new File("")).createResponseHeader(allowedMethods);
         return new Response("HTTP/1.1 405 Method Not Allowed", headers, null);
 
     }
