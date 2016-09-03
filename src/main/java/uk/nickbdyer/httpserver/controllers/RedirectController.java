@@ -9,7 +9,8 @@ public class RedirectController extends Controller {
 
     @Override
     public Response get(Request request) {
-        return new Response("HTTP/1.1 302 Found", "", null);
+        String header = "Location: http://localhost:5000/\n";
+        return new Response("HTTP/1.1 302 Found", header, null);
     }
 
 }

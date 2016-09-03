@@ -2,6 +2,7 @@ package uk.nickbdyer.httpserver;
 
 import uk.nickbdyer.httpserver.controllers.FormController;
 import uk.nickbdyer.httpserver.controllers.RedirectController;
+import uk.nickbdyer.httpserver.controllers.RootController;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +17,7 @@ public class Main {
         Arguments arguments = new Arguments(args);
 
         Router router = new Router();
-        router.add(new Route(GET, "/"));
+        router.addController("/", new RootController());
         router.addController("/redirect", new RedirectController());
         router.addController("/form", new FormController(form));
 
