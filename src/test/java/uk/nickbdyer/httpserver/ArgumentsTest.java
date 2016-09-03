@@ -10,7 +10,7 @@ public class ArgumentsTest {
     public void argumentsCanParseAPortNumber() {
         String[] arguments = new String[]{"-p", "5000"};
 
-        int port = Arguments.getPort(arguments);
+        int port = new Arguments(arguments).getPort();
 
         assertEquals(5000, port);
     }
@@ -19,7 +19,7 @@ public class ArgumentsTest {
     public void argumentsCanParseDifferentPortNumber() {
         String[] arguments = new String[]{"-p", "7777"};
 
-        int port = Arguments.getPort(arguments);
+        int port = new Arguments(arguments).getPort();
 
         assertEquals(7777, port);
     }
@@ -28,7 +28,7 @@ public class ArgumentsTest {
     public void argumentsWillReturnTheDefaultPortOf5000() {
         String[] arguments = new String[]{};
 
-        int port = Arguments.getPort(arguments);
+        int port = new Arguments(arguments).getPort();
 
         assertEquals(5000, port);
     }
@@ -37,7 +37,7 @@ public class ArgumentsTest {
     public void argumentsCanParseADirectoryPath() {
         String[] arguments = new String[]{"-d", "/path/to/somewhere/"};
 
-        String directoryPath = Arguments.getDirectoryPath(arguments);
+        String directoryPath = new Arguments(arguments).getDirectoryPath();
 
         assertEquals("/path/to/somewhere/", directoryPath);
     }
@@ -46,7 +46,7 @@ public class ArgumentsTest {
     public void argumentsCanParseADifferentDirectoryPath() {
         String[] arguments = new String[]{"-d", "/path/to/somewhere/else/"};
 
-        String directoryPath = Arguments.getDirectoryPath(arguments);
+        String directoryPath = new Arguments(arguments).getDirectoryPath();
 
         assertEquals("/path/to/somewhere/else/", directoryPath);
     }
@@ -55,7 +55,7 @@ public class ArgumentsTest {
     public void argumentsWillReturnTheDefaultDirectoryToPublicCobSpec() {
         String[] arguments = new String[]{};
 
-        String directoryPath = Arguments.getDirectoryPath(arguments);
+        String directoryPath = new Arguments(arguments).getDirectoryPath();
 
         assertEquals("/Users/nickdyer/projects/cob_spec/public", directoryPath);
     }

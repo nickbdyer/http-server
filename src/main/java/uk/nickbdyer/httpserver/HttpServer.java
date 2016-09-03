@@ -1,39 +1,34 @@
 package uk.nickbdyer.httpserver;
 
 import java.io.IOException;
-import java.io.OutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 public class HttpServer {
 
-    private final ConnectionHandler connectionHandler;
-    private final ResponseBuilder builder;
+    private final ServerSocket serverSocket;
+    private final Router router;
 
-    public HttpServer(ConnectionHandler connectionHandler, ResponseBuilder builder) {
-        this.connectionHandler = connectionHandler;
-        this.builder = builder;
+    public HttpServer(ServerSocket serverSocket, Router router) {
+        this.serverSocket = serverSocket;
+        this.router = router;
     }
 
     public void listen() {
         try {
-            Socket connection = connectionHandler.getSocket();
+            Socket connection = serverSocket.accept();
             while (connection != null) {
-                String requestString = new SocketHandler(connection).getRequest();
+                // Pass socket to requestParser
+                RequestParser parser = new RequestParser(connection);
+                // requestParser.parse return RequestObject
+                Request request = parser.parse();
+                // Router take RequestObject
+                String responseString = router.getResponse(request).getResponse();
+                // Route request to appropriate response builder
+                // Response to dispatcher with socket
+                new ResponseDispatcher(connection).sendResponse(responseString);
 
-                RequestParser parser = new RequestParser();
-                Request request = parser.parse(requestString);
-
-//              Build response, move to socket handler
-                OutputStream response = connection.getOutputStream();
-
-                String responseString = builder.getResponse(request).getResponse();
-
-                response.write(responseString.getBytes());
-
-                response.flush();
-                response.close();
-
-                connection = connectionHandler.getSocket();
+                connection = serverSocket.accept();
             }
         } catch (IOException e) {
             if ("Socket closed".equals(e.getMessage())) {

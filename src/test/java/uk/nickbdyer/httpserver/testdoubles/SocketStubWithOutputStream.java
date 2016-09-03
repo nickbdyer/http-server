@@ -6,22 +6,22 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-public class SocketStubWithRequest extends Socket {
+public class SocketStubWithOutputStream extends Socket {
 
-    private final String request;
+    private final ByteArrayOutputStream output;
 
-    public SocketStubWithRequest(String request) {
-        this.request = request;
+    public SocketStubWithOutputStream(ByteArrayOutputStream output) {
+        this.output = output;
     }
 
     @Override
     public InputStream getInputStream() {
-        return new ByteArrayInputStream(request.getBytes());
+        return new ByteArrayInputStream("".getBytes());
     }
 
     @Override
     public OutputStream getOutputStream() {
-        return new ByteArrayOutputStream();
+        return output;
     }
 
 }
