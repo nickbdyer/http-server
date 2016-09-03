@@ -30,7 +30,7 @@ public class FormControllerTest {
         Response response = controller.execute(request);
 
         assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
-        assertEquals("data=fatcat", response.getResponseBody());
+        assertEquals("data=fatcat\n", response.getResponseBody());
     }
 
     @Test
@@ -42,7 +42,7 @@ public class FormControllerTest {
         Response response = controller.execute(request);
 
         assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
-        assertEquals("data=heathcliff", response.getResponseBody());
+        assertEquals("data=heathcliff\n", response.getResponseBody());
     }
 
     @Test
