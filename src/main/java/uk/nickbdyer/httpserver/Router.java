@@ -31,17 +31,29 @@ public class Router {
 
     public Response getResponse(Request request) {
         if (!isExistingRoute(request.getPath())) {
-            return new Response("HTTP/1.1 404 Not Found", "", "");
+            return NotFound();
         } else if (hasDefinedRoute(request)) {
-            return definedRoutes.get(request.getPath()).stream()
-                    .filter(matchingMethods(request))
-                    .collect(Collectors.toList()).get(0).getResponse();
+            return getDefinedResponse(request);
         } else {
-            String headers = createResponseHeader(definedRoutes.get(request.getPath()).stream()
-                    .map(Route::getMethod)
-                    .collect(Collectors.toList()));
-            return new Response("HTTP/1.1 405 Method Not Allowed", headers, "");
+            return MethodNotAllowed(request);
         }
+    }
+
+    private Response getDefinedResponse(Request request) {
+        return definedRoutes.get(request.getPath()).stream()
+                .filter(matchingMethods(request))
+                .collect(Collectors.toList()).get(0).getResponse(request);
+    }
+
+    private Response NotFound() {
+        return new Response("HTTP/1.1 404 Not Found", "", "");
+    }
+
+    private Response MethodNotAllowed(Request request) {
+        String headers = createResponseHeader(definedRoutes.get(request.getPath()).stream()
+                .map(Route::getMethod)
+                .collect(Collectors.toList()));
+        return new Response("HTTP/1.1 405 Method Not Allowed", headers, null);
     }
 
     private boolean hasDefinedRoute(Request request) {
@@ -54,7 +66,7 @@ public class Router {
     }
 
     private void addHeadToAllowedMethods(Route route, List<Route> allowedMethods) {
-        allowedMethods.add(new Route(HEAD, route.getPath()).thatRespondsWith(new Response("HTTP/1.1 200 OK", "", "")));
+        allowedMethods.add(new Route(HEAD, route.getPath()));
     }
 
     private boolean newRequestIsGET(Route route) {
@@ -73,7 +85,7 @@ public class Router {
     }
 
     public String createResponseHeader(String location) {
-        return "Location: " + location;
+        return "Location: " + location + "\n";
     }
 
 }

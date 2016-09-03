@@ -16,20 +16,11 @@ public class RouterTest {
 
     @Test
     public void routeWillReturnAnOKResponseToAKnownRoute() {
-        Route route = new Route(GET, "/").thatRespondsWith(OK());
-        Router router = new Router();
-        router.add(route);
-
-        assertEquals(OK().getStatusLine(), router.getResponse(getRequest()).getStatusLine());
-    }
-
-    @Test
-    public void routerWillReturnANotFoundResponseIfNoDefinedResponseIsFound() {
         Route route = new Route(GET, "/");
         Router router = new Router();
         router.add(route);
 
-        assertEquals(NotFound().getStatusLine(), router.getResponse(getRequest()).getStatusLine());
+        assertEquals(OK().getStatusLine(), router.getResponse(getRequest()).getStatusLine());
     }
 
     @Test
@@ -41,8 +32,8 @@ public class RouterTest {
 
     @Test
     public void routerWillReturnAMethodNotAllowedResponseIfMethodIsNotAllowed() {
-        Route route = new Route(GET, "/").thatRespondsWith(OK());
-        Route route2 = new Route(PUT, "/").thatRespondsWith(Redirect(""));
+        Route route = new Route(GET, "/");
+        Route route2 = new Route(PUT, "/");
         Router router = new Router();
         router.add(route);
         router.add(route2);
@@ -52,7 +43,7 @@ public class RouterTest {
 
     @Test
     public void routerWillReturnAMethodNotAllowedResponseIfMethodIsNonsensical() {
-        Route route = new Route(GET, "/").thatRespondsWith(OK());
+        Route route = new Route(GET, "/");
         Router router = new Router();
         router.add(route);
 
