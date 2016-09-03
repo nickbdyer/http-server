@@ -23,7 +23,7 @@ public class HttpServer {
                 // requestParser.parse return RequestObject
                 Request request = parser.parse();
                 // Router take RequestObject
-                String responseString = router.getResponse(request).getResponse();
+                String responseString = router.getControllerResponse(request).getResponse();
                 // Route request to appropriate response builder
                 // Response to dispatcher with socket
                 new ResponseDispatcher(connection).sendResponse(responseString);

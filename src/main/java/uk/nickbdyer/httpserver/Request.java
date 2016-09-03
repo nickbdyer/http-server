@@ -27,6 +27,12 @@ public class Request {
         this.body = body;
     }
 
+    public Request(Method method, String path, String body) {
+        this.method = method;
+        this.path = path;
+        this.body = body;
+    }
+
     public Method getMethod() {
         return method;
     }

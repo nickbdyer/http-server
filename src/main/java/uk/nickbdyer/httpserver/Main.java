@@ -1,5 +1,7 @@
 package uk.nickbdyer.httpserver;
 
+import uk.nickbdyer.httpserver.controllers.FormController;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -19,6 +21,7 @@ public class Main {
         router.add(new Route(POST, "/form").that(writesData).to(form));
         router.add(new Route(PUT, "/form").that(writesData).to(form));
         router.add(new Route(DELETE, "/form").that(deletesData).from(form));
+        router.addController("/form", new FormController(form));
 
         File folder = new File(arguments.getDirectoryPath());
         File[] files = folder.listFiles();
