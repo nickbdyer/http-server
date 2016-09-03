@@ -115,7 +115,7 @@ public class ControllerTest {
 
         Response response = controller.execute(getRequest);
 
-        assertThat(response.getResponseHeader(), containsString("Allow: GET, PUT, DELETE, CONNECT, HEAD, POST, OPTIONS, TRACE"));
+        assertThat(response.getResponseHeader(), containsString("Allow: CONNECT, DELETE, GET, HEAD, OPTIONS, POST, PUT, TRACE"));
     }
 }
 
