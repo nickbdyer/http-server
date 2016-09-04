@@ -72,8 +72,9 @@ public abstract class Controller {
     protected String allowedMethods() {
         List<String> methods = Arrays.stream(this.getClass().getDeclaredMethods())
                 .map(method -> method.getName().toUpperCase())
+                .sorted()
                 .collect(Collectors.toList());
-        return "Allow: " + String.join(", ", methods) + "\n";
+        return "Allow: " + String.join(",", methods) + "\n";
     }
 
 }
