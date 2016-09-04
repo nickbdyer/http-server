@@ -14,7 +14,7 @@ public class Main {
 
         FormData form = new FormData(null);
         Router router = new Router(publicFolder);
-        router.addController("/", new RootController());
+        router.addController("/", new RootController(publicFolder));
         router.addController("/redirect", new RedirectController());
         router.addController("/form", new FormController(form));
         router.addController("/parameters", new ParameterController());

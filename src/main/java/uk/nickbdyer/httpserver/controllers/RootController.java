@@ -3,11 +3,29 @@ package uk.nickbdyer.httpserver.controllers;
 import uk.nickbdyer.httpserver.requests.Request;
 import uk.nickbdyer.httpserver.responses.Response;
 
+import java.io.File;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class RootController extends Controller {
+
+    private final File publicfolder;
+
+    public RootController(File publicfolder) {
+        this.publicfolder = publicfolder;
+    }
 
     @Override
     public Response get(Request request) {
-        return new Response("HTTP/1.1 200 OK", "", null);
+        File[] files = publicfolder.listFiles();
+        String body = null;
+        if (files != null) {
+            body = Arrays.stream(publicfolder.listFiles())
+                .map(File::getName)
+                .collect(Collectors.joining());
+
+        }
+        return new Response("HTTP/1.1 200 OK", "", body);
     }
 
     @Override
