@@ -30,7 +30,7 @@ public class Response {
 
     public String getResponse() {
         if (responseBody != null) {
-            header += "Content-Length: " + responseBody.length() + "\n";
+            header += "Content-Length: " + responseBody.length();
             return getStatusLine() + getHeader() + getResponseBody();
         }
         return getStatusLine() + getHeader();
@@ -52,11 +52,13 @@ public class Response {
         return null;
     }
 
-    public String addFileContentTypeHeader(File file) {
-        return "Content-Type: " + URLConnection.guessContentTypeFromName(file.getName()) + "\n";
+    private String addFileContentTypeHeader(File file) {
+        String type = URLConnection.guessContentTypeFromName(file.getName());
+        type = (type == null ? "text/html; charset=utf-8" : type);
+        return "Content-Type: " + type + "\n";
     }
 
-    public String addContentTypeHeader(String header) {
+    private String addContentTypeHeader(String header) {
         return header + "Content-Type: text/html; charset=utf-8\n";
     }
 
