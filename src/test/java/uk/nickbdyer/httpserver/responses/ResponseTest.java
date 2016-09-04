@@ -1,6 +1,11 @@
 package uk.nickbdyer.httpserver.responses;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+
+import java.io.File;
+import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.StringContains.containsString;
@@ -20,14 +25,14 @@ public class ResponseTest {
     public void aResponseWillHaveANewLineBetweenHeadersAndBody() {
         Response response = new Response("Status-Line", "Headers", "Body");
 
-        assertThat(response.getResponseHeader(), containsString("\r\n\r\n"));
+        assertThat(response.getHeader(), containsString("\r\n\r\n"));
     }
 
     @Test
     public void aResponseWillShowAIncludeADateFieldInTheHeader() {
         Response response = new Response("Status-Line", "Headers", "Body");
 
-        assertThat(response.getResponseHeader(), containsString("Date:"));
+        assertThat(response.getHeader(), containsString("Date:"));
     }
 
     @Test
@@ -56,6 +61,25 @@ public class ResponseTest {
         Response response = new Response("Status-Line", "Headers", null);
 
         assertThat(response.getResponse(), not(containsString("null")));
+    }
+
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
+
+    @Test
+    public void aResponseHeaderWillTheContentTypeForATextFile() throws IOException {
+        File file = folder.newFile("testfile.txt");
+        Response response = new Response("Status-Line", file);
+
+        assertThat(response.getHeader(), containsString("Content-Type: text/plain"));
+    }
+
+    @Test
+    public void aResponseHeaderWillTheContentTypeForAnImageFile() throws IOException {
+        File file = folder.newFile("testfile.png");
+        Response response = new Response("Status-Line", file);
+
+        assertThat(response.getHeader(), containsString("Content-Type: image/png"));
     }
 
 }
