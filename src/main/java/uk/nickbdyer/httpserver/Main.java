@@ -20,6 +20,8 @@ public class Main {
         router.addController("/parameters", new ParameterController());
         router.addController("/method_options", new MethodOptionsController());
         router.addController("/method_options2", new MethodOptions2Controller());
+        router.addController("/coffee", new CoffeeController());
+        router.addController("/tea", new TeaController());
 
         new HttpServer(new ServerSocket(arguments.getPort()), router).listen();
     }
