@@ -29,7 +29,8 @@ public class MethodOptions2ControllerTest {
         Response response = controller.execute(request);
 
         assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
-        assertThat(response.getResponseHeader(), containsString("Allow: GET,OPTIONS"));
+        assertThat(response.getResponseHeader(), containsString("Allow: "));
+        assertThat(response.getResponseHeader(), containsString("GET,OPTIONS"));
     }
 
 }
