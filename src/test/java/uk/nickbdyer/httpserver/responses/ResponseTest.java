@@ -16,51 +16,51 @@ public class ResponseTest {
 
     @Test
     public void aResponseWillHaveAStatusLine() {
-        Response response = new Response("Status-Line", "Headers", "Body");
+        Response response = new Response("Status-Line", "Headers\n", "Body");
 
         assertEquals("Status-Line\n", response.getStatusLine());
     }
 
     @Test
     public void aResponseWillHaveANewLineBetweenHeadersAndBody() {
-        Response response = new Response("Status-Line", "Headers", "Body");
+        Response response = new Response("Status-Line", "Headers\n", "Body");
 
         assertThat(response.getHeader(), containsString("\r\n\r\n"));
     }
 
     @Test
     public void aResponseWillShowAIncludeADateFieldInTheHeader() {
-        Response response = new Response("Status-Line", "Headers", "Body");
+        Response response = new Response("Status-Line", "Headers\n", "Body");
 
         assertThat(response.getHeader(), containsString("Date:"));
     }
 
     @Test
     public void aResponseWillShowABodyIfItIsPresent() {
-        Response response = new Response("Status-Line", "Headers", "Body");
+        Response response = new Response("Status-Line", "Headers\n", "Body");
 
-        assertThat(response.getResponse(), containsString("Body"));
+        assertThat(new String(response.getResponseBody()), containsString("Body"));
     }
 
     @Test
     public void aResponseHeaderWillShowAContentLengthIfBodyIsPresent() {
-        Response response = new Response("Status-Line", "Headers", "Body");
+        Response response = new Response("Status-Line", "Headers\n", "Body");
 
-        assertThat(response.getResponse(), containsString("Content-Length: 4"));
+        assertThat(response.getStatusLineAndHeader(), containsString("Content-Length: 4"));
     }
 
     @Test
     public void aResponseHeaderWillNotShowAContentLengthIfBodyIsNotPresent() {
-        Response response = new Response("Status-Line", "Headers", null);
+        Response response = new Response("Status-Line", "Headers\n", "");
 
-        assertThat(response.getResponse(), not(containsString("Content-Length: ")));
+        assertThat(response.getStatusLineAndHeader(), not(containsString("Content-Length: ")));
     }
 
     @Test
     public void aResponseBodyWillNotShowNullIfBodyIsNotPresent() {
-        Response response = new Response("Status-Line", "Headers", null);
+        Response response = new Response("Status-Line", "Headers\n", "");
 
-        assertThat(response.getResponse(), not(containsString("null")));
+        assertThat(response.getStatusLineAndHeader(), not(containsString("null")));
     }
 
     @Rule

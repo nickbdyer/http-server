@@ -30,7 +30,7 @@ public class FormController extends Controller {
 
     @Override
     public Response delete(Request request) {
-        data.setData(null);
+        data.setData("");
         return new Response("HTTP/1.1 200 OK", "", data.getData());
     }
 }

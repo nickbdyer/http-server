@@ -28,6 +28,6 @@ public class CoffeeControllerTest {
 
         Response response = controller.execute(request);
 
-        assertThat(response.getResponseBody(), containsString("I'm a teapot"));
+        assertThat(new String(response.getResponseBody()), containsString("I'm a teapot"));
     }
 }

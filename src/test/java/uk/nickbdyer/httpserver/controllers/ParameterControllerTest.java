@@ -21,6 +21,6 @@ public class ParameterControllerTest {
         Response response = controller.execute(request);
 
         assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
-        assertEquals("variable_1 = Operators <, >, =, !=; +, -, *, &, @, #, $, [, ]: \"is that all\"?\nvariable_2 = stuff\n", response.getResponseBody());
+        assertEquals("variable_1 = Operators <, >, =, !=; +, -, *, &, @, #, $, [, ]: \"is that all\"?\nvariable_2 = stuff", new String(response.getResponseBody()));
     }
 }

@@ -34,7 +34,7 @@ public class RootController extends Controller {
 
     @Override
     public Response head(Request request) {
-        return new Response("HTTP/1.1 200 OK", "", null);
+        return new Response("HTTP/1.1 200 OK", "", "");
     }
 
 }

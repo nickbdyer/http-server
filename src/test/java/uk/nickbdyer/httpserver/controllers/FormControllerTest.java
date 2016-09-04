@@ -11,7 +11,7 @@ public class FormControllerTest {
 
     @Test
     public void willRespondToAGetRequest() {
-        FormData data = new FormData(null);
+        FormData data = new FormData("");
         FormController controller = new FormController(data);
         Request request = new Request(GET, "/form");
 
@@ -30,7 +30,7 @@ public class FormControllerTest {
         Response response = controller.execute(request);
 
         assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
-        assertEquals("data=fatcat\n", response.getResponseBody());
+        assertEquals("data=fatcat", new String(response.getResponseBody()));
     }
 
     @Test
@@ -42,7 +42,7 @@ public class FormControllerTest {
         Response response = controller.execute(request);
 
         assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
-        assertEquals("data=heathcliff\n", response.getResponseBody());
+        assertEquals("data=heathcliff", new String(response.getResponseBody()));
     }
 
     @Test

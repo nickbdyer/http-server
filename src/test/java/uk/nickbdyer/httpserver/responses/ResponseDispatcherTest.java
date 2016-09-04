@@ -17,8 +17,9 @@ public class ResponseDispatcherTest {
         Socket socket = new SocketStubWithOutputStream(receivedContent);
 
         ResponseDispatcher dispatcher = new ResponseDispatcher(socket);
-        String response = "HTTP/1.1 200 OK\n";
-        dispatcher.sendResponse(response);
+        String statusLine = "HTTP/1.1 200 OK\n";
+        byte[] body = null;
+        dispatcher.sendResponse(statusLine, body);
 
         assertEquals("HTTP/1.1 200 OK\n", receivedContent.toString());
     }

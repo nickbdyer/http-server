@@ -13,12 +13,12 @@ public class Response {
 
     private final String statusLine;
     private String header;
-    private String responseBody;
+    private byte[] responseBody;
 
     public Response(String statusLine, String header, String responseBody) {
         this.statusLine = statusLine;
         this.header = addContentTypeHeader(header);
-        this.responseBody = responseBody;
+        this.responseBody = responseBody.getBytes();
     }
 
     public Response(String statusLine, File file) {
@@ -28,10 +28,9 @@ public class Response {
     }
 
 
-    public String getResponse() {
-        if (responseBody != null) {
-            header += "Content-Length: " + responseBody.length();
-            return getStatusLine() + getHeader() + getResponseBody();
+    public String getStatusLineAndHeader() {
+        if (responseBody.length != 0) {
+            header += "Content-Length: " + responseBody.length;
         }
         return getStatusLine() + getHeader();
     }
@@ -45,9 +44,9 @@ public class Response {
         return date + header + "\r\n\r\n";
     }
 
-    public String getResponseBody() {
-        if (responseBody != null) {
-            return responseBody + "\n";
+    public byte[] getResponseBody() {
+        if (responseBody.length != 0) {
+            return responseBody;
         }
         return null;
     }
@@ -62,9 +61,9 @@ public class Response {
         return header + "Content-Type: text/html; charset=utf-8\n";
     }
 
-    private String getFileBody(File file) {
+    private byte[] getFileBody(File file) {
         try {
-            return new String(Files.readAllBytes(file.toPath()));
+            return Files.readAllBytes(file.toPath());
         } catch (IOException e) {
             e.printStackTrace();
             return null;
