@@ -38,10 +38,22 @@ public class RootControllerTest {
 
         Response response = controller.execute(request);
 
-        assertThat(response.getResponseBody(), containsString("fakeFile"));
+        assertThat(response.getResponseBody(), containsString("fakeFile.txt"));
+        assertThat(response.getResponseBody(), containsString("anotherFakeFile.img"));
     }
 
+    @Test
+    public void willReturnThePublicDirectoryListingAsLinksInTheBody() throws IOException {
+        folder.newFile("fakeFile.txt");
+        folder.newFile("anotherFakeFile.img");
+        RootController controller = new RootController(folder.getRoot());
+        Request request = new Request(GET, "/");
 
+        Response response = controller.execute(request);
+
+        assertThat(response.getResponseBody(), containsString("<a href=\"/fakeFile.txt\">fakeFile.txt</a>"));
+        assertThat(response.getResponseBody(), containsString("<a href=\"/anotherFakeFile.img\">anotherFakeFile.img</a>"));
+    }
 
     @Test
     public void willRespondToAHeadRequest() {

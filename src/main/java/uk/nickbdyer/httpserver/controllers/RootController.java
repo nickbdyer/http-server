@@ -22,10 +22,14 @@ public class RootController extends Controller {
         if (files != null) {
             body = Arrays.stream(publicfolder.listFiles())
                 .map(File::getName)
+                .map(fileName -> makeLink(fileName))
                 .collect(Collectors.joining());
-
         }
         return new Response("HTTP/1.1 200 OK", "", body);
+    }
+
+    private String makeLink(String fileName) {
+        return "<a href=\"/" + fileName + "\">" + fileName + "</a>\n";
     }
 
     @Override
