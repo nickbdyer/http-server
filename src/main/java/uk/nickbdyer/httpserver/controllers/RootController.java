@@ -20,9 +20,9 @@ public class RootController extends Controller {
         File[] files = publicfolder.listFiles();
         String body = null;
         if (files != null) {
-            body = Arrays.stream(publicfolder.listFiles())
+            body = Arrays.stream(files)
                 .map(File::getName)
-                .map(fileName -> makeLink(fileName))
+                .map(this::makeLink)
                 .collect(Collectors.joining());
         }
         return new Response("HTTP/1.1 200 OK", "", body);
