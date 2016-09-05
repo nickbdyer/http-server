@@ -27,9 +27,9 @@ public class Router {
     }
 
     public Response route(Request request) {
-        if(request.getMethod() == null) return Response.NotFound();
+        if(request.getMethod() == null) return Response.NotFound(); //Catches preload requests, and parse failures.
         if (publicFileExists(request.getPath())) {
-            routeTable.put(request.getPath(), new FileController(getFile(request.getPath())));
+            return new FileController(getFile(request.getPath())).execute(request);
         }
         if (!routeTable.containsKey(request.getPath())) {
             return Response.NotFound();

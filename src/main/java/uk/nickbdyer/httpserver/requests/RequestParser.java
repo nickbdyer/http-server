@@ -1,7 +1,5 @@
 package uk.nickbdyer.httpserver.requests;
 
-import uk.nickbdyer.httpserver.exceptions.SocketUnreadableException;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -30,7 +28,7 @@ public class RequestParser {
                 return new Request(requestLine, headers, body);
             }
         } catch (IOException e) {
-            throw new SocketUnreadableException();
+            return new Request(new RequestLine(null, null, null), null, null);
         }
         return new Request(requestLine, headers, "");
     }

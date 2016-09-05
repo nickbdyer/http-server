@@ -1,7 +1,6 @@
 package uk.nickbdyer.httpserver.controllers;
 
 import org.junit.Test;
-import uk.nickbdyer.httpserver.exceptions.FailedDecodingException;
 import uk.nickbdyer.httpserver.requests.Request;
 import uk.nickbdyer.httpserver.requests.RequestLine;
 import uk.nickbdyer.httpserver.responses.Response;
@@ -25,12 +24,4 @@ public class ParameterControllerTest {
         assertEquals("variable_1 = Operators <, >, =, !=; +, -, *, &, @, #, $, [, ]: \"is that all\"?\nvariable_2 = stuff", new String(response.getResponseBody()));
     }
 
-    @Test(expected = FailedDecodingException.class)
-    public void willThrowAnUnsupportedEncodingExceptionIfParamsCannotBeDecoded() {
-        ParameterController controller = new ParameterController();
-        RequestLine line = new RequestLine(GET, "/parameters", "variab%%%%%%5!!!@%^$%&#$%&*(F& &=stuff");
-        Request request = new Request(line, new HashMap<>(), "");
-
-        controller.execute(request);
-    }
 }

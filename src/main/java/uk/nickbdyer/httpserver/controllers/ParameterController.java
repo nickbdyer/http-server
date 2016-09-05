@@ -1,6 +1,5 @@
 package uk.nickbdyer.httpserver.controllers;
 
-import uk.nickbdyer.httpserver.exceptions.FailedDecodingException;
 import uk.nickbdyer.httpserver.requests.Request;
 import uk.nickbdyer.httpserver.responses.Response;
 
@@ -24,7 +23,7 @@ public class ParameterController extends Controller {
                 body = request.getParameters().replace('&', '\n').replace("=", " = ");
                 body = decode(body, "UTF-8");
             } catch (UnsupportedEncodingException|IllegalArgumentException e) {
-                throw new FailedDecodingException();
+                return body;
             }
         }
         return body;
