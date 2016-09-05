@@ -24,4 +24,14 @@ public class ParameterControllerTest {
         assertEquals("variable_1 = Operators <, >, =, !=; +, -, *, &, @, #, $, [, ]: \"is that all\"?\nvariable_2 = stuff", new String(response.getResponseBody()));
     }
 
+    @Test
+    public void bodyWillBeEmptyIfParamsCannotBeDecoded() {
+        ParameterController controller = new ParameterController();
+        RequestLine line = new RequestLine(GET, "/parameters", "variab%%%%%%5!!!@%^$%&#$%&*(F& &=stuff");
+        Request request = new Request(line, new HashMap<>(), "");
+
+        Response response = controller.execute(request);
+
+        assertEquals(null, response.getResponseBody());
+    }
 }

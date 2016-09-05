@@ -23,7 +23,7 @@ public class ParameterController extends Controller {
                 body = request.getParameters().replace('&', '\n').replace("=", " = ");
                 body = decode(body, "UTF-8");
             } catch (UnsupportedEncodingException|IllegalArgumentException e) {
-                return body;
+                return "";
             }
         }
         return body;

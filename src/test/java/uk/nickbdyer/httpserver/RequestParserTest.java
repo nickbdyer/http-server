@@ -4,6 +4,7 @@ import org.junit.Test;
 import uk.nickbdyer.httpserver.requests.Request;
 import uk.nickbdyer.httpserver.requests.RequestParser;
 import uk.nickbdyer.httpserver.testdoubles.SocketStubWithRequest;
+import uk.nickbdyer.httpserver.testdoubles.UnreadableSocketStub;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -148,6 +149,15 @@ public class RequestParserTest {
 
         assertEquals("/foobar", request.getPath());
         assertEquals("hello=goodbye", request.getParameters());
+    }
+
+    @Test
+    public void requestParserWillPassANullMethodIfTheRequestCannotBeRead() throws IOException {
+        Socket socket = new UnreadableSocketStub();
+
+        Request request = new RequestParser(socket).parse();
+
+        assertEquals(null, request.getMethod());
     }
 
 }
