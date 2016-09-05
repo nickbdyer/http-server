@@ -28,10 +28,11 @@ public class HttpServer {
                 Request request = parser.parse();
 
                 Response response = router.route(request);
+                int code = response.getStatusCode();
                 String statusAndHeaders = response.getStatusLineAndHeader();
                 byte[] body = response.getResponseBody();
 
-                new ResponseDispatcher(connection).sendResponse(statusAndHeaders, body);
+                new ResponseDispatcher(connection).sendResponse(code, statusAndHeaders, body);
 
                 connection = serverSocket.accept();
             }

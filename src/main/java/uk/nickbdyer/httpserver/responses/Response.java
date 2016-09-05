@@ -31,7 +31,7 @@ public class Response {
         if (responseBody.length != 0) {
             header += "Content-Length: " + responseBody.length;
         }
-        return getStatusCode() + getHeader();
+        return getHeader();
     }
 
     public int getStatusCode() {

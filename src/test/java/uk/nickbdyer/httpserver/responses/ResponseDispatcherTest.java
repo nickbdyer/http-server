@@ -27,19 +27,16 @@ public class ResponseDispatcherTest {
 
     @Test
     public void aResponseDispatcherCanSendAResponseWithoutABody() throws IOException {
-        String statusLine = "HTTP/1.1 200 OK\n";
-
-        dispatcher.sendResponse(statusLine, null);
+        dispatcher.sendResponse(200, "", null);
 
         assertEquals("HTTP/1.1 200 OK\n", receivedContent.toString());
     }
 
     @Test
     public void aResponseDispatcherCanSendAResponseWithBody() throws IOException {
-        String statusLine = "HTTP/1.1 200 OK\n";
         byte[] body = "hello".getBytes();
 
-        dispatcher.sendResponse(statusLine, body);
+        dispatcher.sendResponse(200, "", body);
 
         assertThat(receivedContent.toString(), containsString("hello"));
     }
