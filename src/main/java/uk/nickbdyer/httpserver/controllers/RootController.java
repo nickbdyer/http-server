@@ -5,6 +5,7 @@ import uk.nickbdyer.httpserver.responses.Response;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public class RootController extends Controller {
@@ -25,7 +26,7 @@ public class RootController extends Controller {
                 .map(this::makeLink)
                 .collect(Collectors.joining());
         }
-        return new Response(200, "", body);
+        return new Response(200, new HashMap<>(), body);
     }
 
     private String makeLink(String fileName) {
@@ -34,7 +35,7 @@ public class RootController extends Controller {
 
     @Override
     public Response head(Request request) {
-        return new Response(200, "", "");
+        return new Response(200, new HashMap<>(), "");
     }
 
 }

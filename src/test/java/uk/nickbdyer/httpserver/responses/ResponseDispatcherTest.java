@@ -7,6 +7,7 @@ import uk.nickbdyer.httpserver.testdoubles.SocketStubWithOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.HashMap;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -27,16 +28,16 @@ public class ResponseDispatcherTest {
 
     @Test
     public void aResponseDispatcherCanSendAResponseWithoutABody() throws IOException {
-        dispatcher.sendResponse(200, "", null);
+        dispatcher.sendResponse(200, new HashMap<>(), null);
 
-        assertEquals("HTTP/1.1 200 OK\n", receivedContent.toString());
+        assertEquals("HTTP/1.1 200 OK\n\r\n", receivedContent.toString());
     }
 
     @Test
     public void aResponseDispatcherCanSendAResponseWithBody() throws IOException {
         byte[] body = "hello".getBytes();
 
-        dispatcher.sendResponse(200, "", body);
+        dispatcher.sendResponse(200, new HashMap<>(), body);
 
         assertThat(receivedContent.toString(), containsString("hello"));
     }

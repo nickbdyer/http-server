@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ResponseDispatcher {
 
@@ -16,13 +17,19 @@ public class ResponseDispatcher {
         this.responseCodes = buildResponseMap();
     }
 
-    public void sendResponse(int code, String statusAndHeaders, byte[] body) throws IOException {
+    public void sendResponse(int code, Map<String, String> headers, byte[] body) throws IOException {
         out.write(buildStatusLine(code));
-        out.write(statusAndHeaders.getBytes());
+        out.write(transfromHeadersToString(headers).getBytes());
         if (body != null) {
             out.write(body);
         }
         out.close();
+    }
+
+    private String transfromHeadersToString(Map<String, String> headers) {
+        return headers.entrySet().stream()
+                .map(entry -> entry.getKey() + entry.getValue())
+                .collect(Collectors.joining()) + "\r\n";
     }
 
     private byte[] buildStatusLine(int code) {

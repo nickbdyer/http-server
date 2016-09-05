@@ -8,6 +8,7 @@ import uk.nickbdyer.httpserver.responses.ResponseDispatcher;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Map;
 
 public class HttpServer {
 
@@ -29,10 +30,10 @@ public class HttpServer {
 
                 Response response = router.route(request);
                 int code = response.getStatusCode();
-                String statusAndHeaders = response.getStatusLineAndHeader();
-                byte[] body = response.getResponseBody();
+                Map<String, String> headers = response.getHeaders();
+                byte[] body = response.getBody();
 
-                new ResponseDispatcher(connection).sendResponse(code, statusAndHeaders, body);
+                new ResponseDispatcher(connection).sendResponse(code, headers, body);
 
                 connection = serverSocket.accept();
             }

@@ -4,10 +4,10 @@ import org.junit.Test;
 import uk.nickbdyer.httpserver.requests.Request;
 import uk.nickbdyer.httpserver.responses.Response;
 
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static uk.nickbdyer.httpserver.requests.Method.*;
+import static org.junit.Assert.assertTrue;
+import static uk.nickbdyer.httpserver.requests.Method.GET;
+import static uk.nickbdyer.httpserver.requests.Method.OPTIONS;
 
 public class MethodOptions2ControllerTest {
 
@@ -29,8 +29,8 @@ public class MethodOptions2ControllerTest {
         Response response = controller.execute(request);
 
         assertEquals(200, response.getStatusCode());
-        assertThat(response.getHeader(), containsString("Allow: "));
-        assertThat(response.getHeader(), containsString("GET,OPTIONS"));
+        assertTrue(response.getHeaders().containsKey("Allow: "));
+        assertEquals("GET,OPTIONS\n", response.getHeaders().get("Allow: "));
     }
 
 }

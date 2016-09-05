@@ -38,8 +38,8 @@ public class RootControllerTest {
 
         Response response = controller.execute(request);
 
-        assertThat(new String(response.getResponseBody()), containsString("fakeFile.txt"));
-        assertThat(new String(response.getResponseBody()), containsString("anotherFakeFile.img"));
+        assertThat(new String(response.getBody()), containsString("fakeFile.txt"));
+        assertThat(new String(response.getBody()), containsString("anotherFakeFile.img"));
     }
 
     @Test
@@ -51,8 +51,8 @@ public class RootControllerTest {
 
         Response response = controller.execute(request);
 
-        assertThat(new String(response.getResponseBody()), containsString("<a href=\"/fakeFile.txt\">fakeFile.txt</a>"));
-        assertThat(new String(response.getResponseBody()), containsString("<a href=\"/anotherFakeFile.img\">anotherFakeFile.img</a>"));
+        assertThat(new String(response.getBody()), containsString("<a href=\"/fakeFile.txt\">fakeFile.txt</a>"));
+        assertThat(new String(response.getBody()), containsString("<a href=\"/anotherFakeFile.img\">anotherFakeFile.img</a>"));
     }
 
     @Test
@@ -63,6 +63,6 @@ public class RootControllerTest {
         Response response = controller.execute(request);
 
         assertEquals(200, response.getStatusCode());
-        assertEquals(null, response.getResponseBody());
+        assertEquals(null, response.getBody());
     }
 }

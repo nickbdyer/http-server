@@ -21,7 +21,7 @@ public class ParameterControllerTest {
         Response response = controller.execute(request);
 
         assertEquals(200, response.getStatusCode());
-        assertEquals("variable_1 = Operators <, >, =, !=; +, -, *, &, @, #, $, [, ]: \"is that all\"?\nvariable_2 = stuff", new String(response.getResponseBody()));
+        assertEquals("variable_1 = Operators <, >, =, !=; +, -, *, &, @, #, $, [, ]: \"is that all\"?\nvariable_2 = stuff", new String(response.getBody()));
     }
 
     @Test
@@ -32,6 +32,6 @@ public class ParameterControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals(null, response.getResponseBody());
+        assertEquals(null, response.getBody());
     }
 }

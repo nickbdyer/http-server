@@ -4,9 +4,8 @@ import org.junit.Test;
 import uk.nickbdyer.httpserver.requests.Request;
 import uk.nickbdyer.httpserver.responses.Response;
 
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static uk.nickbdyer.httpserver.requests.Method.*;
 
 public class MethodOptionsControllerTest {
@@ -49,8 +48,8 @@ public class MethodOptionsControllerTest {
         Response response = controller.execute(request);
 
         assertEquals(200, response.getStatusCode());
-        assertThat(response.getHeader(), containsString("Allow: "));
-        assertThat(response.getHeader(), containsString("GET,HEAD,OPTIONS,POST,PUT"));
+        assertTrue(response.getHeaders().containsKey("Allow: "));
+        assertEquals("GET,HEAD,OPTIONS,POST,PUT\n", response.getHeaders().get("Allow: "));
     }
 
     @Test

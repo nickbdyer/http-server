@@ -47,7 +47,7 @@ public class FileControllerTest {
         Response response = controller.execute(request);
 
         assertEquals(200, response.getStatusCode());
-        assertEquals("hello", new String(response.getResponseBody()));
+        assertEquals("hello", new String(response.getBody()));
     }
 
 }

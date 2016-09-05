@@ -4,7 +4,9 @@ import uk.nickbdyer.httpserver.requests.Request;
 import uk.nickbdyer.httpserver.responses.Response;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public abstract class Controller {
@@ -69,12 +71,14 @@ public abstract class Controller {
         return new Response(405, allowedMethods(), "");
     }
 
-    protected String allowedMethods() {
+    protected Map<String, String> allowedMethods() {
+        Map<String, String> headers = new HashMap<>();
         List<String> methods = Arrays.stream(this.getClass().getDeclaredMethods())
                 .map(method -> method.getName().toUpperCase())
                 .sorted()
                 .collect(Collectors.toList());
-        return "Allow: " + String.join(",", methods) + "\n";
+        headers.put("Allow: ", String.join(",", methods) + "\n");
+        return headers;
     }
 
 }

@@ -4,6 +4,7 @@ import uk.nickbdyer.httpserver.requests.Request;
 import uk.nickbdyer.httpserver.responses.Response;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 
 import static java.net.URLDecoder.decode;
 
@@ -12,7 +13,7 @@ public class ParameterController extends Controller {
     @Override
     public Response get(Request request) {
         String body = formatParamsAsString(request);
-        return new Response(200, "", body);
+        return new Response(200, new HashMap<>(), body);
     }
 
     private String formatParamsAsString(Request request) {
