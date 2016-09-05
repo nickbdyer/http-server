@@ -4,28 +4,24 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URLConnection;
 import java.nio.file.Files;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
-
-import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
 
 public class Response {
 
     private final int statusCode;
-    private Map<String, String> header;
+    private Map<String, String> headers;
     private byte[] responseBody;
 
-    public Response(int code, Map<String, String> header, String responseBody) {
+    public Response(int code, Map<String, String> headers, String responseBody) {
         this.statusCode = code;
-        this.header = addContentTypeHeader(header);
+        this.headers = addContentTypeHeader(headers);
         this.responseBody = responseBody.getBytes();
     }
 
-    public Response(int code, Map<String, String> header, File file) {
+    public Response(int code, Map<String, String> headers, File file) {
         this.statusCode = code;
-        this.header = addFileContentTypeHeader(file, header);
+        this.headers = addFileContentTypeHeader(file, headers);
         this.responseBody = getFileBody(file);
     }
 
@@ -34,11 +30,7 @@ public class Response {
     }
 
     public Map<String, String> getHeaders() {
-        header.put("Date: ", RFC_1123_DATE_TIME.format(ZonedDateTime.now(ZoneId.of("GMT"))) + "\n");
-        if (responseBody.length != 0) {
-            header.put("Content-Length: ", responseBody.length + "\n");
-        }
-        return header;
+        return headers;
     }
 
     public byte[] getBody() {

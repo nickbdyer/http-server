@@ -3,22 +3,32 @@ package uk.nickbdyer.httpserver.responses;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class ResponseDispatcher {
+import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
+
+public class ResponseFormatter {
 
     private final OutputStream out;
     private final Map<Integer, String> responseCodes;
+    private final int statusCode;
+    private final Map<String, String> headers;
+    private final byte[] body;
 
-    public ResponseDispatcher(Socket socket) throws IOException {
+    public ResponseFormatter(Socket socket, Response response) throws IOException {
         this.out = socket.getOutputStream();
+        this.statusCode = response.getStatusCode();
+        this.headers = response.getHeaders();
+        this.body = response.getBody();
         this.responseCodes = buildResponseMap();
     }
 
-    public void sendResponse(int code, Map<String, String> headers, byte[] body) throws IOException {
-        out.write(buildStatusLine(code));
+    public void sendResponse() throws IOException {
+        out.write(buildStatusLine(statusCode));
         out.write(transfromHeadersToString(headers).getBytes());
         if (body != null) {
             out.write(body);
@@ -27,6 +37,10 @@ public class ResponseDispatcher {
     }
 
     private String transfromHeadersToString(Map<String, String> headers) {
+        headers.put("Date: ", RFC_1123_DATE_TIME.format(ZonedDateTime.now(ZoneId.of("GMT"))) + "\n");
+        if (body != null) {
+            headers.put("Content-Length: ", body.length + "\n");
+        }
         return headers.entrySet().stream()
                 .map(entry -> entry.getKey() + entry.getValue())
                 .collect(Collectors.joining()) + "\r\n";

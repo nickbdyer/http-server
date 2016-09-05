@@ -21,25 +21,10 @@ public class ResponseTest {
     }
 
     @Test
-    public void aResponseWillShowAIncludeADateFieldInTheHeader() {
-        Response response = new Response(200, new HashMap<>(), "Body");
-
-        assertTrue(response.getHeaders().containsKey("Date: "));
-    }
-
-    @Test
     public void aResponseWillShowABodyIfItIsPresent() {
         Response response = new Response(200, new HashMap<>(), "Body");
 
         assertThat(new String(response.getBody()), containsString("Body"));
-    }
-
-    @Test
-    public void aResponseHeaderWillShowAContentLengthIfBodyIsPresent() {
-        Response response = new Response(200, new HashMap<>(), "Body");
-
-        assertTrue(response.getHeaders().containsKey("Content-Length: "));
-        assertEquals("4\n", response.getHeaders().get("Content-Length: "));
     }
 
     @Test
