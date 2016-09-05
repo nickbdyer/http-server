@@ -27,6 +27,7 @@ public class Router {
     }
 
     public Response route(Request request) {
+        if(request.getMethod() == null) return Response.NotFound();
         if (publicFileExists(request.getPath())) {
             routeTable.put(request.getPath(), new FileController(getFile(request.getPath())));
         }

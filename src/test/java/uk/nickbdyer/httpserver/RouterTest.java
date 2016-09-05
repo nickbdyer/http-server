@@ -53,4 +53,13 @@ public class RouterTest {
         assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
     }
 
+    @Test
+    public void routerWillReturnNotFoundForPreloadRequestsWithoutHeaders() throws IOException {
+        Request request = new Request(null, null);
+
+        Response response = router.route(request);
+
+        assertEquals("HTTP/1.1 404 Not Found\n", response.getStatusLine());
+    }
+
 }
