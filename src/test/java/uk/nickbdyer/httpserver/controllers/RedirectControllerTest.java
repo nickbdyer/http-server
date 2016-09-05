@@ -16,7 +16,7 @@ public class RedirectControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 302 Found\n", response.getStatusLine());
+        assertEquals(302, response.getStatusCode());
         assertEquals(null, response.getResponseBody());
     }
 

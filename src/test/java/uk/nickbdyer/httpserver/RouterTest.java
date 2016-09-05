@@ -41,7 +41,7 @@ public class RouterTest {
     public void routerWillReturnNotFoundIfPathCanNotBeMatched() {
         Response response = router.route(request);
 
-        assertEquals("HTTP/1.1 404 Not Found\n", response.getStatusLine());
+        assertEquals(404, response.getStatusCode());
     }
 
     @Test
@@ -50,7 +50,7 @@ public class RouterTest {
 
         Response response = router.route(request);
 
-        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
+        assertEquals(200, response.getStatusCode());
     }
 
     @Test
@@ -59,7 +59,7 @@ public class RouterTest {
 
         Response response = router.route(request);
 
-        assertEquals("HTTP/1.1 404 Not Found\n", response.getStatusLine());
+        assertEquals(404, response.getStatusCode());
     }
 
 }

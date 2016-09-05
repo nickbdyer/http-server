@@ -18,7 +18,7 @@ public class MethodOptionsControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
+        assertEquals(200, response.getStatusCode());
     }
 
     @Test
@@ -28,7 +28,7 @@ public class MethodOptionsControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
+        assertEquals(200, response.getStatusCode());
     }
 
     @Test
@@ -38,7 +38,7 @@ public class MethodOptionsControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
+        assertEquals(200, response.getStatusCode());
     }
 
     @Test
@@ -48,7 +48,7 @@ public class MethodOptionsControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
+        assertEquals(200, response.getStatusCode());
         assertThat(response.getHeader(), containsString("Allow: "));
         assertThat(response.getHeader(), containsString("GET,HEAD,OPTIONS,POST,PUT"));
     }
@@ -60,7 +60,7 @@ public class MethodOptionsControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
+        assertEquals(200, response.getStatusCode());
     }
 
 }

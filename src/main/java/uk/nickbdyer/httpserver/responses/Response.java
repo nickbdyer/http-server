@@ -8,22 +8,21 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
-import static uk.nickbdyer.httpserver.responses.StatusLine.*;
 
 public class Response {
 
-    private final String statusLine;
+    private final int statusCode;
     private String header;
     private byte[] responseBody;
 
-    public Response(StatusLine statusLine, String header, String responseBody) {
-        this.statusLine = statusLine.getLineAsString();
+    public Response(int code, String header, String responseBody) {
+        this.statusCode = code;
         this.header = addContentTypeHeader(header);
         this.responseBody = responseBody.getBytes();
     }
 
-    public Response(StatusLine line, File file) {
-        this.statusLine = line.getLineAsString();
+    public Response(int code, File file) {
+        this.statusCode = code;
         this.header = addFileContentTypeHeader(file);
         this.responseBody = getFileBody(file);
     }
@@ -32,11 +31,11 @@ public class Response {
         if (responseBody.length != 0) {
             header += "Content-Length: " + responseBody.length;
         }
-        return getStatusLine() + getHeader();
+        return getStatusCode() + getHeader();
     }
 
-    public String getStatusLine() {
-        return statusLine + "\n";
+    public int getStatusCode() {
+        return statusCode;
     }
 
     public String getHeader() {
@@ -70,6 +69,6 @@ public class Response {
     }
 
     public static Response NotFound() {
-        return new Response(NOT_FOUND, "", "");
+        return new Response(404, "", "");
     }
 }

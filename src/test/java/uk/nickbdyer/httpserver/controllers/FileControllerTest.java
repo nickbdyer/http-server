@@ -35,7 +35,7 @@ public class FileControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
+        assertEquals(200, response.getStatusCode());
     }
 
     @Test
@@ -46,7 +46,7 @@ public class FileControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
+        assertEquals(200, response.getStatusCode());
         assertEquals("hello", new String(response.getResponseBody()));
     }
 

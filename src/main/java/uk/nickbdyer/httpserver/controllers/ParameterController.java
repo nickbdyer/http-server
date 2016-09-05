@@ -6,14 +6,13 @@ import uk.nickbdyer.httpserver.responses.Response;
 import java.io.UnsupportedEncodingException;
 
 import static java.net.URLDecoder.decode;
-import static uk.nickbdyer.httpserver.responses.StatusLine.OK;
 
 public class ParameterController extends Controller {
 
     @Override
     public Response get(Request request) {
         String body = formatParamsAsString(request);
-        return new Response(OK, "", body);
+        return new Response(200, "", body);
     }
 
     private String formatParamsAsString(Request request) {

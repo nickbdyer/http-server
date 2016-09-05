@@ -7,8 +7,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import static uk.nickbdyer.httpserver.responses.StatusLine.OK;
-
 public class RootController extends Controller {
 
     private final File publicfolder;
@@ -27,7 +25,7 @@ public class RootController extends Controller {
                 .map(this::makeLink)
                 .collect(Collectors.joining());
         }
-        return new Response(OK, "", body);
+        return new Response(200, "", body);
     }
 
     private String makeLink(String fileName) {
@@ -36,7 +34,7 @@ public class RootController extends Controller {
 
     @Override
     public Response head(Request request) {
-        return new Response(OK, "", "");
+        return new Response(200, "", "");
     }
 
 }

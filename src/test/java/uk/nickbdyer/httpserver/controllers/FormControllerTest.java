@@ -27,7 +27,7 @@ public class FormControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
+        assertEquals(200, response.getStatusCode());
         assertEquals(null, response.getResponseBody());
     }
 
@@ -39,7 +39,7 @@ public class FormControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
+        assertEquals(200, response.getStatusCode());
         assertEquals("data=fatcat", new String(response.getResponseBody()));
     }
 
@@ -51,7 +51,7 @@ public class FormControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
+        assertEquals(200, response.getStatusCode());
         assertEquals("data=heathcliff", new String(response.getResponseBody()));
     }
 
@@ -63,7 +63,7 @@ public class FormControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
+        assertEquals(200, response.getStatusCode());
         assertEquals(null, response.getResponseBody());
     }
 }

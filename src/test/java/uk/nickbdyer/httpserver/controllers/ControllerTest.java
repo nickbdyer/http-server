@@ -104,7 +104,7 @@ public class ControllerTest {
 
         Response response = controller.execute(getRequest);
 
-        assertEquals("HTTP/1.1 405 Method Not Allowed\n", response.getStatusLine());
+        assertEquals(405, response.getStatusCode());
     }
 
     @Test
