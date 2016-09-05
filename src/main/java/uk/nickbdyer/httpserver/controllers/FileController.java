@@ -5,6 +5,8 @@ import uk.nickbdyer.httpserver.responses.Response;
 
 import java.io.File;
 
+import static uk.nickbdyer.httpserver.responses.StatusLine.OK;
+
 public class FileController extends Controller {
 
     private final File file;
@@ -15,7 +17,7 @@ public class FileController extends Controller {
 
     @Override
     public Response get(Request request) {
-        return new Response("HTTP/1.1 200 OK", "", null);
+        return new Response(OK, file);
     }
 
 }

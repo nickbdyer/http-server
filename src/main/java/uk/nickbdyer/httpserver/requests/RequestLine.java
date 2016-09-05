@@ -4,7 +4,7 @@ public class RequestLine {
 
     private final Method method;
     private final String path;
-    private String parameters;
+    private final String parameters;
 
     public RequestLine(Method method, String path, String parameters) {
         this.method = method;

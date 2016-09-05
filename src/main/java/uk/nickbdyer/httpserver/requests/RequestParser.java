@@ -4,12 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static uk.nickbdyer.httpserver.requests.Method.*;
+import static uk.nickbdyer.httpserver.requests.Method.UNKNOWN_METHOD;
+import static uk.nickbdyer.httpserver.requests.Method.valueOf;
 
 public class RequestParser {
 
@@ -20,8 +18,8 @@ public class RequestParser {
     }
 
     public Request parse() {
-        RequestLine requestLine = null;
-        Map<String, String> headers = null;
+        RequestLine requestLine;
+        Map<String, String> headers;
         try {
             requestLine = getStatusLine(readStatusLine());
             headers = getHeaders(readHeaders());
@@ -30,12 +28,13 @@ public class RequestParser {
                 return new Request(requestLine, headers, body);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            return new Request(new RequestLine(null, null, null), null, null);
         }
-        return new Request(requestLine, headers);
+        return new Request(requestLine, headers, "");
     }
 
     private RequestLine getStatusLine(String statusLine) {
+        if (statusLine == null) return new RequestLine(null, null, null);
         int firstSpace = statusLine.indexOf(' ');
         Method method = validateMethod(statusLine.substring(0, (firstSpace)));
         if (statusLine.contains("?")) {
@@ -53,7 +52,6 @@ public class RequestParser {
     }
 
     private Map<String, String> getHeaders(List<String> headers) {
-        //This will blow up with no header sent, Host is required in 1.1. Might require empty check
         Map<String, String> dict = new HashMap<>();
         headers.forEach(line -> dict.put(line.substring(0, line.indexOf(':')), line.substring(line.indexOf(' ') + 1)));
         return dict;
@@ -63,27 +61,19 @@ public class RequestParser {
         return in.readLine();
     }
 
-    private List<String> readHeaders() {
+    private List<String> readHeaders() throws IOException {
         String line;
         List<String> headers = new ArrayList<>();
-        try {
-            while ((line = in.readLine()) != null && line.length() > 0) {
-                headers.add(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        while ((line = in.readLine()) != null && line.length() > 0) {
+            headers.add(line);
         }
         return headers;
     }
 
-    private String readBody(String contentLength) {
+    private String readBody(String contentLength) throws IOException {
         int readLimit = Integer.parseInt(contentLength);
         char[] buffer = new char[readLimit];
-        try {
-            in.read(buffer, 0, readLimit);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        in.read(buffer, 0, readLimit);
         return new String(buffer);
     }
 

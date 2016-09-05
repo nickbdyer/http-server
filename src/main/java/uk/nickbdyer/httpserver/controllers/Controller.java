@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static uk.nickbdyer.httpserver.responses.StatusLine.METHOD_NOT_ALLOWED;
+
 public abstract class Controller {
 
     public Response execute(Request request) {
@@ -66,7 +68,7 @@ public abstract class Controller {
     }
 
     private Response MethodNotAllowed() {
-        return new Response("HTTP/1.1 405 Method Not Allowed", allowedMethods(), "");
+        return new Response(METHOD_NOT_ALLOWED, allowedMethods(), "");
     }
 
     protected String allowedMethods() {

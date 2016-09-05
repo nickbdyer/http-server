@@ -1,17 +1,27 @@
 package uk.nickbdyer.httpserver.controllers;
 
+import org.junit.Before;
 import org.junit.Test;
 import uk.nickbdyer.httpserver.requests.Request;
+import uk.nickbdyer.httpserver.requests.RequestLine;
 import uk.nickbdyer.httpserver.responses.Response;
+
+import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 import static uk.nickbdyer.httpserver.requests.Method.*;
 
 public class FormControllerTest {
 
+    private FormData data;
+
+    @Before
+    public void setUp() throws Exception {
+        data = new FormData("");
+    }
+
     @Test
     public void willRespondToAGetRequest() {
-        FormData data = new FormData(null);
         FormController controller = new FormController(data);
         Request request = new Request(GET, "/form");
 
@@ -23,26 +33,26 @@ public class FormControllerTest {
 
     @Test
     public void willRespondToAPostRequest() {
-        FormData data = new FormData(null);
         FormController controller = new FormController(data);
-        Request request = new Request(POST, "/form", "data=fatcat");
+        RequestLine requestLine = new RequestLine(POST, "/form", "");
+        Request request = new Request(requestLine, new HashMap<>(), "data=fatcat");
 
         Response response = controller.execute(request);
 
         assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
-        assertEquals("data=fatcat\n", response.getResponseBody());
+        assertEquals("data=fatcat", new String(response.getResponseBody()));
     }
 
     @Test
     public void willRespondToAPutRequest() {
-        FormData data = new FormData(null);
         FormController controller = new FormController(data);
-        Request request = new Request(PUT, "/form", "data=heathcliff");
+        RequestLine requestLine = new RequestLine(PUT, "/form", "");
+        Request request = new Request(requestLine, new HashMap<>(), "data=heathcliff");
 
         Response response = controller.execute(request);
 
         assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
-        assertEquals("data=heathcliff\n", response.getResponseBody());
+        assertEquals("data=heathcliff", new String(response.getResponseBody()));
     }
 
     @Test

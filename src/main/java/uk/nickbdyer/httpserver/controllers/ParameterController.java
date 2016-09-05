@@ -5,24 +5,25 @@ import uk.nickbdyer.httpserver.responses.Response;
 
 import java.io.UnsupportedEncodingException;
 
-import static java.net.URLDecoder.*;
+import static java.net.URLDecoder.decode;
+import static uk.nickbdyer.httpserver.responses.StatusLine.OK;
 
 public class ParameterController extends Controller {
 
     @Override
     public Response get(Request request) {
-        String body = formatParams(request);
-        return new Response("HTTP/1.1 200 OK", "", body);
+        String body = formatParamsAsString(request);
+        return new Response(OK, "", body);
     }
 
-    private String formatParams(Request request) {
+    private String formatParamsAsString(Request request) {
         String body = null;
         if (request.getParameters() != null) {
             try {
                 body = request.getParameters().replace('&', '\n').replace("=", " = ");
                 body = decode(body, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+            } catch (UnsupportedEncodingException|IllegalArgumentException e) {
+                return "";
             }
         }
         return body;

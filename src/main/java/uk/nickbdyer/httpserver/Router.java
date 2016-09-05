@@ -27,31 +27,27 @@ public class Router {
     }
 
     public Response route(Request request) {
-        if (fileExistsIn(publicFolder, request.getPath())) {
-            routeTable.put(request.getPath(), new FileController(getFile(publicFolder, request.getPath())));
+        if(request.getMethod() == null) return Response.NotFound(); //Catches preload requests, and parse failures.
+        if (publicFileExists(request.getPath())) {
+            return new FileController(getFile(request.getPath())).execute(request);
         }
         if (!routeTable.containsKey(request.getPath())) {
-            return NotFound();
+            return Response.NotFound();
         } else {
             return routeTable.get(request.getPath()).execute(request);
         }
     }
 
-    private boolean fileExistsIn(File publicFolder, String path) {
+    private boolean publicFileExists(String path) {
         File[] files = publicFolder.listFiles();
-        if (files == null) return false;
-        return Arrays.stream(files).anyMatch(file -> file.getName().equals(path.substring(1)));
+        return files != null && Arrays.stream(files)
+                .anyMatch(file -> file.getName().equals(path.substring(1)));
     }
 
-    private File getFile(File publicFolder, String path) {
+    private File getFile(String path) {
         return Arrays.stream(publicFolder.listFiles())
                 .filter(file -> Objects.equals(file.getName(), path.substring(1)))
                 .collect(Collectors.toList()).get(0);
     }
-
-    private Response NotFound() {
-        return new Response("HTTP/1.1 404 Not Found", "", null);
-    }
-
 
 }

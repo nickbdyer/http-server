@@ -16,6 +16,7 @@ import static uk.nickbdyer.httpserver.requests.Method.GET;
 public class RouterTest {
 
     private Router router;
+    private Request request;
 
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
@@ -23,13 +24,13 @@ public class RouterTest {
     @Before
     public void setUp() throws IOException {
         router = new Router(tempFolder.getRoot());
+        request = new Request(GET, "/test");
     }
 
     @Test
-    public void aRouterWillPassARequestToTheCorrectController() {
+    public void routerWillMatchARequestPathToInTheRouteTableAndTriggerTheController() {
         ControllerSpy controller = new ControllerSpy();
         router.addController("/test", controller);
-        Request request = new Request(GET, "/test");
 
         router.route(request);
 
@@ -37,22 +38,28 @@ public class RouterTest {
     }
 
     @Test
-    public void aRouterWillReturnNotFoundIfNoControllerExistsForAPath() {
-        Request request = new Request(GET, "/test");
-
+    public void routerWillReturnNotFoundIfPathCanNotBeMatched() {
         Response response = router.route(request);
 
         assertEquals("HTTP/1.1 404 Not Found\n", response.getStatusLine());
     }
 
     @Test
-    public void aRouterWillPassARequestToTheFileControllerIfAFileExists() throws IOException {
+    public void routerWillDynamicallyAddARouteForAFileFoundInThePublicFolder() throws IOException {
         tempFolder.newFile("test");
-        Request request = new Request(GET, "/test");
 
         Response response = router.route(request);
 
         assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
+    }
+
+    @Test
+    public void routerWillReturnNotFoundForPreloadRequestsWithoutHeaders() throws IOException {
+        Request request = new Request(null, null);
+
+        Response response = router.route(request);
+
+        assertEquals("HTTP/1.1 404 Not Found\n", response.getStatusLine());
     }
 
 }
