@@ -70,4 +70,7 @@ public class Response {
         }
     }
 
+    public static Response NotFound() {
+        return new Response("HTTP/1.1 404 Not Found", "", "");
+    }
 }

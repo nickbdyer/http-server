@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 
 public class Router {
 
-    private final File publicFolder;
+    private final File[] publicFiles;
     private Map<String, Controller> routeTable;
 
     public Router(File publicFolder) {
-        this.publicFolder = publicFolder;
+        this.publicFiles = publicFolder.listFiles();
         routeTable = new HashMap<>();
     }
 
@@ -27,31 +27,26 @@ public class Router {
     }
 
     public Response route(Request request) {
-        if (fileExistsIn(publicFolder, request.getPath())) {
-            routeTable.put(request.getPath(), new FileController(getFile(publicFolder, request.getPath())));
+        String requestPath = request.getPath();
+        if (publicFileExists(requestPath)) {
+            routeTable.put(requestPath, new FileController(getFile(requestPath)));
         }
-        if (!routeTable.containsKey(request.getPath())) {
-            return NotFound();
+        if (!routeTable.containsKey(requestPath)) {
+            return Response.NotFound();
         } else {
-            return routeTable.get(request.getPath()).execute(request);
+            return routeTable.get(requestPath).execute(request);
         }
     }
 
-    private boolean fileExistsIn(File publicFolder, String path) {
-        File[] files = publicFolder.listFiles();
-        if (files == null) return false;
-        return Arrays.stream(files).anyMatch(file -> file.getName().equals(path.substring(1)));
+    private boolean publicFileExists(String path) {
+        return publicFiles != null && Arrays.stream(publicFiles)
+                .anyMatch(file -> file.getName().equals(path.substring(1)));
     }
 
-    private File getFile(File publicFolder, String path) {
-        return Arrays.stream(publicFolder.listFiles())
+    private File getFile(String path) {
+        return Arrays.stream(publicFiles)
                 .filter(file -> Objects.equals(file.getName(), path.substring(1)))
                 .collect(Collectors.toList()).get(0);
     }
-
-    private Response NotFound() {
-        return new Response("HTTP/1.1 404 Not Found", "", "");
-    }
-
 
 }
