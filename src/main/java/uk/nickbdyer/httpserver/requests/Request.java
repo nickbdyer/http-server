@@ -15,24 +15,11 @@ public class Request {
         this.path = path;
     }
 
-    public Request(RequestLine status, Map<String, String> headers) {
-        this.method = status.getMethod();
-        this.path = status.getPath();
-        this.parameters = status.getParameters();
-        this.headers = headers;
-    }
-
     public Request(RequestLine status, Map<String, String> headers, String body) {
         this.method = status.getMethod();
         this.path = status.getPath();
         this.parameters = status.getParameters();
         this.headers = headers;
-        this.body = body;
-    }
-
-    public Request(Method method, String path, String body) {
-        this.method = method;
-        this.path = path;
         this.body = body;
     }
 
@@ -44,6 +31,10 @@ public class Request {
         return path;
     }
 
+    public String getParameters() {
+        return parameters;
+    }
+
     public Map<String, String> getHeaders() {
         return headers;
     }
@@ -52,7 +43,4 @@ public class Request {
         return body;
     }
 
-    public String getParameters() {
-        return parameters;
-    }
 }

@@ -34,7 +34,7 @@ public class RequestParser {
         } catch (IOException e) {
             throw new SocketUnreadableException();
         }
-        return new Request(requestLine, headers);
+        return new Request(requestLine, headers, "");
     }
 
     private RequestLine getStatusLine(String statusLine) {
