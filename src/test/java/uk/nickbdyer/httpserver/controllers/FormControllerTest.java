@@ -1,5 +1,6 @@
 package uk.nickbdyer.httpserver.controllers;
 
+import org.junit.Before;
 import org.junit.Test;
 import uk.nickbdyer.httpserver.requests.Request;
 import uk.nickbdyer.httpserver.requests.RequestLine;
@@ -12,9 +13,15 @@ import static uk.nickbdyer.httpserver.requests.Method.*;
 
 public class FormControllerTest {
 
+    private FormData data;
+
+    @Before
+    public void setUp() throws Exception {
+        data = new FormData("");
+    }
+
     @Test
     public void willRespondToAGetRequest() {
-        FormData data = new FormData("");
         FormController controller = new FormController(data);
         Request request = new Request(GET, "/form");
 
@@ -26,7 +33,6 @@ public class FormControllerTest {
 
     @Test
     public void willRespondToAPostRequest() {
-        FormData data = new FormData(null);
         FormController controller = new FormController(data);
         RequestLine requestLine = new RequestLine(POST, "/form", "");
         Request request = new Request(requestLine, new HashMap<>(), "data=fatcat");
@@ -39,9 +45,8 @@ public class FormControllerTest {
 
     @Test
     public void willRespondToAPutRequest() {
-        FormData data = new FormData(null);
         FormController controller = new FormController(data);
-        RequestLine requestLine = new RequestLine(POST, "/form", "");
+        RequestLine requestLine = new RequestLine(PUT, "/form", "");
         Request request = new Request(requestLine, new HashMap<>(), "data=heathcliff");
 
         Response response = controller.execute(request);
