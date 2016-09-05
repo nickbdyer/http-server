@@ -102,7 +102,7 @@ public class RequestParserTest {
 
         assertEquals(5, request.getHeaders().size());
     }
-    
+
     @Test
     public void requestParserWillIgnoreBodyWhenParsingHeaders() throws IOException {
         String requestString = "GET /foobar HTTP/1.1\n" +
@@ -157,6 +157,5 @@ public class RequestParserTest {
         Socket socket = new UnreadableSocketStub();
         new RequestParser(socket).parse();
     }
-
 
 }
