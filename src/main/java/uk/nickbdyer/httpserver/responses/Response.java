@@ -8,6 +8,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
+import static uk.nickbdyer.httpserver.responses.StatusLine.*;
 
 public class Response {
 
@@ -15,18 +16,17 @@ public class Response {
     private String header;
     private byte[] responseBody;
 
-    public Response(String statusLine, String header, String responseBody) {
-        this.statusLine = statusLine;
+    public Response(StatusLine statusLine, String header, String responseBody) {
+        this.statusLine = statusLine.getLineAsString();
         this.header = addContentTypeHeader(header);
         this.responseBody = responseBody.getBytes();
     }
 
-    public Response(String statusLine, File file) {
-        this.statusLine = statusLine;
+    public Response(StatusLine line, File file) {
+        this.statusLine = line.getLineAsString();
         this.header = addFileContentTypeHeader(file);
         this.responseBody = getFileBody(file);
     }
-
 
     public String getStatusLineAndHeader() {
         if (responseBody.length != 0) {
@@ -71,6 +71,6 @@ public class Response {
     }
 
     public static Response NotFound() {
-        return new Response("HTTP/1.1 404 Not Found", "", "");
+        return new Response(NOT_FOUND, "", "");
     }
 }
