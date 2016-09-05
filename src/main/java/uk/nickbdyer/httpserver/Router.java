@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 
 public class Router {
 
-    private final File[] publicFiles;
+    private final File publicFolder;
     private Map<String, Controller> routeTable;
 
     public Router(File publicFolder) {
-        this.publicFiles = publicFolder.listFiles();
+        this.publicFolder = publicFolder;
         routeTable = new HashMap<>();
     }
 
@@ -27,24 +27,24 @@ public class Router {
     }
 
     public Response route(Request request) {
-        String requestPath = request.getPath();
-        if (publicFileExists(requestPath)) {
-            routeTable.put(requestPath, new FileController(getFile(requestPath)));
+        if (publicFileExists(request.getPath())) {
+            routeTable.put(request.getPath(), new FileController(getFile(request.getPath())));
         }
-        if (!routeTable.containsKey(requestPath)) {
+        if (!routeTable.containsKey(request.getPath())) {
             return Response.NotFound();
         } else {
-            return routeTable.get(requestPath).execute(request);
+            return routeTable.get(request.getPath()).execute(request);
         }
     }
 
     private boolean publicFileExists(String path) {
-        return publicFiles != null && Arrays.stream(publicFiles)
+        File[] files = publicFolder.listFiles();
+        return files != null && Arrays.stream(files)
                 .anyMatch(file -> file.getName().equals(path.substring(1)));
     }
 
     private File getFile(String path) {
-        return Arrays.stream(publicFiles)
+        return Arrays.stream(publicFolder.listFiles())
                 .filter(file -> Objects.equals(file.getName(), path.substring(1)))
                 .collect(Collectors.toList()).get(0);
     }
