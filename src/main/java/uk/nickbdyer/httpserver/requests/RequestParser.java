@@ -1,5 +1,7 @@
 package uk.nickbdyer.httpserver.requests;
 
+import uk.nickbdyer.httpserver.exceptions.SocketUnreadableException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -30,7 +32,7 @@ public class RequestParser {
                 return new Request(requestLine, headers, body);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new SocketUnreadableException();
         }
         return new Request(requestLine, headers);
     }
@@ -63,27 +65,19 @@ public class RequestParser {
         return in.readLine();
     }
 
-    private List<String> readHeaders() {
+    private List<String> readHeaders() throws IOException {
         String line;
         List<String> headers = new ArrayList<>();
-        try {
-            while ((line = in.readLine()) != null && line.length() > 0) {
-                headers.add(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        while ((line = in.readLine()) != null && line.length() > 0) {
+            headers.add(line);
         }
         return headers;
     }
 
-    private String readBody(String contentLength) {
+    private String readBody(String contentLength) throws IOException {
         int readLimit = Integer.parseInt(contentLength);
         char[] buffer = new char[readLimit];
-        try {
-            in.read(buffer, 0, readLimit);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        in.read(buffer, 0, readLimit);
         return new String(buffer);
     }
 
