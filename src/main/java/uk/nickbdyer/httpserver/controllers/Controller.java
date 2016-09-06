@@ -77,7 +77,7 @@ public abstract class Controller {
                 .map(method -> method.getName().toUpperCase())
                 .sorted()
                 .collect(Collectors.toList());
-        headers.put("Allow: ", String.join(",", methods) + "\n");
+        headers.put("Allow", String.join(",", methods));
         return headers;
     }
 

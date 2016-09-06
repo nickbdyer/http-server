@@ -49,8 +49,8 @@ public class ResponseTest {
         File file = folder.newFile("testfile.txt");
         Response response = new Response(200, new HashMap<>(),  file);
 
-        assertTrue(response.getHeaders().containsKey("Content-Type: "));
-        assertEquals("text/plain\n", response.getHeaders().get("Content-Type: "));
+        assertTrue(response.getHeaders().containsKey("Content-Type"));
+        assertEquals("text/plain", response.getHeaders().get("Content-Type"));
     }
 
     @Test
@@ -58,8 +58,8 @@ public class ResponseTest {
         File file = folder.newFile("testfile.png");
         Response response = new Response(200, new HashMap<>(), file);
 
-        assertTrue(response.getHeaders().containsKey("Content-Type: "));
-        assertEquals("image/png\n", response.getHeaders().get("Content-Type: "));
+        assertTrue(response.getHeaders().containsKey("Content-Type"));
+        assertEquals("image/png", response.getHeaders().get("Content-Type"));
     }
 
 }

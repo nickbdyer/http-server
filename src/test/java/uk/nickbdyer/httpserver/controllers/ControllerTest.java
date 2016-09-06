@@ -116,8 +116,8 @@ public class ControllerTest {
 
         Response response = controller.execute(getRequest);
 
-        assertTrue(response.getHeaders().containsKey("Allow: "));
-        assertThat(response.getHeaders().get("Allow: "), containsString("CONNECT,DELETE,GET,HEAD,OPTIONS,POST,PUT,TRACE\n"));
+        assertTrue(response.getHeaders().containsKey("Allow"));
+        assertThat(response.getHeaders().get("Allow"), containsString("CONNECT,DELETE,GET,HEAD,OPTIONS,POST,PUT,TRACE"));
     }
 
 

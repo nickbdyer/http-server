@@ -12,7 +12,7 @@ public class RedirectController extends Controller {
     @Override
     public Response get(Request request) {
         Map<String, String> headers = new HashMap<>();
-        headers.put("Location: ", "http://localhost:5000/\n");
+        headers.put("Location", "http://localhost:5000/");
         return new Response(302, headers, "");
     }
 

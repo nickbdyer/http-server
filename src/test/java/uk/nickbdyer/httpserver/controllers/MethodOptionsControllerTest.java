@@ -50,8 +50,8 @@ public class MethodOptionsControllerTest {
         Response response = controller.execute(request);
 
         assertEquals(200, response.getStatusCode());
-        assertTrue(response.getHeaders().containsKey("Allow: "));
-        assertThat(response.getHeaders().get("Allow: "), containsString("GET,HEAD,OPTIONS,POST,PUT\n"));
+        assertTrue(response.getHeaders().containsKey("Allow"));
+        assertThat(response.getHeaders().get("Allow"), containsString("GET,HEAD,OPTIONS,POST,PUT"));
     }
 
     @Test

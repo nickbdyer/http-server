@@ -42,13 +42,13 @@ public class Response {
 
     private Map<String, String> addFileContentTypeHeader(File file, Map<String, String> header) {
         String type = URLConnection.guessContentTypeFromName(file.getName());
-        type = (type == null ? "text/html; charset=utf-8\n" : type + "\n");
-        header.put("Content-Type: ", type);
+        type = (type == null ? "text/html; charset=utf-8\n" : type);
+        header.put("Content-Type", type);
         return header;
     }
 
     private Map<String, String> addContentTypeHeader(Map<String, String> header) {
-        header.put("Content-Type: ", "text/html; charset=utf-8\n");
+        header.put("Content-Type", "text/html; charset=utf-8");
         return header;
     }
 

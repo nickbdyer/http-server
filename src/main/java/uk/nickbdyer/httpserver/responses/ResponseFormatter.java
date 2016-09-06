@@ -37,18 +37,18 @@ public class ResponseFormatter {
     }
 
     private String transfromHeadersToString(Map<String, String> headers) {
-        headers.put("Date: ", RFC_1123_DATE_TIME.format(ZonedDateTime.now(ZoneId.of("GMT"))) + "\n");
+        headers.put("Date", RFC_1123_DATE_TIME.format(ZonedDateTime.now(ZoneId.of("GMT"))));
         if (body != null) {
-            headers.put("Content-Length: ", body.length + "\n");
+            headers.put("Content-Length", Integer.toString(body.length));
         }
         return headers.entrySet().stream()
-                .map(entry -> entry.getKey() + entry.getValue())
+                .map(entry -> entry.getKey() + ": "+ entry.getValue() + "\r\n")
                 .collect(Collectors.joining()) + "\r\n";
     }
 
     private byte[] buildStatusLine(int code) {
-        String statusLine = "HTTP/1.1 " + code + " " + responseCodes.get(code);
-        return (statusLine + "\n").getBytes();
+        String statusLine = "HTTP/1.1 " + code + " " + responseCodes.get(code) + "\n";
+        return statusLine.getBytes();
     }
 
     private Map<Integer, String> buildResponseMap() {
