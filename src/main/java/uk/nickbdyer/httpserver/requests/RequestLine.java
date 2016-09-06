@@ -1,12 +1,14 @@
 package uk.nickbdyer.httpserver.requests;
 
+import java.util.Map;
+
 public class RequestLine {
 
     private final Method method;
     private final String path;
-    private final String parameters;
+    private final Map<String, String> parameters;
 
-    public RequestLine(Method method, String path, String parameters) {
+    public RequestLine(Method method, String path, Map<String, String> parameters) {
         this.method = method;
         this.path = path;
         this.parameters = parameters;
@@ -20,7 +22,7 @@ public class RequestLine {
         return method;
     }
 
-    public String getParameters() {
+    public Map<String, String> getParameters() {
         return parameters;
     }
 }

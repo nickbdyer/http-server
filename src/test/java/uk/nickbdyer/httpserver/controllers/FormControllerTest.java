@@ -34,7 +34,7 @@ public class FormControllerTest {
     @Test
     public void willRespondToAPostRequest() {
         FormController controller = new FormController(data);
-        RequestLine requestLine = new RequestLine(POST, "/form", "");
+        RequestLine requestLine = new RequestLine(POST, "/form", new HashMap<>());
         Request request = new Request(requestLine, new HashMap<>(), "data=fatcat");
 
         Response response = controller.execute(request);
@@ -46,7 +46,7 @@ public class FormControllerTest {
     @Test
     public void willRespondToAPutRequest() {
         FormController controller = new FormController(data);
-        RequestLine requestLine = new RequestLine(PUT, "/form", "");
+        RequestLine requestLine = new RequestLine(PUT, "/form", new HashMap<>());
         Request request = new Request(requestLine, new HashMap<>(), "data=heathcliff");
 
         Response response = controller.execute(request);
