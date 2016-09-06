@@ -39,7 +39,7 @@ public class Response {
 
     private Map<String, String> addFileContentTypeHeader(File file, Map<String, String> header) {
         String type = URLConnection.guessContentTypeFromName(file.getName());
-        type = (type == null ? "text/html; charset=utf-8\n" : type);
+        type = (type == null ? "text/html; charset=utf-8" : type);
         header.put("Content-Type", type);
         return header;
     }

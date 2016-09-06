@@ -4,7 +4,12 @@ import uk.nickbdyer.httpserver.requests.Request;
 import uk.nickbdyer.httpserver.responses.Response;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
+
+import static org.apache.commons.codec.digest.DigestUtils.sha1Hex;
 
 public class FileController extends Controller {
 
@@ -17,6 +22,45 @@ public class FileController extends Controller {
     @Override
     public Response get(Request request) {
         return new Response(200, new HashMap<>(), file);
+    }
+
+    @Override
+    public Response patch(Request request) {
+        if (etagIsNotPresent(request)) {
+            return new Response(400, new HashMap<>(), "");
+        } else if (etagsMatch(request)) {
+            overwriteFileWithRequestBody(request);
+            return new Response(204, new HashMap<>(), "");
+        } else {
+            return Response.NotFound();
+        }
+    }
+
+    private boolean etagIsNotPresent(Request request) {
+        return !request.getHeaders().containsKey("If-Match");
+    }
+
+    private boolean etagsMatch(Request request) {
+        return request.getHeaders().get("If-Match").equals(fileSha(file));
+    }
+
+    private void overwriteFileWithRequestBody(Request request) {
+        try {
+            FileWriter writer = new FileWriter(file, false);
+            writer.write(request.getBody());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String fileSha(File file) {
+        try {
+            return sha1Hex(Files.readAllBytes(file.toPath()));
+        } catch (IOException e) {
+            return null;
+        }
+
     }
 
 }
