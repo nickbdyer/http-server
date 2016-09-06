@@ -26,22 +26,19 @@ public class FileController extends Controller {
 
     @Override
     public Response patch(Request request) {
-        if (etagIsNotPresent(request)) {
-            return new Response(400, new HashMap<>(), "");
-        } else if (etagsMatch(request)) {
+        if (etagsMatch(request)) {
             overwriteFileWithRequestBody(request);
             return new Response(204, new HashMap<>(), "");
-        } else {
-            return Response.NotFound();
         }
+        return new Response(400, new HashMap<>(), "");
     }
 
-    private boolean etagIsNotPresent(Request request) {
-        return !request.getHeaders().containsKey("If-Match");
+    private boolean etagIsPresent(Request request) {
+        return request.getHeaders().containsKey("If-Match");
     }
 
     private boolean etagsMatch(Request request) {
-        return request.getHeaders().get("If-Match").equals(fileSha(file));
+        return etagIsPresent(request) && request.getHeaders().get("If-Match").equals(fileSha(file));
     }
 
     private void overwriteFileWithRequestBody(Request request) {
