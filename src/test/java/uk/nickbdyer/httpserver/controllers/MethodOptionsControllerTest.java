@@ -4,9 +4,10 @@ import org.junit.Test;
 import uk.nickbdyer.httpserver.requests.Request;
 import uk.nickbdyer.httpserver.responses.Response;
 
-import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static uk.nickbdyer.httpserver.requests.Method.*;
 
 public class MethodOptionsControllerTest {
@@ -18,7 +19,7 @@ public class MethodOptionsControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
+        assertEquals(200, response.getStatusCode());
     }
 
     @Test
@@ -28,7 +29,7 @@ public class MethodOptionsControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
+        assertEquals(200, response.getStatusCode());
     }
 
     @Test
@@ -38,7 +39,7 @@ public class MethodOptionsControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
+        assertEquals(200, response.getStatusCode());
     }
 
     @Test
@@ -48,9 +49,9 @@ public class MethodOptionsControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
-        assertThat(response.getHeader(), containsString("Allow: "));
-        assertThat(response.getHeader(), containsString("GET,HEAD,OPTIONS,POST,PUT"));
+        assertEquals(200, response.getStatusCode());
+        assertTrue(response.getHeaders().containsKey("Allow"));
+        assertThat(response.getHeaders().get("Allow"), containsString("GET,HEAD,OPTIONS,POST,PUT"));
     }
 
     @Test
@@ -60,7 +61,7 @@ public class MethodOptionsControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
+        assertEquals(200, response.getStatusCode());
     }
 
 }

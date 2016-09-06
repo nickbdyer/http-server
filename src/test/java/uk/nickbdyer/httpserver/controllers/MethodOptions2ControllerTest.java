@@ -4,10 +4,12 @@ import org.junit.Test;
 import uk.nickbdyer.httpserver.requests.Request;
 import uk.nickbdyer.httpserver.responses.Response;
 
-import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static uk.nickbdyer.httpserver.requests.Method.*;
+import static org.junit.Assert.assertTrue;
+import static uk.nickbdyer.httpserver.requests.Method.GET;
+import static uk.nickbdyer.httpserver.requests.Method.OPTIONS;
 
 public class MethodOptions2ControllerTest {
 
@@ -18,7 +20,7 @@ public class MethodOptions2ControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
+        assertEquals(200, response.getStatusCode());
     }
 
     @Test
@@ -28,9 +30,9 @@ public class MethodOptions2ControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
-        assertThat(response.getHeader(), containsString("Allow: "));
-        assertThat(response.getHeader(), containsString("GET,OPTIONS"));
+        assertEquals(200, response.getStatusCode());
+        assertTrue(response.getHeaders().containsKey("Allow"));
+        assertThat(response.getHeaders().get("Allow"), containsString("GET,OPTIONS"));
     }
 
 }

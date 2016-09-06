@@ -3,7 +3,9 @@ package uk.nickbdyer.httpserver.requests;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.net.URLDecoder;
 import java.util.*;
 
 import static uk.nickbdyer.httpserver.requests.Method.UNKNOWN_METHOD;
@@ -39,16 +41,35 @@ public class RequestParser {
         Method method = validateMethod(statusLine.substring(0, (firstSpace)));
         if (statusLine.contains("?")) {
             String path = statusLine.substring((firstSpace + 1), statusLine.indexOf('?'));
-            String parameters = getParameters(statusLine);
+            Map<String, String> parameters = getParameters(statusLine);
             return new RequestLine(method, path, parameters);
         }
         String path = statusLine.substring((firstSpace + 1), statusLine.indexOf(' ', firstSpace + 1));
         return new RequestLine(method, path, null);
     }
 
-    private String getParameters(String statusLine) {
+    private Map<String, String> getParameters(String statusLine) {
+        Map<String, String> parameters = new HashMap<>();
         int mark = statusLine.indexOf('?');
-        return statusLine.substring(mark + 1, statusLine.indexOf(' ', mark));
+        String paramsString = statusLine.substring(mark + 1, statusLine.indexOf(' ', mark));
+        for (String pair : paramsString.split("&")) {
+            addToParams(parameters, pair);
+        }
+        return parameters;
+    }
+
+    private void addToParams(Map<String, String> parameters, String pair) {
+        try {
+            int equalsMark = pair.indexOf("=");
+            String key = decodeParams(pair.substring(0, equalsMark));
+            String value = decodeParams(pair.substring(equalsMark + 1));
+            parameters.put(key, value);
+        } catch (UnsupportedEncodingException ignored) {
+        }
+    }
+
+    private static String decodeParams(String encodedString) throws UnsupportedEncodingException {
+        return URLDecoder.decode(encodedString, "UTF-8");
     }
 
     private Map<String, String> getHeaders(List<String> headers) {

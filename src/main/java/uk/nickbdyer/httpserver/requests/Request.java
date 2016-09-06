@@ -8,7 +8,7 @@ public class Request {
     private String path;
     private Map<String, String> headers;
     private String body;
-    private String parameters;
+    private Map<String, String> parameters;
 
     public Request(Method method, String path) {
         this.method = method;
@@ -31,7 +31,7 @@ public class Request {
         return path;
     }
 
-    public String getParameters() {
+    public Map<String, String> getParameters() {
         return parameters;
     }
 

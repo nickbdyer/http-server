@@ -4,61 +4,49 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URLConnection;
 import java.nio.file.Files;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-
-import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
-import static uk.nickbdyer.httpserver.responses.StatusLine.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Response {
 
-    private final String statusLine;
-    private String header;
+    private final int statusCode;
+    private Map<String, String> headers;
     private byte[] responseBody;
 
-    public Response(StatusLine statusLine, String header, String responseBody) {
-        this.statusLine = statusLine.getLineAsString();
-        this.header = addContentTypeHeader(header);
+    public Response(int code, Map<String, String> headers, String responseBody) {
+        this.statusCode = code;
+        this.headers = addContentTypeHeader(headers);
         this.responseBody = responseBody.getBytes();
     }
 
-    public Response(StatusLine line, File file) {
-        this.statusLine = line.getLineAsString();
-        this.header = addFileContentTypeHeader(file);
+    public Response(int code, Map<String, String> headers, File file) {
+        this.statusCode = code;
+        this.headers = addFileContentTypeHeader(file, headers);
         this.responseBody = getFileBody(file);
     }
 
-    public String getStatusLineAndHeader() {
-        if (responseBody.length != 0) {
-            header += "Content-Length: " + responseBody.length;
-        }
-        return getStatusLine() + getHeader();
+    public int getStatusCode() {
+        return statusCode;
     }
 
-    public String getStatusLine() {
-        return statusLine + "\n";
+    public Map<String, String> getHeaders() {
+        return headers;
     }
 
-    public String getHeader() {
-        String date = "Date: " + RFC_1123_DATE_TIME.format(ZonedDateTime.now(ZoneId.of("GMT"))) + "\n";
-        return date + header + "\r\n\r\n";
+    public byte[] getBody() {
+        return responseBody;
     }
 
-    public byte[] getResponseBody() {
-        if (responseBody.length != 0) {
-            return responseBody;
-        }
-        return null;
-    }
-
-    private String addFileContentTypeHeader(File file) {
+    private Map<String, String> addFileContentTypeHeader(File file, Map<String, String> header) {
         String type = URLConnection.guessContentTypeFromName(file.getName());
-        type = (type == null ? "text/html; charset=utf-8" : type);
-        return "Content-Type: " + type + "\n";
+        type = (type == null ? "text/html; charset=utf-8\n" : type);
+        header.put("Content-Type", type);
+        return header;
     }
 
-    private String addContentTypeHeader(String header) {
-        return header + "Content-Type: text/html; charset=utf-8\n";
+    private Map<String, String> addContentTypeHeader(Map<String, String> header) {
+        header.put("Content-Type", "text/html; charset=utf-8");
+        return header;
     }
 
     private byte[] getFileBody(File file) {
@@ -70,6 +58,6 @@ public class Response {
     }
 
     public static Response NotFound() {
-        return new Response(NOT_FOUND, "", "");
+        return new Response(404, new HashMap<>(), "");
     }
 }

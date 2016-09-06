@@ -3,7 +3,7 @@ package uk.nickbdyer.httpserver;
 import uk.nickbdyer.httpserver.requests.Request;
 import uk.nickbdyer.httpserver.requests.RequestParser;
 import uk.nickbdyer.httpserver.responses.Response;
-import uk.nickbdyer.httpserver.responses.ResponseDispatcher;
+import uk.nickbdyer.httpserver.responses.ResponseFormatter;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -28,10 +28,8 @@ public class HttpServer {
                 Request request = parser.parse();
 
                 Response response = router.route(request);
-                String statusAndHeaders = response.getStatusLineAndHeader();
-                byte[] body = response.getResponseBody();
 
-                new ResponseDispatcher(connection).sendResponse(statusAndHeaders, body);
+                new ResponseFormatter(connection, response).sendResponse();
 
                 connection = serverSocket.accept();
             }

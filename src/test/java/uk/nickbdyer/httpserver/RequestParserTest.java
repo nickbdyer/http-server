@@ -11,6 +11,7 @@ import java.net.Socket;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static uk.nickbdyer.httpserver.requests.Method.*;
 
 public class RequestParserTest {
@@ -148,7 +149,8 @@ public class RequestParserTest {
         Request request = new RequestParser(socket).parse();
 
         assertEquals("/foobar", request.getPath());
-        assertEquals("hello=goodbye", request.getParameters());
+        assertTrue(request.getParameters().containsKey("hello"));
+        assertEquals("goodbye", request.getParameters().get("hello"));
     }
 
     @Test

@@ -18,7 +18,7 @@ public class CoffeeControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 418 OK\n", response.getStatusLine());
+        assertEquals(418, response.getStatusCode());
     }
 
     @Test
@@ -28,6 +28,6 @@ public class CoffeeControllerTest {
 
         Response response = controller.execute(request);
 
-        assertThat(new String(response.getResponseBody()), containsString("I'm a teapot"));
+        assertThat(new String(response.getBody()), containsString("I'm a teapot"));
     }
 }

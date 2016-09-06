@@ -27,32 +27,32 @@ public class FormControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
-        assertEquals(null, response.getResponseBody());
+        assertEquals(200, response.getStatusCode());
+        assertEquals(0, response.getBody().length);
     }
 
     @Test
     public void willRespondToAPostRequest() {
         FormController controller = new FormController(data);
-        RequestLine requestLine = new RequestLine(POST, "/form", "");
+        RequestLine requestLine = new RequestLine(POST, "/form", new HashMap<>());
         Request request = new Request(requestLine, new HashMap<>(), "data=fatcat");
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
-        assertEquals("data=fatcat", new String(response.getResponseBody()));
+        assertEquals(200, response.getStatusCode());
+        assertEquals("data=fatcat", new String(response.getBody()));
     }
 
     @Test
     public void willRespondToAPutRequest() {
         FormController controller = new FormController(data);
-        RequestLine requestLine = new RequestLine(PUT, "/form", "");
+        RequestLine requestLine = new RequestLine(PUT, "/form", new HashMap<>());
         Request request = new Request(requestLine, new HashMap<>(), "data=heathcliff");
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
-        assertEquals("data=heathcliff", new String(response.getResponseBody()));
+        assertEquals(200, response.getStatusCode());
+        assertEquals("data=heathcliff", new String(response.getBody()));
     }
 
     @Test
@@ -63,7 +63,7 @@ public class FormControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals("HTTP/1.1 200 OK\n", response.getStatusLine());
-        assertEquals(null, response.getResponseBody());
+        assertEquals(200, response.getStatusCode());
+        assertEquals(0, response.getBody().length);
     }
 }
