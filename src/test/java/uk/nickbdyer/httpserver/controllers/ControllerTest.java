@@ -19,101 +19,110 @@ public class ControllerTest {
 
     @Test
     public void aControllerWillRespondToAGetRequest() {
-        Request getRequest = new Request(GET, "/");
+        Request request = new Request(GET, "/");
         ControllerSpy controller = new ControllerSpy();
 
-        controller.execute(getRequest);
+        Response response = controller.execute(request);
 
         assertEquals("get", controller.methodTriggered);
+        assertEquals(405, response.getStatusCode());
     }
 
     @Test
     public void aControllerWillRespondToAPostRequest() {
-        Request getRequest = new Request(POST, "/");
+        Request request = new Request(POST, "/");
         ControllerSpy controller = new ControllerSpy();
 
-        controller.execute(getRequest);
+        Response response = controller.execute(request);
 
         assertEquals("post", controller.methodTriggered);
+        assertEquals(405, response.getStatusCode());
     }
 
     @Test
     public void aControllerWillRespondToAPutRequest() {
-        Request getRequest = new Request(PUT, "/");
+        Request request = new Request(PUT, "/");
         ControllerSpy controller = new ControllerSpy();
 
-        controller.execute(getRequest);
+        Response response = controller.execute(request);
 
         assertEquals("put", controller.methodTriggered);
+        assertEquals(405, response.getStatusCode());
     }
 
     @Test
     public void aControllerWillRespondToADeleteRequest() {
-        Request getRequest = new Request(DELETE, "/");
+        Request request = new Request(DELETE, "/");
         ControllerSpy controller = new ControllerSpy();
 
-        controller.execute(getRequest);
+        Response response = controller.execute(request);
 
         assertEquals("delete", controller.methodTriggered);
+        assertEquals(405, response.getStatusCode());
     }
 
     @Test
     public void aControllerWillRespondToAHeadRequest() {
-        Request getRequest = new Request(HEAD, "/");
+        Request request = new Request(HEAD, "/");
         ControllerSpy controller = new ControllerSpy();
 
-        controller.execute(getRequest);
+        Response response = controller.execute(request);
 
         assertEquals("head", controller.methodTriggered);
+        assertEquals(405, response.getStatusCode());
     }
 
     @Test
     public void aControllerWillRespondToAOptionsRequest() {
-        Request getRequest = new Request(OPTIONS, "/");
+        Request request = new Request(OPTIONS, "/");
         ControllerSpy controller = new ControllerSpy();
 
-        controller.execute(getRequest);
+        Response response = controller.execute(request);
 
         assertEquals("options", controller.methodTriggered);
+        assertEquals(405, response.getStatusCode());
     }
 
     @Test
     public void aControllerWillRespondToATraceRequest() {
-        Request getRequest = new Request(TRACE, "/");
+        Request request = new Request(TRACE, "/");
         ControllerSpy controller = new ControllerSpy();
 
-        controller.execute(getRequest);
+        Response response = controller.execute(request);
 
         assertEquals("trace", controller.methodTriggered);
+        assertEquals(405, response.getStatusCode());
     }
 
     @Test
     public void aControllerWillRespondToAConnectRequest() {
-        Request getRequest = new Request(CONNECT, "/");
+        Request request = new Request(CONNECT, "/");
         ControllerSpy controller = new ControllerSpy();
 
-        controller.execute(getRequest);
+        Response response = controller.execute(request);
 
         assertEquals("connect", controller.methodTriggered);
+        assertEquals(405, response.getStatusCode());
     }
 
     @Test
     public void aControllerWillRespondToAPatchRequest() {
-        Request getRequest = new Request(PATCH, "/");
+        Request request = new Request(PATCH, "/");
         ControllerSpy controller = new ControllerSpy();
 
-        controller.execute(getRequest);
+        Response response = controller.execute(request);
 
         assertEquals("patch", controller.methodTriggered);
+        assertEquals(405, response.getStatusCode());
     }
 
     @Test
     public void aControllerWillRespondToAnUnknownMethodWithAMethodNotAllowedResponse() throws IOException {
         SocketStubWithRequest socket = new SocketStubWithRequest("HELLO / HTTP/1.1");
-        Request getRequest = new RequestParser(socket).parse();
+        Request request = new RequestParser(socket).parse();
         ControllerSpy controller = new ControllerSpy();
 
-        Response response = controller.execute(getRequest);
+        Response response = controller.execute(request);
 
         assertEquals(405, response.getStatusCode());
     }
@@ -121,10 +130,10 @@ public class ControllerTest {
     @Test
     public void aControllerWillRespondWithACorrectHeaderForAMethodNotAllowedResponse() throws IOException {
         SocketStubWithRequest socket = new SocketStubWithRequest("HELLO / HTTP/1.1");
-        Request getRequest = new RequestParser(socket).parse();
+        Request request = new RequestParser(socket).parse();
         ControllerSpy controller = new ControllerSpy();
 
-        Response response = controller.execute(getRequest);
+        Response response = controller.execute(request);
 
         assertTrue(response.getHeaders().containsKey("Allow"));
         assertThat(response.getHeaders().get("Allow"), containsString("CONNECT,DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT,TRACE"));
