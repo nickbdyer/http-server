@@ -4,7 +4,9 @@ import org.junit.Test;
 import uk.nickbdyer.httpserver.requests.Request;
 import uk.nickbdyer.httpserver.responses.Response;
 
+import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static uk.nickbdyer.httpserver.requests.Method.*;
 
@@ -49,7 +51,7 @@ public class MethodOptionsControllerTest {
 
         assertEquals(200, response.getStatusCode());
         assertTrue(response.getHeaders().containsKey("Allow: "));
-        assertEquals("GET,HEAD,OPTIONS,POST,PUT\n", response.getHeaders().get("Allow: "));
+        assertThat(response.getHeaders().get("Allow: "), containsString("GET,HEAD,OPTIONS,POST,PUT\n"));
     }
 
     @Test

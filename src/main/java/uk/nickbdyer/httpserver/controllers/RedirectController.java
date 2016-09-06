@@ -6,8 +6,6 @@ import uk.nickbdyer.httpserver.responses.Response;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.sun.tools.doclets.formats.html.markup.HtmlStyle.header;
-
 
 public class RedirectController extends Controller {
 

@@ -9,6 +9,8 @@ import uk.nickbdyer.httpserver.testdoubles.SocketStubWithRequest;
 
 import java.io.IOException;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static uk.nickbdyer.httpserver.requests.Method.*;
@@ -115,7 +117,7 @@ public class ControllerTest {
         Response response = controller.execute(getRequest);
 
         assertTrue(response.getHeaders().containsKey("Allow: "));
-        assertTrue(response.getHeaders().get("Allow: ").equals("CONNECT,DELETE,GET,HEAD,OPTIONS,POST,PUT,TRACE\n"));
+        assertThat(response.getHeaders().get("Allow: "), containsString("CONNECT,DELETE,GET,HEAD,OPTIONS,POST,PUT,TRACE\n"));
     }
 
 
