@@ -28,7 +28,7 @@ public class FormControllerTest {
         Response response = controller.execute(request);
 
         assertEquals(200, response.getStatusCode());
-        assertEquals(null, response.getBody());
+        assertEquals(0, response.getBody().length);
     }
 
     @Test
@@ -64,6 +64,6 @@ public class FormControllerTest {
         Response response = controller.execute(request);
 
         assertEquals(200, response.getStatusCode());
-        assertEquals(null, response.getBody());
+        assertEquals(0, response.getBody().length);
     }
 }

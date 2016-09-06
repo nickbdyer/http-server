@@ -34,10 +34,7 @@ public class Response {
     }
 
     public byte[] getBody() {
-        if (responseBody.length != 0) {
-            return responseBody;
-        }
-        return null;
+        return responseBody;
     }
 
     private Map<String, String> addFileContentTypeHeader(File file, Map<String, String> header) {

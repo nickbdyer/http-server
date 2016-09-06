@@ -17,7 +17,7 @@ public class RedirectControllerTest {
         Response response = controller.execute(request);
 
         assertEquals(302, response.getStatusCode());
-        assertEquals(null, response.getBody());
+        assertEquals(0, response.getBody().length);
     }
 
 }

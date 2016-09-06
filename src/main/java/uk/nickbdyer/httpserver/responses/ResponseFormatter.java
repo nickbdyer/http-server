@@ -15,6 +15,7 @@ public class ResponseFormatter {
 
     private final OutputStream out;
     private final Map<Integer, String> responseCodes;
+
     private final int statusCode;
     private final Map<String, String> headers;
     private final byte[] body;
@@ -30,15 +31,16 @@ public class ResponseFormatter {
     public void sendResponse() throws IOException {
         out.write(buildStatusLine(statusCode));
         out.write(transfromHeadersToString(headers).getBytes());
-        if (body != null) {
+        if (bodyExists()) {
             out.write(body);
         }
         out.close();
     }
 
+
     private String transfromHeadersToString(Map<String, String> headers) {
         headers.put("Date", RFC_1123_DATE_TIME.format(ZonedDateTime.now(ZoneId.of("GMT"))));
-        if (body != null) {
+        if (bodyExists()) {
             headers.put("Content-Length", Integer.toString(body.length));
         }
         return headers.entrySet().stream()
@@ -51,12 +53,16 @@ public class ResponseFormatter {
         return statusLine.getBytes();
     }
 
+    private boolean bodyExists() {
+        return body.length != 0;
+    }
+
     private Map<Integer, String> buildResponseMap() {
         Map<Integer, String> responses = new HashMap<>();
         responses.put(200, "OK");
+        responses.put(302, "Found");
         responses.put(404, "Not Found");
         responses.put(405, "Method Not Allowed");
-        responses.put(302, "Found");
         responses.put(418, "Teapot");
         return responses;
     }

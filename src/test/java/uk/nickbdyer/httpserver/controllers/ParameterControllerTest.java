@@ -32,6 +32,6 @@ public class ParameterControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals(null, response.getBody());
+        assertEquals(0, response.getBody().length);
     }
 }

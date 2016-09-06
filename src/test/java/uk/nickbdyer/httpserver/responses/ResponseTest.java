@@ -38,7 +38,7 @@ public class ResponseTest {
     public void aResponseBodyWillBeNullIfNotNoBodyIsPresent() {
         Response response = new Response(200, new HashMap<>(), "");
 
-        assertEquals(null, response.getBody());
+        assertEquals(0, response.getBody().length);
     }
 
     @Rule
