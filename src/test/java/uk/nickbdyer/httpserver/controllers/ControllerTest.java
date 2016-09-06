@@ -98,6 +98,16 @@ public class ControllerTest {
     }
 
     @Test
+    public void aControllerWillRespondToAPatchRequest() {
+        Request getRequest = new Request(PATCH, "/");
+        ControllerSpy controller = new ControllerSpy();
+
+        controller.execute(getRequest);
+
+        assertEquals("patch", controller.methodTriggered);
+    }
+
+    @Test
     public void aControllerWillRespondToAnUnknownMethodWithAMethodNotAllowedResponse() throws IOException {
         SocketStubWithRequest socket = new SocketStubWithRequest("HELLO / HTTP/1.1");
         Request getRequest = new RequestParser(socket).parse();
@@ -117,7 +127,7 @@ public class ControllerTest {
         Response response = controller.execute(getRequest);
 
         assertTrue(response.getHeaders().containsKey("Allow"));
-        assertThat(response.getHeaders().get("Allow"), containsString("CONNECT,DELETE,GET,HEAD,OPTIONS,POST,PUT,TRACE"));
+        assertThat(response.getHeaders().get("Allow"), containsString("CONNECT,DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT,TRACE"));
     }
 
 

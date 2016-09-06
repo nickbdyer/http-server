@@ -60,4 +60,10 @@ public class ControllerSpy extends Controller {
         methodTriggered = "connect";
         return super.connect(request);
     }
+
+    @Override
+    public Response patch(Request request) {
+        methodTriggered = "patch";
+        return super.connect(request);
+    }
 }
