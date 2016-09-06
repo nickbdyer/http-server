@@ -64,8 +64,7 @@ public class RequestParser {
             String key = decodeParams(pair.substring(0, equalsMark));
             String value = decodeParams(pair.substring(equalsMark + 1));
             parameters.put(key, value);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        } catch (UnsupportedEncodingException ignored) {
         }
     }
 
