@@ -22,6 +22,7 @@ public class Main {
         router.addController("/method_options2", new MethodOptions2Controller());
         router.addController("/coffee", new CoffeeController());
         router.addController("/tea", new TeaController());
+        router.addController("/logs", new LogsController());
 
         new HttpServer(new ServerSocket(arguments.getPort()), router).listen();
     }
