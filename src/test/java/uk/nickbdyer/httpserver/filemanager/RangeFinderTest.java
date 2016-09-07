@@ -21,4 +21,20 @@ public class RangeFinderTest {
         assertEquals(33, rangeFinder.getLowerBound());
         assertEquals(89, rangeFinder.getUpperBound());
     }
+
+    @Test
+    public void rangeCanBeCalculatedWithMissingLowerBound() {
+        RangeFinder rangeFinder = new RangeFinder("bytes=-6", 100);
+
+        assertEquals(94, rangeFinder.getLowerBound());
+        assertEquals(99, rangeFinder.getUpperBound());
+    }
+
+    @Test
+    public void rangeCanBeCalculatedWithMissingUpperBound() {
+        RangeFinder rangeFinder = new RangeFinder("bytes=4-", 100);
+
+        assertEquals(4, rangeFinder.getLowerBound());
+        assertEquals(99, rangeFinder.getUpperBound());
+    }
 }
