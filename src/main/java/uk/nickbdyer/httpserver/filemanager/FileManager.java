@@ -18,7 +18,7 @@ public class FileManager {
 
     public FileManager(File file) {
         this.file = file;
-        this.fileBytes = readFile(file);
+        this.fileBytes = getFileBytes();
     }
 
     public void overwriteFileWith(String newContent) {
@@ -50,10 +50,6 @@ public class FileManager {
     }
 
     public byte[] getFileBytes() {
-        return fileBytes;
-    }
-
-    private byte[] readFile(File file) {
         byte[] fileBytes = "".getBytes();
         try {
             fileBytes = Files.readAllBytes(file.toPath());
@@ -77,6 +73,5 @@ public class FileManager {
         header.put("Content-Type", type);
         return header;
     }
-
 
 }
