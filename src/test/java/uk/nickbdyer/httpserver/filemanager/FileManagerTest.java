@@ -76,4 +76,29 @@ public class FileManagerTest {
         assertEquals("image/png", headers.get("Content-Type"));
     }
 
+    @Test
+    public void fileManagerWillAddAppropriateRangeHeader() throws IOException {
+        Files.write(Paths.get(file.getPath()), "hello".getBytes(), StandardOpenOption.APPEND);
+        Map<String, String> requestHeaders = new HashMap<>();
+        requestHeaders.put("Range", "bytes=0-2");
+        FileManager manager = new FileManager(file);
+
+        Map<String, String> responseHeaders = manager.getFileHeaders(requestHeaders);
+
+        assertTrue(responseHeaders.containsKey("Content-Range"));
+    }
+
+    @Test
+    public void fileManagerWillReturnRangeOfFileForBody() throws IOException {
+        Files.write(Paths.get(file.getPath()), "hello".getBytes(), StandardOpenOption.APPEND);
+        Map<String, String> requestHeaders = new HashMap<>();
+        requestHeaders.put("Range", "bytes=0-2");
+        FileManager manager = new FileManager(file);
+
+        String body = manager.getFileContent("bytes=0-2");
+
+        assertEquals("hel", body);
+    }
+
+
 }
