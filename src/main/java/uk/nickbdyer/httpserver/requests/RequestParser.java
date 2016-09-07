@@ -1,5 +1,7 @@
 package uk.nickbdyer.httpserver.requests;
 
+import uk.nickbdyer.httpserver.middleware.Logger;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,9 +16,11 @@ import static uk.nickbdyer.httpserver.requests.Method.valueOf;
 public class RequestParser {
 
     private final BufferedReader in;
+    private final Logger logger;
 
-    public RequestParser(Socket socket) throws IOException {
+    public RequestParser(Socket socket, Logger logger) throws IOException {
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        this.logger = logger;
     }
 
     public Request parse() {
@@ -79,7 +83,9 @@ public class RequestParser {
     }
 
     private String readStatusLine() throws IOException {
-        return in.readLine();
+        String statusLine = in.readLine();
+        logger.log(statusLine);
+        return statusLine;
     }
 
     private List<String> readHeaders() throws IOException {

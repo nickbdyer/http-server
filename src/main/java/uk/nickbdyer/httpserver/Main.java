@@ -31,7 +31,7 @@ public class Main {
         router.addController("/tea", new TeaController());
         router.addController("/logs", new LogsController(basicAuth, logger));
 
-        new HttpServer(new ServerSocket(arguments.getPort()), router).listen();
+        new HttpServer(new ServerSocket(arguments.getPort()), router, logger).listen();
     }
 
 }
