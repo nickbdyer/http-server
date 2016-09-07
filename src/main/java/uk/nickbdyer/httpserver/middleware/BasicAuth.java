@@ -20,7 +20,8 @@ public class BasicAuth {
     }
 
     public boolean userIsAuthorised(String digest) {
-        return authorisedUsers.contains(digest);
+        String digestWithoutType = digest.substring(digest.indexOf(' ') + 1);
+        return authorisedUsers.contains(digestWithoutType);
     }
 
 }
