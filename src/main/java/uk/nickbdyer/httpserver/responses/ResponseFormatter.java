@@ -61,6 +61,7 @@ public class ResponseFormatter {
         Map<Integer, String> responses = new HashMap<>();
         responses.put(200, "OK");
         responses.put(204, "No Content");
+        responses.put(206, "Partial Content");
         responses.put(302, "Found");
         responses.put(400, "Bad Request");
         responses.put(404, "Not Found");
