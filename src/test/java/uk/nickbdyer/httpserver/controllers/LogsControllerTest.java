@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static uk.nickbdyer.httpserver.requests.Method.GET;
 
 public class LogsControllerTest {
@@ -34,6 +35,16 @@ public class LogsControllerTest {
         Response response = controller.execute(request);
 
         assertEquals(401, response.getStatusCode());
+    }
+
+    @Test
+    public void willSendAnAuthorisationHeaderToAnUnAuthorisedRequest() {
+        RequestLine requestLine = new RequestLine(GET, "/logs", new HashMap<>());
+        Request request = new Request(requestLine, new HashMap<>(), "");
+
+        Response response = controller.execute(request);
+
+        assertTrue(response.getHeaders().containsKey("WWW-Authenticate"));
     }
 
     @Test

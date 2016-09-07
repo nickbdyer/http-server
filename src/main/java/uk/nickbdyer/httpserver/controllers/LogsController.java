@@ -20,7 +20,7 @@ public class LogsController extends Controller {
         if (basicAuthorisor.userIsAuthorised(user)) {
             return new Response(200, new HashMap<>(), "");
         }
-        return new Response(401, new HashMap<>(), "");
+        return new Response(401, basicAuthorisor.getUnAuthorisedHeader(), "");
     }
 
 }

@@ -2,6 +2,8 @@ package uk.nickbdyer.httpserver.middleware;
 
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BasicAuth {
 
@@ -24,4 +26,9 @@ public class BasicAuth {
         return authorisedUsers.contains(digestWithoutType);
     }
 
+    public Map<String, String> getUnAuthorisedHeader() {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("WWW-Authenticate", "Basic realm=\"NicksServer\"");
+        return headers;
+    }
 }
