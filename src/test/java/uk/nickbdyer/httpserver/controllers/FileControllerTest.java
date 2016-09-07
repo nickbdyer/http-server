@@ -44,6 +44,17 @@ public class FileControllerTest {
     }
 
     @Test
+    public void willRespondToAGetRequestWithRange() throws IOException {
+        Files.write(Paths.get(file.getPath()), "hello".getBytes(), StandardOpenOption.APPEND);
+        FileController controller = new FileController(file);
+        Request request = getRequestWithRange("/filetest");
+
+        Response response = controller.execute(request);
+
+        assertEquals(206, response.getStatusCode());
+    }
+
+    @Test
     public void willReturnFileContentsInBody() throws IOException {
         Files.write(Paths.get(file.getPath()), "hello".getBytes(), StandardOpenOption.APPEND);
         FileController controller = new FileController(file);
@@ -79,6 +90,12 @@ public class FileControllerTest {
 
     private Request getRequest(String path) {
         return new Request(new RequestLine(GET, path, new HashMap<>()), new HashMap<>(), "");
+    }
+
+    private Request getRequestWithRange(String path) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Range", "bytes=0-2");
+        return new Request(new RequestLine(GET, path, new HashMap<>()), headers, "");
     }
 
     private Request patchRequest() throws IOException {
