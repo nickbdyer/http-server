@@ -77,18 +77,6 @@ public class FileControllerTest {
         assertEquals(400, response.getStatusCode());
     }
 
-    //Move to file mainpulation class when extracted
-    @Test
-    public void fileWillBeUpdatedAfterValidPatchRequest() throws IOException {
-        Files.write(Paths.get(file.getPath()), "hello".getBytes(), StandardOpenOption.APPEND);
-        FileController controller = new FileController(file);
-        Request request = patchRequest();
-
-        controller.execute(request);
-
-        assertEquals("goodbye", new String(Files.readAllBytes(file.toPath())));
-    }
-
     private Request getRequest(String path) {
         return new Request(new RequestLine(GET, path, new HashMap<>()), new HashMap<>(), "");
     }
