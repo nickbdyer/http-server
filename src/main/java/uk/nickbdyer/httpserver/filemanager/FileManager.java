@@ -3,6 +3,7 @@ package uk.nickbdyer.httpserver.filemanager;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,12 +41,16 @@ public class FileManager {
             RangeFinder rangeFinder = new RangeFinder(requestHeaders.get("Range"), fileBytes.length);
             responseHeaders.put("Content-Range", "bytes " + rangeFinder.getLowerBound() + "-" + rangeFinder.getUpperBound() + "/" + fileBytes.length);
         }
-        return responseHeaders;
+        return addFileContentTypeHeader(file, responseHeaders);
     }
 
     public String getFileContent(String range) {
         RangeFinder rangeFinder = new RangeFinder(range, fileBytes.length);
         return new String(fileBytes).substring(rangeFinder.getLowerBound(), rangeFinder.getUpperBound() + 1);
+    }
+
+    public byte[] getFileBytes() {
+        return fileBytes;
     }
 
     private byte[] readFile(File file) {
@@ -64,6 +69,13 @@ public class FileManager {
         } catch (IOException e) {
             return null;
         }
+    }
+
+    private Map<String, String> addFileContentTypeHeader(File file, Map<String, String> header) {
+        String type = URLConnection.guessContentTypeFromName(file.getName());
+        type = (type == null ? "text/html; charset=utf-8" : type);
+        header.put("Content-Type", type);
+        return header;
     }
 
 

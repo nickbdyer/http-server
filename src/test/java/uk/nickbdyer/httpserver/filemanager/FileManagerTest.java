@@ -10,11 +10,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.apache.commons.codec.digest.DigestUtils.sha1Hex;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class FileManagerTest {
 
@@ -52,6 +52,28 @@ public class FileManagerTest {
         FileManager fileManager = new FileManager(file);
 
         assertFalse(fileManager.etagsMatch(""));
+    }
+
+    @Test
+    public void aResponseHeaderWillTheContentTypeForATextFile() throws IOException {
+        File file = folder.newFile("testfile.txt");
+        FileManager manager = new FileManager(file);
+
+        Map<String, String> headers = manager.getFileHeaders(new HashMap<>());
+
+        assertTrue(headers.containsKey("Content-Type"));
+        assertEquals("text/plain", headers.get("Content-Type"));
+    }
+
+    @Test
+    public void aResponseHeaderWillTheContentTypeForAnImageFile() throws IOException {
+        File file = folder.newFile("testfile.png");
+        FileManager manager = new FileManager(file);
+
+        Map<String, String> headers = manager.getFileHeaders(new HashMap<>());
+
+        assertTrue(headers.containsKey("Content-Type"));
+        assertEquals("image/png", headers.get("Content-Type"));
     }
 
 }

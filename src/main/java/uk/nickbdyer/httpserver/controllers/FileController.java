@@ -23,7 +23,7 @@ public class FileController extends Controller {
             String rangeRequestHeader = request.getHeaders().get("Range");
             return new Response(206, fileMan.getFileHeaders(request.getHeaders()), fileMan.getFileContent(rangeRequestHeader));
         }
-        return new Response(200, fileMan.getFileHeaders(request.getHeaders()), file);
+        return new Response(200, fileMan.getFileHeaders(request.getHeaders()), fileMan.getFileBytes());
     }
 
     @Override
