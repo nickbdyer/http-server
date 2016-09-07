@@ -29,6 +29,8 @@ public abstract class Controller {
                 return trace(request);
             case CONNECT:
                 return connect(request);
+            case PATCH:
+                return patch(request);
             default:
                 return MethodNotAllowed();
         }
@@ -64,6 +66,10 @@ public abstract class Controller {
     }
 
     protected Response connect(Request request) {
+        return MethodNotAllowed();
+    }
+
+    protected Response patch(Request request) {
         return MethodNotAllowed();
     }
 

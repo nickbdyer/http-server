@@ -1,11 +1,7 @@
 package uk.nickbdyer.httpserver.responses;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 
 import static org.hamcrest.core.StringContains.containsString;
@@ -39,27 +35,6 @@ public class ResponseTest {
         Response response = new Response(200, new HashMap<>(), "");
 
         assertEquals(0, response.getBody().length);
-    }
-
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
-
-    @Test
-    public void aResponseHeaderWillTheContentTypeForATextFile() throws IOException {
-        File file = folder.newFile("testfile.txt");
-        Response response = new Response(200, new HashMap<>(),  file);
-
-        assertTrue(response.getHeaders().containsKey("Content-Type"));
-        assertEquals("text/plain", response.getHeaders().get("Content-Type"));
-    }
-
-    @Test
-    public void aResponseHeaderWillTheContentTypeForAnImageFile() throws IOException {
-        File file = folder.newFile("testfile.png");
-        Response response = new Response(200, new HashMap<>(), file);
-
-        assertTrue(response.getHeaders().containsKey("Content-Type"));
-        assertEquals("image/png", response.getHeaders().get("Content-Type"));
     }
 
 }

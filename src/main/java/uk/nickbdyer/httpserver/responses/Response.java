@@ -1,9 +1,5 @@
 package uk.nickbdyer.httpserver.responses;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URLConnection;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,10 +15,10 @@ public class Response {
         this.responseBody = responseBody.getBytes();
     }
 
-    public Response(int code, Map<String, String> headers, File file) {
+    public Response(int code, Map<String, String> headers, byte[] file) {
         this.statusCode = code;
-        this.headers = addFileContentTypeHeader(file, headers);
-        this.responseBody = getFileBody(file);
+        this.headers = headers;
+        this.responseBody = file;
     }
 
     public int getStatusCode() {
@@ -37,24 +33,9 @@ public class Response {
         return responseBody;
     }
 
-    private Map<String, String> addFileContentTypeHeader(File file, Map<String, String> header) {
-        String type = URLConnection.guessContentTypeFromName(file.getName());
-        type = (type == null ? "text/html; charset=utf-8\n" : type);
-        header.put("Content-Type", type);
-        return header;
-    }
-
     private Map<String, String> addContentTypeHeader(Map<String, String> header) {
         header.put("Content-Type", "text/html; charset=utf-8");
         return header;
-    }
-
-    private byte[] getFileBody(File file) {
-        try {
-            return Files.readAllBytes(file.toPath());
-        } catch (IOException e) {
-            return null;
-        }
     }
 
     public static Response NotFound() {

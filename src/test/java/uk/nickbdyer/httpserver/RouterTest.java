@@ -5,10 +5,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import uk.nickbdyer.httpserver.requests.Request;
+import uk.nickbdyer.httpserver.requests.RequestLine;
 import uk.nickbdyer.httpserver.responses.Response;
 import uk.nickbdyer.httpserver.testdoubles.ControllerSpy;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 import static uk.nickbdyer.httpserver.requests.Method.GET;
@@ -24,7 +26,7 @@ public class RouterTest {
     @Before
     public void setUp() throws IOException {
         router = new Router(tempFolder.getRoot());
-        request = new Request(GET, "/test");
+        request = new Request(new RequestLine(GET, "/test", new HashMap<>()), new HashMap<>(), "");
     }
 
     @Test
