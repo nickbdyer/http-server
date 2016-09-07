@@ -64,6 +64,7 @@ public class ResponseFormatter {
         responses.put(206, "Partial Content");
         responses.put(302, "Found");
         responses.put(400, "Bad Request");
+        responses.put(401, "Unauthorized");
         responses.put(404, "Not Found");
         responses.put(405, "Method Not Allowed");
         responses.put(418, "Teapot");

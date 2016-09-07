@@ -16,6 +16,6 @@ public class LogsControllerTest {
 
         Response response = controller.execute(request);
 
-        assertEquals(200, response.getStatusCode());
+        assertEquals(401, response.getStatusCode());
     }
 }

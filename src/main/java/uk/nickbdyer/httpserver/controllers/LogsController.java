@@ -9,7 +9,7 @@ public class LogsController extends Controller {
 
     @Override
     public Response get(Request request) {
-        return new Response(200, new HashMap<>(), "");
+        return new Response(401, new HashMap<>(), "");
     }
 
 }
