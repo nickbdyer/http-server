@@ -3,6 +3,7 @@ package uk.nickbdyer.httpserver;
 import uk.nickbdyer.httpserver.middleware.Logger;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -32,9 +33,9 @@ public class HttpServer {
             }
         } catch (IOException e) {
             if ("Socket closed".equals(e.getMessage())) {
-                System.out.println("Server shutdown...");
+                logger.log("Server shutdown...");
             } else {
-                e.printStackTrace();
+                throw new UncheckedIOException(e);
             }
         }
     }
