@@ -27,9 +27,16 @@ public class SocketHandler {
             Request request = parser.parse();
             Response response = router.route(request);
             new ResponseFormatter(socket, response).sendResponse();
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
+        } catch (IOException|UncheckedIOException e) {
+            returnA500Error();
         }
+    }
 
+    private void returnA500Error() {
+        try {
+            new ResponseFormatter(socket, Response.ServerError()).sendResponse();
+        } catch (IOException e1) {
+            throw new UncheckedIOException(e1);
+        }
     }
 }
