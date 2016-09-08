@@ -8,7 +8,10 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.net.URLDecoder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static uk.nickbdyer.httpserver.requests.Method.UNKNOWN_METHOD;
 import static uk.nickbdyer.httpserver.requests.Method.valueOf;
@@ -63,17 +66,18 @@ public class RequestParser {
     }
 
     private void addToParams(Map<String, String> parameters, String pair) {
-        try {
-            int equalsMark = pair.indexOf("=");
-            String key = decodeParams(pair.substring(0, equalsMark));
-            String value = decodeParams(pair.substring(equalsMark + 1));
-            parameters.put(key, value);
-        } catch (UnsupportedEncodingException ignored) {
-        }
+        int equalsMark = pair.indexOf("=");
+        String key = decodeParams(pair.substring(0, equalsMark));
+        String value = decodeParams(pair.substring(equalsMark + 1));
+        parameters.put(key, value);
     }
 
-    private static String decodeParams(String encodedString) throws UnsupportedEncodingException {
-        return URLDecoder.decode(encodedString, "UTF-8");
+    private static String decodeParams(String encodedString) {
+        try {
+            return URLDecoder.decode(encodedString, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return "";
+        }
     }
 
     private Map<String, String> getHeaders(List<String> headers) {
