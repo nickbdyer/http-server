@@ -29,7 +29,6 @@ public class HttpServer {
                 executorService.execute(() -> {
                     new SocketHandler(finalConnection, logger, router).processRequestAndRespond();
                 });
-                connection = serverSocket.accept();
             }
         } catch (IOException e) {
             if ("Socket closed".equals(e.getMessage())) {
