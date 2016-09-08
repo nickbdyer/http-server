@@ -1,37 +1,34 @@
 package uk.nickbdyer.httpserver;
 
-import uk.nickbdyer.httpserver.requests.Request;
-import uk.nickbdyer.httpserver.requests.RequestParser;
-import uk.nickbdyer.httpserver.responses.Response;
-import uk.nickbdyer.httpserver.responses.ResponseFormatter;
+import uk.nickbdyer.httpserver.middleware.Logger;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
 
 public class HttpServer {
 
+    private final ExecutorService executorService;
     private final ServerSocket serverSocket;
     private final Router router;
+    private final Logger logger;
 
-    public HttpServer(ServerSocket serverSocket, Router router) {
+    public HttpServer(ExecutorService executorService, ServerSocket serverSocket, Router router, Logger logger) {
+        this.executorService = executorService;
         this.serverSocket = serverSocket;
         this.router = router;
+        this.logger = logger;
     }
 
     public void listen() {
         try {
-            Socket connection = serverSocket.accept();
-            while (connection != null) {
-                RequestParser parser = new RequestParser(connection);
-
-                Request request = parser.parse();
-
-                Response response = router.route(request);
-
-                new ResponseFormatter(connection, response).sendResponse();
-
-                connection = serverSocket.accept();
+            Socket connection;
+            while ((connection = serverSocket.accept()) != null) {
+                Socket finalConnection = connection;
+                executorService.execute(() -> {
+                    new SocketHandler(finalConnection, logger, router).processRequestAndRespond();
+                });
             }
         } catch (IOException e) {
             if ("Socket closed".equals(e.getMessage())) {

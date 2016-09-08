@@ -1,12 +1,17 @@
 package uk.nickbdyer.httpserver.requests;
 
+import uk.nickbdyer.httpserver.middleware.Logger;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.net.URLDecoder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static uk.nickbdyer.httpserver.requests.Method.UNKNOWN_METHOD;
 import static uk.nickbdyer.httpserver.requests.Method.valueOf;
@@ -14,9 +19,11 @@ import static uk.nickbdyer.httpserver.requests.Method.valueOf;
 public class RequestParser {
 
     private final BufferedReader in;
+    private final Logger logger;
 
-    public RequestParser(Socket socket) throws IOException {
+    public RequestParser(Socket socket, Logger logger) throws IOException {
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        this.logger = logger;
     }
 
     public Request parse() {
@@ -59,17 +66,18 @@ public class RequestParser {
     }
 
     private void addToParams(Map<String, String> parameters, String pair) {
-        try {
-            int equalsMark = pair.indexOf("=");
-            String key = decodeParams(pair.substring(0, equalsMark));
-            String value = decodeParams(pair.substring(equalsMark + 1));
-            parameters.put(key, value);
-        } catch (UnsupportedEncodingException ignored) {
-        }
+        int equalsMark = pair.indexOf("=");
+        String key = decodeParams(pair.substring(0, equalsMark));
+        String value = decodeParams(pair.substring(equalsMark + 1));
+        parameters.put(key, value);
     }
 
-    private static String decodeParams(String encodedString) throws UnsupportedEncodingException {
-        return URLDecoder.decode(encodedString, "UTF-8");
+    private static String decodeParams(String encodedString) {
+        try {
+            return URLDecoder.decode(encodedString, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return "";
+        }
     }
 
     private Map<String, String> getHeaders(List<String> headers) {
@@ -79,7 +87,9 @@ public class RequestParser {
     }
 
     private String readStatusLine() throws IOException {
-        return in.readLine();
+        String statusLine = in.readLine();
+        logger.log(statusLine);
+        return statusLine;
     }
 
     private List<String> readHeaders() throws IOException {
