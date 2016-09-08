@@ -41,4 +41,8 @@ public class Response {
     public static Response NotFound() {
         return new Response(404, new HashMap<>(), "");
     }
+
+    public static Response ServerError() {
+        return new Response(500, new HashMap<>(), "");
+    }
 }

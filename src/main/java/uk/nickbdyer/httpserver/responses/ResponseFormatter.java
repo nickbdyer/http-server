@@ -68,6 +68,7 @@ public class ResponseFormatter {
         responses.put(404, "Not Found");
         responses.put(405, "Method Not Allowed");
         responses.put(418, "Teapot");
+        responses.put(500, "Internal Server Error");
         return responses;
     }
 }

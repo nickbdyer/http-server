@@ -1,6 +1,7 @@
 package uk.nickbdyer.httpserver;
 
 import org.junit.Test;
+import uk.nickbdyer.httpserver.testdoubles.BrokenInputStreamSocket;
 import uk.nickbdyer.httpserver.testdoubles.DummyLogger;
 import uk.nickbdyer.httpserver.testdoubles.SocketStub;
 import uk.nickbdyer.httpserver.testdoubles.UnreadableSocketStub;
@@ -30,5 +31,15 @@ public class SocketHandlerTest {
         SocketHandler socketHandler = new SocketHandler(new UnreadableSocketStub(), new DummyLogger(), new Router(new File("")));
 
         socketHandler.processRequestAndRespond();
+    }
+
+    @Test
+    public void socketHandlerWillReturnA500IfPossible() {
+        ByteArrayOutputStream receivedContent = new ByteArrayOutputStream();
+        SocketHandler socketHandler = new SocketHandler(new BrokenInputStreamSocket(receivedContent), new DummyLogger(), new Router(new File("")));
+
+        socketHandler.processRequestAndRespond();
+
+        assertThat(receivedContent.toString(), containsString("HTTP/1.1 500 Internal Server Error"));
     }
 }

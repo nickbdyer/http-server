@@ -1,21 +1,20 @@
 package uk.nickbdyer.httpserver.middleware;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Logger {
 
-    private final List<String> logs;
+    private final ConcurrentLinkedQueue<String> logs;
 
     public Logger() {
-        this.logs = new ArrayList();
+        this.logs = new ConcurrentLinkedQueue<String>();
     }
 
     public void log(String requestString) {
         logs.add(requestString);
     }
 
-    public List<String> logs() {
+    public ConcurrentLinkedQueue<String> logs() {
         return logs;
     }
 }
