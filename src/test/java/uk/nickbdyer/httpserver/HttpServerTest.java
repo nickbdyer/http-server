@@ -7,6 +7,7 @@ import uk.nickbdyer.httpserver.testdoubles.ServerSocketSpy;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.Executors;
 
 import static org.junit.Assert.assertTrue;
 
@@ -16,7 +17,7 @@ public class HttpServerTest {
     public void whenListeningTheNewSocketConnectionsWillBeAccepted() throws IOException {
         ServerSocketSpy socketSpy = new ServerSocketSpy();
         Logger logger = new DummyLogger();
-        HttpServer server = new HttpServer(socketSpy, new Router(new File("")), logger);
+        HttpServer server = new HttpServer(Executors.newSingleThreadExecutor(), socketSpy, new Router(new File("")), logger);
 
         server.listen();
 

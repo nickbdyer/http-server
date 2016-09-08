@@ -7,12 +7,15 @@ import uk.nickbdyer.httpserver.middleware.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
         Arguments arguments = new Arguments(args);
         File publicFolder = new File(arguments.getDirectoryPath());
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
 
         BasicAuth basicAuth = new BasicAuth();
         basicAuth.addAuthorisedUser("admin", "hunter2");
@@ -31,7 +34,7 @@ public class Main {
         router.addController("/tea", new TeaController());
         router.addController("/logs", new LogsController(basicAuth, logger));
 
-        new HttpServer(new ServerSocket(arguments.getPort()), router, logger).listen();
+        new HttpServer(executorService, new ServerSocket(arguments.getPort()), router, logger).listen();
     }
 
 }

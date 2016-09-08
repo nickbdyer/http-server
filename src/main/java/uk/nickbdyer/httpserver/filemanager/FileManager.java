@@ -3,6 +3,7 @@ package uk.nickbdyer.httpserver.filemanager;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.util.HashMap;
@@ -27,7 +28,7 @@ public class FileManager {
             writer.write(newContent);
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -54,7 +55,7 @@ public class FileManager {
         try {
             fileBytes = Files.readAllBytes(file.toPath());
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new UncheckedIOException(e);
         }
         return fileBytes;
     }
@@ -63,7 +64,7 @@ public class FileManager {
         try {
             return sha1Hex(Files.readAllBytes(file.toPath()));
         } catch (IOException e) {
-            return null;
+            throw new UncheckedIOException(e);
         }
     }
 
