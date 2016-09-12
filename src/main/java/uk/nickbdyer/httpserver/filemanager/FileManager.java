@@ -52,6 +52,7 @@ public class FileManager {
     }
 
     public byte[] getFileBytes() {
+        if (file == null) return new byte[]{};
         byte[] fileBytes = "".getBytes();
         try {
             fileBytes = Files.readAllBytes(file.toPath());

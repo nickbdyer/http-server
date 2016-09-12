@@ -25,6 +25,7 @@ public class FileFinder {
     }
 
     public File getFile(String filename) {
+        if (!fileExists(filename)) return null;
         try {
             return Files.walk(folder.toPath())
                     .filter(file -> Objects.equals(file.getFileName().toFile().getName(), filename))
