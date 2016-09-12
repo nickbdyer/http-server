@@ -55,7 +55,7 @@ public class FileManagerTest {
     }
 
     @Test
-    public void aResponseHeaderWillTheContentTypeForATextFile() throws IOException {
+    public void aResponseHeaderWillDetectTheContentTypeForATextFile() throws IOException {
         File file = folder.newFile("testfile.txt");
         FileManager manager = new FileManager(file);
 
@@ -66,7 +66,7 @@ public class FileManagerTest {
     }
 
     @Test
-    public void aResponseHeaderWillTheContentTypeForAnImageFile() throws IOException {
+    public void aResponseHeaderWillDetectTheContentTypeForAnImageFile() throws IOException {
         File file = folder.newFile("testfile.png");
         FileManager manager = new FileManager(file);
 
