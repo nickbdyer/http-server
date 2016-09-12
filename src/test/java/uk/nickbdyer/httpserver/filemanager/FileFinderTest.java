@@ -44,9 +44,19 @@ public class FileFinderTest {
         assertEquals("TestFile.txt", file.getName());
     }
 
-//    @Test
-//    public void canRetrieveAFileFromAFolder() {
-//
-//    }
+    @Test
+    public void canRetrieveAFileFromAFolder() throws IOException {
+        tempFolder.newFolder("stylesheets");
+        tempFolder.newFile("stylesheets/styles.css");
+
+        File file = fileFinder.getFile("styles.css");
+
+        assertEquals("styles.css", file.getName());
+    }
+
+    @Test
+    public void willReturnFalseForAnUnnamedFolder() throws IOException {
+        assertFalse(fileFinder.fileExists(""));
+    }
 
 }
