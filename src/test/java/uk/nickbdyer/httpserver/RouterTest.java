@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import uk.nickbdyer.httpserver.filemanager.FileFinder;
 import uk.nickbdyer.httpserver.requests.Request;
 import uk.nickbdyer.httpserver.requests.RequestLine;
 import uk.nickbdyer.httpserver.responses.Response;
@@ -19,13 +20,15 @@ public class RouterTest {
 
     private Router router;
     private Request request;
+    private FileFinder fileFinder;
 
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
     @Before
     public void setUp() throws IOException {
-        router = new Router(tempFolder.getRoot());
+        fileFinder = new FileFinder(tempFolder.getRoot());
+        router = new Router(fileFinder);
         request = new Request(new RequestLine(GET, "/test", new HashMap<>()), new HashMap<>(), "");
     }
 
