@@ -55,7 +55,7 @@ public class FileManagerTest {
     }
 
     @Test
-    public void aResponseHeaderWillDetectTheContentTypeForATextFile() throws IOException {
+    public void fileManageWillDetectContentTypeForTextFile() throws IOException {
         File file = folder.newFile("testfile.txt");
         FileManager manager = new FileManager(file);
 
@@ -66,7 +66,7 @@ public class FileManagerTest {
     }
 
     @Test
-    public void aResponseHeaderWillDetectTheContentTypeForAnImageFile() throws IOException {
+    public void fileManagerWillDetectTheContentTypeForAnImageFile() throws IOException {
         File file = folder.newFile("testfile.png");
         FileManager manager = new FileManager(file);
 
@@ -74,6 +74,17 @@ public class FileManagerTest {
 
         assertTrue(headers.containsKey("Content-Type"));
         assertEquals("image/png", headers.get("Content-Type"));
+    }
+
+    @Test
+    public void fileManagerWillDefaultContentTypeToHtmlIfNotFound() throws IOException {
+        File file = folder.newFile("testfile");
+        FileManager manager = new FileManager(file);
+
+        Map<String, String> headers = manager.getFileHeaders(new HashMap<>());
+
+        assertTrue(headers.containsKey("Content-Type"));
+        assertEquals("text/html", headers.get("Content-Type"));
     }
 
     @Test

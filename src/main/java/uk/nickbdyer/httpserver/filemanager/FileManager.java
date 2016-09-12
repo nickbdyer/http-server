@@ -72,7 +72,12 @@ public class FileManager {
     private Map<String, String> addFileContentTypeHeader(File file, Map<String, String> header) {
         String filename = file.getName();
         String extention = filename.substring(filename.indexOf('.') + 1);
-        String contentType = ContentType.valueOf(extention.toUpperCase()).type;
+        String contentType;
+        try {
+            contentType = ContentType.valueOf(extention.toUpperCase()).type;
+        } catch (IllegalArgumentException e) {
+            contentType = "text/html";
+        }
         header.put("Content-Type", contentType);
         return header;
     }
