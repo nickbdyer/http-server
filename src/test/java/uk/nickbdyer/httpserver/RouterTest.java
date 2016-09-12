@@ -47,7 +47,7 @@ public class RouterTest {
     }
 
     @Test
-    public void routerWillDynamicallyAddARouteForAFileFoundInThePublicFolder() throws IOException {
+    public void routerWillRespondToAFileRoute() throws IOException {
         tempFolder.newFile("test");
 
         Response response = router.route(request);
