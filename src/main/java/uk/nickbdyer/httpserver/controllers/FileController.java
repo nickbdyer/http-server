@@ -9,11 +9,9 @@ import java.util.HashMap;
 
 public class FileController extends Controller {
 
-    private final File file;
     private final FileManager fileMan;
 
     public FileController(File file) {
-        this.file = file;
         this.fileMan = new FileManager(file);
     }
 
