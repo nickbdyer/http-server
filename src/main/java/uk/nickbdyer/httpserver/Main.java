@@ -35,6 +35,7 @@ public class Main {
         router.addController("/coffee", new CoffeeController());
         router.addController("/tea", new TeaController());
         router.addController("/logs", new LogsController(basicAuth, logger));
+        router.addController("/elmttt", new ElmTTTController(fileFinder));
 
         new HttpServer(executorService, new ServerSocket(arguments.getPort()), router, logger).listen();
     }
