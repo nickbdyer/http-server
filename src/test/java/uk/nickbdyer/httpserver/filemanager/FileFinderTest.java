@@ -7,6 +7,7 @@ import org.junit.rules.TemporaryFolder;
 
 import java.io.IOException;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class FileFinderTest {
@@ -25,6 +26,11 @@ public class FileFinderTest {
     public void knowsIfAFileExists() throws IOException {
         tempFolder.newFile("TestFile.txt");
         assertTrue(fileFinder.fileExists("TestFile.txt"));
+    }
+
+    @Test
+    public void knowsIfAFileDoesNotExist() throws IOException {
+        assertFalse(fileFinder.fileExists("TestFile.txt"));
     }
 
 //    @Test
