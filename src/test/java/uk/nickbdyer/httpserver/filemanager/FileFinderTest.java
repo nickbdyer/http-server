@@ -5,8 +5,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
+import java.io.File;
 import java.io.IOException;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -33,11 +35,15 @@ public class FileFinderTest {
         assertFalse(fileFinder.fileExists("TestFile.txt"));
     }
 
-//    @Test
-//    public void canRetrieveAFile() {
-//
-//    }
-//
+    @Test
+    public void canRetrieveAFile() throws IOException {
+        tempFolder.newFile("TestFile.txt");
+
+        File file = fileFinder.getFile("TestFile.txt");
+
+        assertEquals("TestFile.txt", file.getName());
+    }
+
 //    @Test
 //    public void canRetrieveAFileFromAFolder() {
 //
