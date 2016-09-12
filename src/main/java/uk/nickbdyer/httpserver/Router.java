@@ -28,14 +28,12 @@ public class Router {
 
     public Response route(Request request) {
         if(request.getMethod() == null) return Response.NotFound(); //Catches preload requests, and parse failures.
-        if (publicFileExists(request.getPath())) {
+        if (routeTable.containsKey(request.getPath())) {
+            return routeTable.get(request.getPath()).execute(request);
+        } else if (publicFileExists(request.getPath())) {
             return new FileController(getFile(request.getPath())).execute(request);
         }
-        if (!routeTable.containsKey(request.getPath())) {
-            return Response.NotFound();
-        } else {
-            return routeTable.get(request.getPath()).execute(request);
-        }
+        return Response.NotFound();
     }
 
     private boolean publicFileExists(String path) {
