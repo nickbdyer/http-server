@@ -1,9 +1,7 @@
-package uk.nickbdyer.httpserver;
+package uk.nickbdyer.httpserver.requests;
 
 import org.junit.Before;
 import org.junit.Test;
-import uk.nickbdyer.httpserver.requests.Request;
-import uk.nickbdyer.httpserver.requests.RequestParser;
 import uk.nickbdyer.httpserver.testdoubles.DummyLogger;
 import uk.nickbdyer.httpserver.testdoubles.SocketStubWithRequest;
 import uk.nickbdyer.httpserver.testdoubles.UnreadableSocketStub;
@@ -11,9 +9,7 @@ import uk.nickbdyer.httpserver.testdoubles.UnreadableSocketStub;
 import java.io.IOException;
 import java.net.Socket;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static uk.nickbdyer.httpserver.requests.Method.*;
 
 public class RequestParserTest {
