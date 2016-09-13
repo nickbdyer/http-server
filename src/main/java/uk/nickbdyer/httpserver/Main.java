@@ -1,6 +1,7 @@
 package uk.nickbdyer.httpserver;
 
 import uk.nickbdyer.httpserver.controllers.*;
+import uk.nickbdyer.httpserver.filemanager.FileFinder;
 import uk.nickbdyer.httpserver.middleware.BasicAuth;
 import uk.nickbdyer.httpserver.middleware.Logger;
 
@@ -15,6 +16,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         Arguments arguments = new Arguments(args);
         File publicFolder = new File(arguments.getDirectoryPath());
+        FileFinder fileFinder = new FileFinder(publicFolder);
         ExecutorService executorService = Executors.newFixedThreadPool(4);
 
         BasicAuth basicAuth = new BasicAuth();
@@ -23,7 +25,7 @@ public class Main {
         Logger logger = new Logger();
 
         FormData form = new FormData("");
-        Router router = new Router(publicFolder);
+        Router router = new Router(fileFinder);
         router.addController("/", new RootController(publicFolder));
         router.addController("/redirect", new RedirectController());
         router.addController("/form", new FormController(form));
@@ -33,6 +35,7 @@ public class Main {
         router.addController("/coffee", new CoffeeController());
         router.addController("/tea", new TeaController());
         router.addController("/logs", new LogsController(basicAuth, logger));
+        router.addController("/elmttt", new ElmTTTController(fileFinder));
 
         new HttpServer(executorService, new ServerSocket(arguments.getPort()), router, logger).listen();
     }

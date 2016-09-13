@@ -1,10 +1,11 @@
 package uk.nickbdyer.httpserver.filemanager;
 
+import uk.nickbdyer.httpserver.responses.ContentType;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.net.URLConnection;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +52,7 @@ public class FileManager {
     }
 
     public byte[] getFileBytes() {
+        if (file == null) return new byte[]{};
         byte[] fileBytes = "".getBytes();
         try {
             fileBytes = Files.readAllBytes(file.toPath());
@@ -69,9 +71,15 @@ public class FileManager {
     }
 
     private Map<String, String> addFileContentTypeHeader(File file, Map<String, String> header) {
-        String type = URLConnection.guessContentTypeFromName(file.getName());
-        type = (type == null ? "text/html; charset=utf-8" : type);
-        header.put("Content-Type", type);
+        String filename = file.getName();
+        String extention = filename.substring(filename.indexOf('.') + 1);
+        String contentType;
+        try {
+            contentType = ContentType.valueOf(extention.toUpperCase()).type;
+        } catch (IllegalArgumentException e) {
+            contentType = "text/html";
+        }
+        header.put("Content-Type", contentType);
         return header;
     }
 

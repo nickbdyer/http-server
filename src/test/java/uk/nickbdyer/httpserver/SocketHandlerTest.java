@@ -1,13 +1,9 @@
 package uk.nickbdyer.httpserver;
 
 import org.junit.Test;
-import uk.nickbdyer.httpserver.testdoubles.BrokenInputStreamSocket;
-import uk.nickbdyer.httpserver.testdoubles.DummyLogger;
-import uk.nickbdyer.httpserver.testdoubles.SocketStub;
-import uk.nickbdyer.httpserver.testdoubles.UnreadableSocketStub;
+import uk.nickbdyer.httpserver.testdoubles.*;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.UncheckedIOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -19,7 +15,7 @@ public class SocketHandlerTest {
     public void socketHandlerWillRespondToARequest() {
         ByteArrayOutputStream recievedResponse = new ByteArrayOutputStream();
         SocketStub socketStub = new SocketStub("GET / HTTP/1.1", recievedResponse);
-        SocketHandler socketHandler = new SocketHandler(socketStub, new DummyLogger(), new Router(new File("")));
+        SocketHandler socketHandler = new SocketHandler(socketStub, new DummyLogger(), new Router(new DummyFileFinder()));
 
         socketHandler.processRequestAndRespond();
 
@@ -28,7 +24,7 @@ public class SocketHandlerTest {
 
     @Test(expected = UncheckedIOException.class)
     public void socketHandlerWillThrowUncheckIOExceptionIfStreamsCannotBeRead() {
-        SocketHandler socketHandler = new SocketHandler(new UnreadableSocketStub(), new DummyLogger(), new Router(new File("")));
+        SocketHandler socketHandler = new SocketHandler(new UnreadableSocketStub(), new DummyLogger(), new Router(new DummyFileFinder()));
 
         socketHandler.processRequestAndRespond();
     }
@@ -36,7 +32,7 @@ public class SocketHandlerTest {
     @Test
     public void socketHandlerWillReturnA500IfPossible() {
         ByteArrayOutputStream receivedContent = new ByteArrayOutputStream();
-        SocketHandler socketHandler = new SocketHandler(new BrokenInputStreamSocket(receivedContent), new DummyLogger(), new Router(new File("")));
+        SocketHandler socketHandler = new SocketHandler(new BrokenInputStreamSocket(receivedContent), new DummyLogger(), new Router(new DummyFileFinder()));
 
         socketHandler.processRequestAndRespond();
 
