@@ -1,4 +1,4 @@
-package uk.nickbdyer.httpserver;
+package uk.nickbdyer.httpserver.middleware;
 
 import uk.nickbdyer.httpserver.controllers.Controller;
 import uk.nickbdyer.httpserver.controllers.FileController;

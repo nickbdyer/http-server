@@ -1,6 +1,7 @@
 package uk.nickbdyer.httpserver;
 
 import org.junit.Test;
+import uk.nickbdyer.httpserver.middleware.Router;
 import uk.nickbdyer.httpserver.testdoubles.*;
 
 import java.io.ByteArrayOutputStream;

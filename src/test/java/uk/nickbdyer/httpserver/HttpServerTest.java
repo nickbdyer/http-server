@@ -2,6 +2,7 @@ package uk.nickbdyer.httpserver;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import uk.nickbdyer.httpserver.middleware.Router;
 import uk.nickbdyer.httpserver.testdoubles.BrokenServerSocketStub;
 import uk.nickbdyer.httpserver.testdoubles.ClosedServerSocketStub;
 import uk.nickbdyer.httpserver.testdoubles.DummyFileFinder;

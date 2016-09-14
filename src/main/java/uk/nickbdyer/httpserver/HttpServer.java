@@ -1,5 +1,7 @@
 package uk.nickbdyer.httpserver;
 
+import uk.nickbdyer.httpserver.middleware.Router;
+
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.ServerSocket;

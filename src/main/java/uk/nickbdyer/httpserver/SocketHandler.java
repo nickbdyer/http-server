@@ -1,5 +1,6 @@
 package uk.nickbdyer.httpserver;
 
+import uk.nickbdyer.httpserver.middleware.Router;
 import uk.nickbdyer.httpserver.requests.Request;
 import uk.nickbdyer.httpserver.requests.RequestParser;
 import uk.nickbdyer.httpserver.responses.Response;

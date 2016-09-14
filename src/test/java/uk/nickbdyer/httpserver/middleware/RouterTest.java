@@ -1,4 +1,4 @@
-package uk.nickbdyer.httpserver;
+package uk.nickbdyer.httpserver.middleware;
 
 import org.junit.Before;
 import org.junit.Rule;

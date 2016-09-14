@@ -1,15 +1,28 @@
 package uk.nickbdyer.httpserver.middleware;
 
+import uk.nickbdyer.httpserver.requests.Request;
+import uk.nickbdyer.httpserver.responses.Response;
+
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BasicAuth {
+public class BasicAuth extends Middleware {
 
     private final ArrayList<String> authorisedUsers;
 
+    @Override
+    public Response call(Request request) {
+        String user = request.getHeaders().getOrDefault("Authorization", "");
+        if (userIsAuthorised(user)) {
+            return next.call(request);
+        }
+        return new Response(401, getUnAuthorisedHeader(), "");
+    }
+
     public BasicAuth() {
+        super();
         this.authorisedUsers = new ArrayList<>();
     }
 
@@ -31,4 +44,5 @@ public class BasicAuth {
         headers.put("WWW-Authenticate", "Basic realm=\"NicksServer\"");
         return headers;
     }
+
 }
