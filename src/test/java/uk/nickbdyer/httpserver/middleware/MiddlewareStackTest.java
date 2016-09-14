@@ -44,12 +44,24 @@ public class MiddlewareStackTest {
 
     @Test
     public void testReturns404AsACatchAll() {
-        Middleware nonRespondingMiddleware = new NonRespondingMiddleware();
-        stack.add(nonRespondingMiddleware);
+        stack.add(new NonRespondingMiddleware());
 
         Response response = stack.call(new Request(Method.GET, "/"));
 
         assertEquals(404, response.getStatusCode());
+    }
+
+    @Test
+    public void testReturns200ForMultipleMiddlewares() {
+        stack.add(new NonRespondingMiddleware());
+        stack.add(new NonRespondingMiddleware());
+        stack.add(new NonRespondingMiddleware());
+        stack.add(new OkMiddleware());
+        stack.add(new NonRespondingMiddleware());
+
+        Response response = stack.call(new Request(Method.GET, "/"));
+
+        assertEquals(200, response.getStatusCode());
     }
 
 }

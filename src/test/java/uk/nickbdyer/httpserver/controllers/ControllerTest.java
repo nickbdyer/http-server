@@ -1,12 +1,10 @@
 package uk.nickbdyer.httpserver.controllers;
 
-import org.junit.Before;
 import org.junit.Test;
 import uk.nickbdyer.httpserver.requests.Request;
 import uk.nickbdyer.httpserver.requests.RequestParser;
 import uk.nickbdyer.httpserver.responses.Response;
 import uk.nickbdyer.httpserver.testdoubles.ControllerSpy;
-import uk.nickbdyer.httpserver.testdoubles.DummyLogger;
 import uk.nickbdyer.httpserver.testdoubles.SocketStubWithRequest;
 
 import java.io.IOException;
@@ -18,13 +16,6 @@ import static org.junit.Assert.assertTrue;
 import static uk.nickbdyer.httpserver.requests.Method.*;
 
 public class ControllerTest {
-
-    private DummyLogger logger;
-
-    @Before
-    public void setUp() {
-        logger = new DummyLogger();
-    }
 
     @Test
     public void aControllerWillRespondToAGetRequest() {
@@ -128,7 +119,7 @@ public class ControllerTest {
     @Test
     public void aControllerWillRespondToAnUnknownMethodWithAMethodNotAllowedResponse() throws IOException {
         SocketStubWithRequest socket = new SocketStubWithRequest("HELLO / HTTP/1.1");
-        Request request = new RequestParser(socket, logger).parse();
+        Request request = new RequestParser(socket).parse();
         ControllerSpy controller = new ControllerSpy();
 
         Response response = controller.execute(request);
@@ -139,7 +130,7 @@ public class ControllerTest {
     @Test
     public void aControllerWillRespondWithACorrectHeaderForAMethodNotAllowedResponse() throws IOException {
         SocketStubWithRequest socket = new SocketStubWithRequest("HELLO / HTTP/1.1");
-        Request request = new RequestParser(socket, logger).parse();
+        Request request = new RequestParser(socket).parse();
         ControllerSpy controller = new ControllerSpy();
 
         Response response = controller.execute(request);

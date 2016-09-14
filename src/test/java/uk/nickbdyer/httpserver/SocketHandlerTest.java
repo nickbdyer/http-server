@@ -15,7 +15,7 @@ public class SocketHandlerTest {
     public void socketHandlerWillRespondToARequest() {
         ByteArrayOutputStream recievedResponse = new ByteArrayOutputStream();
         SocketStub socketStub = new SocketStub("GET / HTTP/1.1", recievedResponse);
-        SocketHandler socketHandler = new SocketHandler(socketStub, new DummyLogger(), new Router(new DummyFileFinder()));
+        SocketHandler socketHandler = new SocketHandler(socketStub, new Router(new DummyFileFinder()));
 
         socketHandler.processRequestAndRespond();
 
@@ -24,7 +24,7 @@ public class SocketHandlerTest {
 
     @Test(expected = UncheckedIOException.class)
     public void socketHandlerWillThrowUncheckIOExceptionIfStreamsCannotBeRead() {
-        SocketHandler socketHandler = new SocketHandler(new UnreadableSocketStub(), new DummyLogger(), new Router(new DummyFileFinder()));
+        SocketHandler socketHandler = new SocketHandler(new UnreadableSocketStub(), new Router(new DummyFileFinder()));
 
         socketHandler.processRequestAndRespond();
     }
@@ -32,7 +32,7 @@ public class SocketHandlerTest {
     @Test
     public void socketHandlerWillReturnA500IfPossible() {
         ByteArrayOutputStream receivedContent = new ByteArrayOutputStream();
-        SocketHandler socketHandler = new SocketHandler(new BrokenInputStreamSocket(receivedContent), new DummyLogger(), new Router(new DummyFileFinder()));
+        SocketHandler socketHandler = new SocketHandler(new BrokenInputStreamSocket(receivedContent), new Router(new DummyFileFinder()));
 
         socketHandler.processRequestAndRespond();
 
