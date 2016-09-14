@@ -9,7 +9,7 @@ import uk.nickbdyer.httpserver.responses.Response;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Router {
+public class Router extends Middleware {
 
     private final FileFinder fileFinder;
     private Map<String, Controller> routeTable;
@@ -23,7 +23,8 @@ public class Router {
         routeTable.put(path, controller);
     }
 
-    public Response route(Request request) {
+    @Override
+    public Response call(Request request) {
         if(request.getMethod() == null) return Response.NotFound(); //Catches preload requests, and parse failures.
         if (routeTable.containsKey(request.getPath())) {
             return routeTable.get(request.getPath()).execute(request);

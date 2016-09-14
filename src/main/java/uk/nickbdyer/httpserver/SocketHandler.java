@@ -23,7 +23,7 @@ public class SocketHandler {
         try {
             RequestParser parser = new RequestParser(socket);
             Request request = parser.parse();
-            Response response = router.route(request);
+            Response response = router.call(request);
             new ResponseFormatter(socket, response).sendResponse();
         } catch (Exception e) {
             returnA500Error();
