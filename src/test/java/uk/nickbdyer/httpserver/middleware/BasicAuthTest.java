@@ -60,6 +60,18 @@ public class BasicAuthTest {
         assertEquals(200, response.getStatusCode());
     }
 
+    @Test
+    public void willSendAnAuthorisationHeaderToAnUnAuthorisedRequest() {
+        BasicAuth auth = new BasicAuth();
+        auth.addAuthorisedUser("/auth", "admin", "password");
+        RequestLine requestLine = new RequestLine(GET, "/auth", new HashMap<>());
+        Request request = new Request(requestLine, new HashMap<>(), "");
+
+        Response response = auth.call(request);
+
+        assertTrue(response.getHeaders().containsKey("WWW-Authenticate"));
+    }
+
     class OkMiddleware extends Middleware {
         @Override
         public Response call(Request request) {
