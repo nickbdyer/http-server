@@ -12,7 +12,7 @@ public abstract class Middleware {
     }
 
     public Response call(Request request) {
-        return null;
+        return next.call(request);
     }
 
     public void setNext(Middleware next) {
