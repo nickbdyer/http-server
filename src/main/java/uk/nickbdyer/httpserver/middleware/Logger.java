@@ -19,7 +19,7 @@ public class Logger extends Middleware {
         return next.call(request);
     }
 
-    private void log(String requestString) {
+    public void log(String requestString) {
         logs.add(requestString);
     }
 

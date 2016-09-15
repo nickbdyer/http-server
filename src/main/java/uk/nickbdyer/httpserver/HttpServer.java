@@ -1,5 +1,6 @@
 package uk.nickbdyer.httpserver;
 
+import uk.nickbdyer.httpserver.middleware.Logger;
 import uk.nickbdyer.httpserver.middleware.MiddlewareStack;
 
 import java.io.IOException;
@@ -13,11 +14,13 @@ public class HttpServer {
     private final ExecutorService executorService;
     private final ServerSocket serverSocket;
     private final MiddlewareStack middlewareStack;
+    private final Logger logger;
 
-    public HttpServer(ExecutorService executorService, ServerSocket serverSocket, MiddlewareStack middlewareStack) {
+    public HttpServer(ExecutorService executorService, ServerSocket serverSocket, MiddlewareStack middlewareStack, Logger logger) {
         this.executorService = executorService;
         this.serverSocket = serverSocket;
         this.middlewareStack = middlewareStack;
+        this.logger = logger;
     }
 
     public void listen() {
@@ -31,7 +34,7 @@ public class HttpServer {
             }
         } catch (IOException e) {
             if ("Socket closed".equals(e.getMessage())) {
-                System.out.println(("Server shutdown..."));
+                logger.log("Server shutdown...");
             } else {
                 throw new UncheckedIOException(e);
             }

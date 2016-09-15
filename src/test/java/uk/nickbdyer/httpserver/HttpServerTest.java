@@ -1,7 +1,7 @@
 package uk.nickbdyer.httpserver;
 
-import org.junit.Ignore;
 import org.junit.Test;
+import uk.nickbdyer.httpserver.middleware.Logger;
 import uk.nickbdyer.httpserver.middleware.MiddlewareStack;
 import uk.nickbdyer.httpserver.testdoubles.BrokenServerSocketStub;
 import uk.nickbdyer.httpserver.testdoubles.ClosedServerSocketStub;
@@ -19,30 +19,32 @@ public class HttpServerTest {
     public void whenListeningTheNewSocketConnectionsWillBeAccepted() throws IOException {
         ServerSocketSpy socketSpy = new ServerSocketSpy();
         MiddlewareStack middlewareStack = new MiddlewareStack();
-        HttpServer server = new HttpServer(Executors.newSingleThreadExecutor(), socketSpy, middlewareStack);
+        Logger logger = new Logger();
+        HttpServer server = new HttpServer(Executors.newSingleThreadExecutor(), socketSpy, middlewareStack, logger);
 
         server.listen();
 
         assertTrue(socketSpy.acceptWasCalled());
     }
 
-    @Ignore
     @Test
     public void serverWillCatchSocketClosedExceptions() throws IOException {
         ClosedServerSocketStub socketStub = new ClosedServerSocketStub();
         MiddlewareStack middlewareStack = new MiddlewareStack();
-        HttpServer server = new HttpServer(Executors.newSingleThreadExecutor(), socketStub, middlewareStack);
+        Logger logger = new Logger();
+        HttpServer server = new HttpServer(Executors.newSingleThreadExecutor(), socketStub, middlewareStack, logger);
 
         server.listen();
 
-//        assertTrue(logger.logs().contains("Server shutdown..."));
+        assertTrue(logger.logs().contains("Server shutdown..."));
     }
 
     @Test(expected = UncheckedIOException.class)
     public void serverWillThrowUncheckedIOExceptionsIfNecessary() throws IOException {
         BrokenServerSocketStub socketStub = new BrokenServerSocketStub();
         MiddlewareStack middlewareStack = new MiddlewareStack();
-        HttpServer server = new HttpServer(Executors.newSingleThreadExecutor(), socketStub, middlewareStack);
+        Logger logger = new Logger();
+        HttpServer server = new HttpServer(Executors.newSingleThreadExecutor(), socketStub, middlewareStack, logger);
 
         server.listen();
 
