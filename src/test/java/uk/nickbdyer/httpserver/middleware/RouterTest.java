@@ -1,4 +1,4 @@
-package uk.nickbdyer.httpserver;
+package uk.nickbdyer.httpserver.middleware;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -37,14 +37,14 @@ public class RouterTest {
         ControllerSpy controller = new ControllerSpy();
         router.addController("/test", controller);
 
-        router.route(request);
+        router.call(request);
 
         assertEquals("get", controller.methodTriggered);
     }
 
     @Test
     public void routerWillReturnNotFoundIfPathCanNotBeMatched() {
-        Response response = router.route(request);
+        Response response = router.call(request);
 
         assertEquals(404, response.getStatusCode());
     }
@@ -53,7 +53,7 @@ public class RouterTest {
     public void routerWillRespondToAFileRoute() throws IOException {
         tempFolder.newFile("test");
 
-        Response response = router.route(request);
+        Response response = router.call(request);
 
         assertEquals(200, response.getStatusCode());
     }
@@ -62,7 +62,7 @@ public class RouterTest {
     public void routerWillReturnNotFoundForPreloadRequestsWithoutHeaders() throws IOException {
         Request request = new Request(null, null);
 
-        Response response = router.route(request);
+        Response response = router.call(request);
 
         assertEquals(404, response.getStatusCode());
     }

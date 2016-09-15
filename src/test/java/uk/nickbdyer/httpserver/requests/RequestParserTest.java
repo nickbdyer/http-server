@@ -1,35 +1,22 @@
-package uk.nickbdyer.httpserver;
+package uk.nickbdyer.httpserver.requests;
 
-import org.junit.Before;
 import org.junit.Test;
-import uk.nickbdyer.httpserver.requests.Request;
-import uk.nickbdyer.httpserver.requests.RequestParser;
-import uk.nickbdyer.httpserver.testdoubles.DummyLogger;
 import uk.nickbdyer.httpserver.testdoubles.SocketStubWithRequest;
 import uk.nickbdyer.httpserver.testdoubles.UnreadableSocketStub;
 
 import java.io.IOException;
 import java.net.Socket;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static uk.nickbdyer.httpserver.requests.Method.*;
 
 public class RequestParserTest {
-
-    private DummyLogger logger;
-
-    @Before
-    public void setUp() {
-        logger = new DummyLogger();
-    }
 
     @Test
     public void requestParserRecognisesGETMethod() throws IOException {
         Socket socket = new SocketStubWithRequest("GET / HTTP/1.1\nHost: localhost:5000\r\n");
 
-        Request request = new RequestParser(socket, logger).parse();
+        Request request = new RequestParser(socket).parse();
 
         assertEquals(GET, request.getMethod());
     }
@@ -38,7 +25,7 @@ public class RequestParserTest {
     public void requestParserRecognisesPOSTMethod() throws IOException {
         Socket socket = new SocketStubWithRequest("POST / HTTP/1.1\nHost: localhost:5000\r\n");
 
-        Request request = new RequestParser(socket, logger).parse();
+        Request request = new RequestParser(socket).parse();
 
         assertEquals(POST, request.getMethod());
     }
@@ -47,7 +34,7 @@ public class RequestParserTest {
     public void requestParserRecognisesHEADMethod() throws IOException {
         Socket socket = new SocketStubWithRequest("HEAD / HTTP/1.1\nHost: localhost:5000\r\n");
 
-        Request request = new RequestParser(socket, logger).parse();
+        Request request = new RequestParser(socket).parse();
 
         assertEquals(HEAD, request.getMethod());
     }
@@ -56,7 +43,7 @@ public class RequestParserTest {
     public void requestParserWillReturnUnknownMethodForNonStandardMethods() throws IOException {
         Socket socket = new SocketStubWithRequest("HELLO / HTTP/1.1\nHost: localhost:5000\r\n");
 
-        Request request = new RequestParser(socket, logger).parse();
+        Request request = new RequestParser(socket).parse();
 
         assertEquals(UNKNOWN_METHOD, request.getMethod());
     }
@@ -65,7 +52,7 @@ public class RequestParserTest {
     public void requestParserCanExtractThePath() throws IOException {
         Socket socket = new SocketStubWithRequest("HEAD / HTTP/1.1\nHost: localhost:5000\r\n");
 
-        Request request = new RequestParser(socket, logger).parse();
+        Request request = new RequestParser(socket).parse();
 
         assertEquals("/", request.getPath());
     }
@@ -74,7 +61,7 @@ public class RequestParserTest {
     public void requestParserCanExtractAnotherPath() throws IOException {
         Socket socket = new SocketStubWithRequest("GET /foobar HTTP/1.1\nHost: localhost:5000\r\n");
 
-        Request request = new RequestParser(socket, logger).parse();
+        Request request = new RequestParser(socket).parse();
 
         assertEquals("/foobar", request.getPath());
     }
@@ -83,7 +70,7 @@ public class RequestParserTest {
     public void requestParserWillParseRequestWithoutHeaders() throws IOException {
         Socket socket = new SocketStubWithRequest("GET /foobar HTTP/1.1\n\r\n\r\n");
 
-        Request request = new RequestParser(socket, logger).parse();
+        Request request = new RequestParser(socket).parse();
 
         assertEquals("/foobar", request.getPath());
     }
@@ -92,7 +79,7 @@ public class RequestParserTest {
     public void requestParserWillReturnNoHeadersIfNoneAreParsed() throws IOException {
         Socket socket = new SocketStubWithRequest("GET /foobar HTTP/1.1\n\r\n\r\n");
 
-        Request request = new RequestParser(socket, logger).parse();
+        Request request = new RequestParser(socket).parse();
 
         assertEquals(0, request.getHeaders().size());
     }
@@ -107,7 +94,7 @@ public class RequestParserTest {
                 "Accept-Encoding: gzip,deflate\n";
         Socket socket = new SocketStubWithRequest(requestString);
 
-        Request request = new RequestParser(socket, logger).parse();
+        Request request = new RequestParser(socket).parse();
 
         assertEquals(5, request.getHeaders().size());
     }
@@ -124,7 +111,7 @@ public class RequestParserTest {
                 "Body: That Looks Like A Header";
         Socket socket = new SocketStubWithRequest(requestString);
 
-        Request request = new RequestParser(socket, logger).parse();
+        Request request = new RequestParser(socket).parse();
 
         assertFalse(request.getHeaders().containsKey("Body"));
     }
@@ -141,7 +128,7 @@ public class RequestParserTest {
                 "data=fatcat";
         Socket socket = new SocketStubWithRequest(requestString);
 
-        Request request = new RequestParser(socket, logger).parse();
+        Request request = new RequestParser(socket).parse();
 
         assertEquals("data=fatcat", request.getBody());
     }
@@ -155,7 +142,7 @@ public class RequestParserTest {
                 "Accept-Encoding: gzip,deflate\r\n\r\n";
         Socket socket = new SocketStubWithRequest(requestString);
 
-        Request request = new RequestParser(socket, logger).parse();
+        Request request = new RequestParser(socket).parse();
 
         assertEquals("/foobar", request.getPath());
         assertTrue(request.getParameters().containsKey("hello"));
@@ -166,7 +153,7 @@ public class RequestParserTest {
     public void requestParserWillPassANullMethodIfTheRequestCannotBeRead() throws IOException {
         Socket socket = new UnreadableSocketStub();
 
-        Request request = new RequestParser(socket, logger).parse();
+        Request request = new RequestParser(socket).parse();
 
         assertEquals(null, request.getMethod());
     }

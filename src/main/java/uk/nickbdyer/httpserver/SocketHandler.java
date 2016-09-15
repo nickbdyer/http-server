@@ -1,6 +1,6 @@
 package uk.nickbdyer.httpserver;
 
-import uk.nickbdyer.httpserver.middleware.Logger;
+import uk.nickbdyer.httpserver.middleware.MiddlewareStack;
 import uk.nickbdyer.httpserver.requests.Request;
 import uk.nickbdyer.httpserver.requests.RequestParser;
 import uk.nickbdyer.httpserver.responses.Response;
@@ -12,20 +12,18 @@ import java.net.Socket;
 
 public class SocketHandler {
     private final Socket socket;
-    private final Logger logger;
-    private final Router router;
+    private final MiddlewareStack middlewareStack;
 
-    public SocketHandler(Socket socket, Logger logger, Router router) {
+    public SocketHandler(Socket socket, MiddlewareStack middlewareStack) {
         this.socket = socket;
-        this.logger = logger;
-        this.router = router;
+        this.middlewareStack = middlewareStack;
     }
 
     public void processRequestAndRespond() {
         try {
-            RequestParser parser = new RequestParser(socket, logger);
+            RequestParser parser = new RequestParser(socket);
             Request request = parser.parse();
-            Response response = router.route(request);
+            Response response = middlewareStack.call(request);
             new ResponseFormatter(socket, response).sendResponse();
         } catch (Exception e) {
             returnA500Error();

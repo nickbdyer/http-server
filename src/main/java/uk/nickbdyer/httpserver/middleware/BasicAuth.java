@@ -1,29 +1,42 @@
 package uk.nickbdyer.httpserver.middleware;
 
-import java.util.ArrayList;
+import uk.nickbdyer.httpserver.requests.Request;
+import uk.nickbdyer.httpserver.responses.Response;
+
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BasicAuth {
+public class BasicAuth extends Middleware {
 
-    private final ArrayList<String> authorisedUsers;
+    private final Map<String, String> authorisedUsers;
 
-    public BasicAuth() {
-        this.authorisedUsers = new ArrayList<>();
+    @Override
+    public Response call(Request request) {
+        String user = request.getHeaders().getOrDefault("Authorization", "");
+        if (userIsAuthorised(request.getPath(), user)) {
+            return next.call(request);
+        }
+        return new Response(401, getUnAuthorisedHeader(), "");
     }
 
-    public void addAuthorisedUser(String username, String password) {
-        authorisedUsers.add(encodeUser(username, password));
+    public BasicAuth() {
+        super();
+        this.authorisedUsers = new HashMap<>();
+    }
+
+    public void addAuthorisedUser(String path, String username, String password) {
+        authorisedUsers.put(path, encodeUser(username, password));
     }
 
     private String encodeUser(String username, String password) {
         return Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
     }
 
-    public boolean userIsAuthorised(String digest) {
+    public boolean userIsAuthorised(String path, String digest) {
+        if(!authorisedUsers.containsKey(path)) return true;
         String digestWithoutType = digest.substring(digest.indexOf(' ') + 1);
-        return authorisedUsers.contains(digestWithoutType);
+        return authorisedUsers.get(path).contentEquals(digestWithoutType);
     }
 
     public Map<String, String> getUnAuthorisedHeader() {
@@ -31,4 +44,5 @@ public class BasicAuth {
         headers.put("WWW-Authenticate", "Basic realm=\"NicksServer\"");
         return headers;
     }
+
 }
