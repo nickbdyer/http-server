@@ -23,7 +23,7 @@ public class MiddlewareStackTest {
     class NonRespondingMiddleware extends Middleware {
         @Override
         public Response call(Request request) {
-            return next.call(request);
+            return super.call(request);
         }
     }
 
