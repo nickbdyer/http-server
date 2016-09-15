@@ -1,8 +1,10 @@
 package uk.nickbdyer.httpserver;
 
 import org.junit.Test;
-import uk.nickbdyer.httpserver.middleware.Router;
-import uk.nickbdyer.httpserver.testdoubles.*;
+import uk.nickbdyer.httpserver.middleware.MiddlewareStack;
+import uk.nickbdyer.httpserver.testdoubles.BrokenInputStreamSocket;
+import uk.nickbdyer.httpserver.testdoubles.SocketStub;
+import uk.nickbdyer.httpserver.testdoubles.UnreadableSocketStub;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UncheckedIOException;
@@ -16,7 +18,8 @@ public class SocketHandlerTest {
     public void socketHandlerWillRespondToARequest() {
         ByteArrayOutputStream recievedResponse = new ByteArrayOutputStream();
         SocketStub socketStub = new SocketStub("GET / HTTP/1.1", recievedResponse);
-        SocketHandler socketHandler = new SocketHandler(socketStub, new Router(new DummyFileFinder()));
+        MiddlewareStack middlewareStack = new MiddlewareStack();
+        SocketHandler socketHandler = new SocketHandler(socketStub, middlewareStack);
 
         socketHandler.processRequestAndRespond();
 
@@ -25,7 +28,8 @@ public class SocketHandlerTest {
 
     @Test(expected = UncheckedIOException.class)
     public void socketHandlerWillThrowUncheckIOExceptionIfStreamsCannotBeRead() {
-        SocketHandler socketHandler = new SocketHandler(new UnreadableSocketStub(), new Router(new DummyFileFinder()));
+        MiddlewareStack middlewareStack = new MiddlewareStack();
+        SocketHandler socketHandler = new SocketHandler(new UnreadableSocketStub(), middlewareStack);
 
         socketHandler.processRequestAndRespond();
     }
@@ -33,7 +37,8 @@ public class SocketHandlerTest {
     @Test
     public void socketHandlerWillReturnA500IfPossible() {
         ByteArrayOutputStream receivedContent = new ByteArrayOutputStream();
-        SocketHandler socketHandler = new SocketHandler(new BrokenInputStreamSocket(receivedContent), new Router(new DummyFileFinder()));
+        MiddlewareStack middlewareStack = new MiddlewareStack();
+        SocketHandler socketHandler = new SocketHandler(new BrokenInputStreamSocket(receivedContent), middlewareStack);
 
         socketHandler.processRequestAndRespond();
 

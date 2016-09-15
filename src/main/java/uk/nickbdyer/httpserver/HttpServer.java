@@ -1,6 +1,6 @@
 package uk.nickbdyer.httpserver;
 
-import uk.nickbdyer.httpserver.middleware.Router;
+import uk.nickbdyer.httpserver.middleware.MiddlewareStack;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -12,12 +12,12 @@ public class HttpServer {
 
     private final ExecutorService executorService;
     private final ServerSocket serverSocket;
-    private final Router router;
+    private final MiddlewareStack middlewareStack;
 
-    public HttpServer(ExecutorService executorService, ServerSocket serverSocket, Router router) {
+    public HttpServer(ExecutorService executorService, ServerSocket serverSocket, MiddlewareStack middlewareStack) {
         this.executorService = executorService;
         this.serverSocket = serverSocket;
-        this.router = router;
+        this.middlewareStack = middlewareStack;
     }
 
     public void listen() {
@@ -26,7 +26,7 @@ public class HttpServer {
             while ((connection = serverSocket.accept()) != null) {
                 Socket finalConnection = connection;
                 executorService.execute(() -> {
-                    new SocketHandler(finalConnection, router).processRequestAndRespond();
+                    new SocketHandler(finalConnection, middlewareStack).processRequestAndRespond();
                 });
             }
         } catch (IOException e) {

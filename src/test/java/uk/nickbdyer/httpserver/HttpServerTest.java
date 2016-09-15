@@ -2,10 +2,9 @@ package uk.nickbdyer.httpserver;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import uk.nickbdyer.httpserver.middleware.Router;
+import uk.nickbdyer.httpserver.middleware.MiddlewareStack;
 import uk.nickbdyer.httpserver.testdoubles.BrokenServerSocketStub;
 import uk.nickbdyer.httpserver.testdoubles.ClosedServerSocketStub;
-import uk.nickbdyer.httpserver.testdoubles.DummyFileFinder;
 import uk.nickbdyer.httpserver.testdoubles.ServerSocketSpy;
 
 import java.io.IOException;
@@ -19,7 +18,8 @@ public class HttpServerTest {
     @Test
     public void whenListeningTheNewSocketConnectionsWillBeAccepted() throws IOException {
         ServerSocketSpy socketSpy = new ServerSocketSpy();
-        HttpServer server = new HttpServer(Executors.newSingleThreadExecutor(), socketSpy, new Router(new DummyFileFinder()));
+        MiddlewareStack middlewareStack = new MiddlewareStack();
+        HttpServer server = new HttpServer(Executors.newSingleThreadExecutor(), socketSpy, middlewareStack);
 
         server.listen();
 
@@ -30,7 +30,8 @@ public class HttpServerTest {
     @Test
     public void serverWillCatchSocketClosedExceptions() throws IOException {
         ClosedServerSocketStub socketStub = new ClosedServerSocketStub();
-        HttpServer server = new HttpServer(Executors.newSingleThreadExecutor(), socketStub, new Router(new DummyFileFinder()));
+        MiddlewareStack middlewareStack = new MiddlewareStack();
+        HttpServer server = new HttpServer(Executors.newSingleThreadExecutor(), socketStub, middlewareStack);
 
         server.listen();
 
@@ -40,7 +41,8 @@ public class HttpServerTest {
     @Test(expected = UncheckedIOException.class)
     public void serverWillThrowUncheckedIOExceptionsIfNecessary() throws IOException {
         BrokenServerSocketStub socketStub = new BrokenServerSocketStub();
-        HttpServer server = new HttpServer(Executors.newSingleThreadExecutor(), socketStub, new Router(new DummyFileFinder()));
+        MiddlewareStack middlewareStack = new MiddlewareStack();
+        HttpServer server = new HttpServer(Executors.newSingleThreadExecutor(), socketStub, middlewareStack);
 
         server.listen();
 
