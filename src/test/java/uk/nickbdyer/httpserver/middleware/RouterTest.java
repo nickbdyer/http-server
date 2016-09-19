@@ -42,12 +42,6 @@ public class RouterTest {
         assertEquals("get", controller.methodTriggered);
     }
 
-    @Test
-    public void routerWillReturnNotFoundIfPathCanNotBeMatched() {
-        Response response = router.call(request);
-
-        assertEquals(404, response.getStatusCode());
-    }
 
     @Test
     public void routerWillRespondToAFileRoute() throws IOException {
@@ -59,8 +53,18 @@ public class RouterTest {
     }
 
     @Test
+    public void routerWillDelegateToNotFoundMiddleware() throws IOException {
+        router.setNext(new NotFoundMiddleware());
+
+        Response response = router.call(request);
+
+        assertEquals(404, response.getStatusCode());
+    }
+
+    @Test
     public void routerWillReturnNotFoundForPreloadRequestsWithoutHeaders() throws IOException {
         Request request = new Request(null, null);
+        router.setNext(new NotFoundMiddleware());
 
         Response response = router.call(request);
 

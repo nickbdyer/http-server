@@ -14,8 +14,7 @@ public class Logger extends Middleware {
     }
 
     @Override
-    public Response call(Request request) {
-        log(request.getMethod() + " " + request.getPath() + " HTTP/1.1");
+    public Response call(Request request) { log(request.getMethod() + " " + request.getPath() + " HTTP/1.1");
         return next.call(request);
     }
 

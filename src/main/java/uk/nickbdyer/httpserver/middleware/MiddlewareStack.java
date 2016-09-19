@@ -19,18 +19,23 @@ public class MiddlewareStack {
     }
 
     public Response call(Request request) {
+        ensureNotFoundMiddlewareIsPresent();
         return buildStack().call(request);
     }
 
     private Middleware buildStack() {
-        stack.add(new NotFoundMiddleware());
-        for(int i = 0; i < stack.size(); i++) {
-            if (i == (stack.size() - 1)) {
-                break;
-            }
+        for(int i = 0; i < stack.size() - 1; i++) {
             stack.get(i).setNext(stack.get(i + 1));
         }
         return stack.get(0);
+    }
+
+    private void ensureNotFoundMiddlewareIsPresent() {
+        if (stack.isEmpty()) {
+            stack.add(new NotFoundMiddleware());
+        } else if (!(stack.get(stack.size() - 1) instanceof NotFoundMiddleware)) {
+            stack.add(new NotFoundMiddleware());
+        }
     }
 }
 

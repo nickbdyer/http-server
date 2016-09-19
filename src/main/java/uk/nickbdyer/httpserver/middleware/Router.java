@@ -9,6 +9,8 @@ import uk.nickbdyer.httpserver.responses.Response;
 import java.util.HashMap;
 import java.util.Map;
 
+import static uk.nickbdyer.httpserver.responses.Response.NotFound;
+
 public class Router extends Middleware {
 
     private final FileFinder fileFinder;
@@ -25,13 +27,13 @@ public class Router extends Middleware {
 
     @Override
     public Response call(Request request) {
-        if(request.getMethod() == null) return Response.NotFound(); //Catches preload requests, and parse failures.
+        if(request.getMethod() == null) return NotFound(); //Catches preload requests, and parse failures.
         if (routeTable.containsKey(request.getPath())) {
             return routeTable.get(request.getPath()).execute(request);
         } else if (fileFinder.fileExists(request.getPath().substring(1))) {
             return new FileController(fileFinder.getFile(request.getPath().substring(1))).execute(request);
         }
-        return Response.NotFound();
+        return next.call(request);
     }
 
 }
